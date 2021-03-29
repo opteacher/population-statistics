@@ -5,7 +5,7 @@ import axios from "axios"
 import routes from "./routes"
 import "./styles/common.scss"
 import "mint-ui/lib/style.min.css"
-import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell } from 'mint-ui'
+import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell, CellSwipe, Search, Tabbar, Radio } from "mint-ui"
 
 Vue.component(Field.name, Field)
 Vue.component(Button.name, Button)
@@ -14,10 +14,14 @@ Vue.component(TabItem.name, TabItem)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Cell.name, Cell)
+Vue.component(CellSwipe.name, CellSwipe)
+Vue.component(Search.name, Search)
+Vue.component(Tabbar.name, Tabbar)
+Vue.component(Radio.name, Radio)
 
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
-// Vue.axios.defaults.baseURL = 'https://api-demo.websanova.com/api/v1'
+// Vue.axios.defaults.baseURL = "https://api-demo.websanova.com/api/v1"
 Vue.router = new VueRouter({ routes })
 
 new Vue({

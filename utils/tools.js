@@ -99,6 +99,11 @@ const exp = {
       || req.connection.remoteAddress
       || req.socket.remoteAddress
       || req.connection.socket.remoteAddress
+  },
+  getDatabase() {
+    return require(`../databases/${
+      this.readConfig("./configs/model").type
+    }`)
   }
 }
 

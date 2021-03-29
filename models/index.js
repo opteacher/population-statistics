@@ -12,8 +12,8 @@ const db = require(`../databases/${cfg.type}`)
 
 // @steps{1}:引进所有模型
 const exp = {
-  // "Users": require("./user"),
-  // "Admin": require("./admin"),
+  "Company": require("./company"),
+  "Person": require("./person"),
   // "Prods": require("./prod"),
   // "Orders": require("./order"),
   // "Images": require("./image"),
@@ -41,7 +41,7 @@ console.log("模型生成的路由：")
 router.get(`/${cfg.prefix}/mdl/v${cfg.version}/model`, async ctx => {
   ctx.body = {version: cfg.version}
 })
-console.log(`GET\t\t/${cfg.prefix}/mdl/v${cfg.version}/model`)
+console.log(`GET\t/${cfg.prefix}/mdl/v${cfg.version}/model`)
 _.forIn(exp, (model, apiNam) => {
   // @steps{3_1}:检测用户定义的模型参数是否包含了所需的信息
   if (!model.__extProperties) {
@@ -91,7 +91,7 @@ _.forIn(exp, (model, apiNam) => {
             }, {ext: true})
           }
         })
-        console.log(`GET\t\t${GetUrl}`)
+        console.log(`GET\t${GetUrl}`)
         break
       case "all":
         // @steps{3_3_2_2}:*ALL*：查所有，**不会联表**
@@ -100,7 +100,7 @@ _.forIn(exp, (model, apiNam) => {
             data: await db.select(model, ctx.query)
           }
         })
-        console.log(`GET\t\t${AllUrl}`)
+        console.log(`GET\t${AllUrl}`)
         break
       case "post":
         // @steps{3_3_2_3}:*POST*：**使用form表单提交**
@@ -118,7 +118,7 @@ _.forIn(exp, (model, apiNam) => {
             data: await db.save(model, ctx.request.body, ctx.params)
           }
         })
-        console.log(`PUT\t\t${PutUrl}`)
+        console.log(`PUT\t${PutUrl}`)
         break
       case "delete":
         // @steps{3_3_2_5}:*DELETE*：同GET
