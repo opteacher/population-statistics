@@ -1,4 +1,6 @@
-import home from "./pages/home.vue"
+import home from "./pages/home"
+import come from "./pages/come"
+import input from "./pages/input"
 import list from "./pages/list"
 import cmpDetail from "./pages/cmpDetail"
 import psnDetail from "./pages/psnDetail"
@@ -10,6 +12,12 @@ export default [{
 }, {
     path: "/population-statistics/home",
     component: home
+}, {
+    path: "/population-statistics/come",
+    component: come
+}, {
+    path: "/population-statistics/input",
+    component: input
 }, {
     path: "/population-statistics/list",
     component: list
