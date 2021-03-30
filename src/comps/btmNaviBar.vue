@@ -25,7 +25,7 @@ export default {
     return  {
       selected: this.$props.select,
       pagesMap: {
-        "input": "/population-statistics/home",
+        "input": "/population-statistics/input",
         "company": "/population-statistics/list?type=company",
         "person": "/population-statistics/list?type=person",
         "admin": "/population-statistics/admin"

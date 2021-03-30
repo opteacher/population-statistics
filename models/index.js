@@ -14,7 +14,7 @@ const db = require(`../databases/${cfg.type}`)
 const exp = {
   "Company": require("./company"),
   "Person": require("./person"),
-  // "Prods": require("./prod"),
+  "Record": require("./record"),
   // "Orders": require("./order"),
   // "Images": require("./image"),
   // "Temps": require("./temp")

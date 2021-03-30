@@ -2,15 +2,15 @@
   <div>
     <mt-search v-model="schWords" :show="true" @input="onSchWdsChanged">
       <mt-radio v-if="lsMode === 'select'"
-      align="right"
-      v-model="selCmp"
-      :options="mchItems.map(item => item.name)"/>
+        align="right"
+        v-model="selCmp"
+        :options="mchItems.map(item => item.name)"/>
       <mt-cell v-else v-for="item in mchItems"
-      :title="item.name"
-      :key="item.id"
-      :to="`/population-statistics/${lsType}-detail?${(new URLSearchParams(item)).toString()}`"
-      is-link
-      value="详情"/>
+        :title="item.name"
+        :key="item.id"
+        :to="`/population-statistics/${lsType}-detail?${(new URLSearchParams(item)).toString()}`"
+        is-link
+        value="详情"/>
     </mt-search>
     <div  v-if="lsMode === 'select'" class="w-100 fixed-bottom mb-55" style="background-color: white">
       <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onCfmSelClick">确定</mt-button>

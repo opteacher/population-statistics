@@ -1,5 +1,6 @@
 import home from "./pages/home"
 import come from "./pages/come"
+import leave from "./pages/leave"
 import input from "./pages/input"
 import list from "./pages/list"
 import cmpDetail from "./pages/cmpDetail"
@@ -15,6 +16,9 @@ export default [{
 }, {
     path: "/population-statistics/come",
     component: come
+}, {
+    path: "/population-statistics/leave",
+    component: leave
 }, {
     path: "/population-statistics/input",
     component: input

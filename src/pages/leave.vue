@@ -2,15 +2,11 @@
   <div style="overflow: hidden">
     <ul class="nav nav-pills nav-fill" style="padding: 10px 5px">
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'house', 'disabled': !stepOrder['house']}" v-on:click="curStep = 'house'">房屋</a>
-      </li>
-      <i class="iconfont icon-arrow-right"/>
-      <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
       </li>
       <i class="iconfont icon-arrow-right"/>
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'company', 'disabled': !stepOrder['company']}" v-on:click="curStep = 'company'">单位</a>
+        <a class="nav-link" :class="{'active': curStep === 'whereto', 'disabled': !stepOrder['whereto']}" v-on:click="curStep = 'whereto'">去向</a>
       </li>
       <i class="iconfont icon-arrow-right"/>
       <li class="nav-item">
@@ -18,13 +14,12 @@
       </li>
     </ul>
     <div>
-      <house-form v-if="curStep === 'house'" :form="form"/>
-      <cm-psn-form v-if="curStep === 'person'" :form="form"/>
-      <wk-spc-form v-if="curStep === 'company'" :form="form"/>
+      <lv-psn-form v-if="curStep === 'person'" :form="form"/>
+      <where-to-form v-if="curStep === 'whereto'" :form="form"/>
       <connect-form v-if="curStep === 'connect'" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px">
-      <mt-button v-if="curStep !== 'house'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 'person'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" type="primary" @click="onFinishBtnClick">完成</mt-button>
     </div>
@@ -32,36 +27,29 @@
 </template>
 
 <script>
-import houseForm from "../comps/houseForm"
-import cmPsnForm from "../comps/cmPsnForm"
-import wkSpcForm from "../comps/wkSpcForm"
+import lvPsnForm from "../comps/lvPsnForm"
+import whereToForm from "../comps/whereToForm"
 import connectForm from "../comps/connectForm"
-import { MessageBox, Toast } from "mint-ui"
 
 export default {
   components: {
-    "house-form": houseForm,
-    "cm-psn-form": cmPsnForm,
-    "wk-spc-form": wkSpcForm,
+    "lv-psn-form": lvPsnForm,
+    "where-to-form": whereToForm,
     "connect-form": connectForm
   },
   data() {
     return {
       stepOrder: {
-        "house": false,
         "person": false,
-        "company": false,
+        "whereto": false,
         "connect": false
       },
-      curStep: "house",
+      curStep: "person",
       form: {
         idCard: "",
         name: "",
         lvAddress: "",
-        lvAddrType: "",
-        hhAddress: "",
-        workComp: "",
-        workCompId: "",
+        toAddress: "",
         phone: ""
       }
     }
@@ -87,28 +75,7 @@ export default {
         if (action !== "confirm") {
           return
         }
-        const ress = await Promise.all([
-          this.axios.post("/population-statistics/mdl/v1/record", Object.assign({
-            type: "come", purpose: this.form.lvAddrType === "工作" ? "work" : "live"
-          }, this.form)),
-          this.axios.post("/population-statistics/mdl/v1/person", Object.assign({
-            cmpId: parseInt(this.form.workCompId)
-          }, this.form))
-        ])
-        for (let res of ress) {
-          console.log(res)
-          if (res.status !== 200) {
-            Toast({
-              message: `系统错误！${res.statusText}`,
-              iconClass: "iconfont icon-close-bold"
-            })
-            return
-          }
-        }
-        Toast({
-          message: "来登成功！",
-          iconClass: "iconfont icon-select-bold"
-        })
+        // @TODO
         this.$router.go(-1)
       })
     }
@@ -116,14 +83,3 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.iconfont::before {
-  position: relative;
-  top: 8px;
-}
-
-.nav-item a {
-  padding-left: 0;
-  padding-right: 0;
-}
-</style>
