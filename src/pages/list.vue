@@ -6,7 +6,7 @@
         v-model="selCmp"
         :options="mchItems.map(item => item.name)"/>
       <mt-cell v-else v-for="item in mchItems"
-        :title="item.name"
+        :title="lsType === 'company' ? `(${item.shopName}) ${item.name}` : (lsType === 'house' ? item.address : item.name)"
         :key="item.id"
         :to="`/population-statistics/${lsType}-detail?${(new URLSearchParams(item)).toString()}`"
         is-link
@@ -76,7 +76,14 @@ export default {
     },
     async onSelTabChanged(selTab) {
       this.lsType = selTab
-      const res = await this.axios.get(`/population-statistics/mdl/v1/${selTab}s`)
+      let urlParamStr = ""
+      if (selTab === "company") {
+        urlParamStr = "?shopName=!=&shopName="
+      } else if (selTab === "house") {
+        selTab = "company"
+        urlParamStr = "?shopName===&shopName="
+      }
+      const res = await this.axios.get(`/population-statistics/mdl/v1/${selTab}s${urlParamStr}`)
       if (res.status != 200) {
         Toast({
           message: `系统错误！${res.statusText}`,

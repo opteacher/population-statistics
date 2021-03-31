@@ -57,6 +57,7 @@ export default {
       },
       curStep: "purpose",
       form: {
+        type: "come",
         idCard: "",
         name: "",
         lvAddress: "",
@@ -65,7 +66,8 @@ export default {
         purposeCn: "",
         cmpId: "",
         company: "",
-        phone: ""
+        phone: "",
+        passed: false
       }
     }
   },
@@ -91,9 +93,7 @@ export default {
           return
         }
         this.form.cmpId = parseInt(this.form.cmpId)
-        const res = await this.axios.post("/population-statistics/mdl/v1/record", Object.assign({
-          type: "come", passed: false
-        }, this.form))
+        const res = await this.axios.post("/population-statistics/mdl/v1/record", this.form)
         if (res.status !== 200) {
           Toast({
             message: `系统错误！${res.statusText}`,

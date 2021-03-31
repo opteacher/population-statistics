@@ -4,11 +4,11 @@
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
       </li>
-      <i class="iconfont icon-arrow-right"/>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'whereto', 'disabled': !stepOrder['whereto']}" v-on:click="curStep = 'whereto'">去向</a>
       </li>
-      <i class="iconfont icon-arrow-right"/>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
       </li>
@@ -30,6 +30,7 @@
 import lvPsnForm from "../comps/lvPsnForm"
 import whereToForm from "../comps/whereToForm"
 import connectForm from "../comps/connectForm"
+import { MessageBox, Toast } from "mint-ui"
 
 export default {
   components: {
@@ -39,18 +40,23 @@ export default {
   },
   data() {
     return {
+      curStep: "person",
       stepOrder: {
         "person": false,
         "whereto": false,
         "connect": false
       },
-      curStep: "person",
       form: {
-        idCard: "",
+        type: "leave",
+        purpose: "",
         name: "",
+        idCard: "",
+        phone: "",
+        hhAddress: "",
         lvAddress: "",
         toAddress: "",
-        phone: ""
+        cmpId: -1,
+        passed: false
       }
     }
   },
@@ -69,14 +75,26 @@ export default {
     onFinishBtnClick() {
       MessageBox({
         title: "提示",
-        message: "确认该人员来访/居住/工作?",
+        message: "确认该人员已离开?",
         showCancelButton: true
       }).then(async action => {
         if (action !== "confirm") {
           return
         }
-        // @TODO
-        this.$router.go(-1)
+        this.form.cmpId = parseInt(this.form.cmpId)
+        const res = await this.axios.post("/population-statistics/mdl/v1/record", this.form)
+        if (res.status !== 200) {
+          Toast({
+            message: `系统错误！${res.statusText}`,
+            iconClass: "iconfont icon-close-bold"
+          })
+        } else {
+          Toast({
+            message: "去销成功！请等待协管核实",
+            iconClass: "iconfont icon-select-bold"
+          })
+          this.$router.go(-1)
+        }
       })
     }
   }

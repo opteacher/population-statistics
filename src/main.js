@@ -5,7 +5,7 @@ import axios from "axios"
 import routes from "./routes"
 import "./styles/common.scss"
 import "mint-ui/lib/style.min.css"
-import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell, CellSwipe, Search, Tabbar, Radio, Actionsheet } from "mint-ui"
+import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell, CellSwipe, Search, Tabbar, Radio, Actionsheet, Header } from "mint-ui"
 
 Vue.component(Field.name, Field)
 Vue.component(Button.name, Button)
@@ -19,6 +19,7 @@ Vue.component(Search.name, Search)
 Vue.component(Tabbar.name, Tabbar)
 Vue.component(Radio.name, Radio)
 Vue.component(Actionsheet.name, Actionsheet)
+Vue.component(Header.name, Header)
 
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)

@@ -87,7 +87,7 @@ export default {
           message: "审批通过！人员已录入实有人口",
           iconClass: "iconfont icon-select-bold"
         })
-        this.$router.go(-1)
+        this.$router.push({path: "/population-statistics/list?type=person"})
       })
     }
   }
