@@ -115,7 +115,9 @@ _.forIn(exp, (model, apiNam) => {
         // @steps{3_3_2_4}:*PUT*：同POST
         router.put(PutUrl, async ctx => {
           ctx.body = {
-            data: await db.save(model, ctx.request.body, ctx.params)
+            data: await db.save(model, ctx.request.body, {
+              id: ctx.params.id
+            })
           }
         })
         console.log(`PUT\t${PutUrl}`)
@@ -124,7 +126,9 @@ _.forIn(exp, (model, apiNam) => {
         // @steps{3_3_2_5}:*DELETE*：同GET
         router.delete(DelUrl, async ctx => {
           ctx.body = {
-            data: await db.delete(model, ctx.params)
+            data: await db.delete(model, {
+              id: ctx.params.id
+            })
           }
         })
         console.log(`DELETE\t${DelUrl}`)

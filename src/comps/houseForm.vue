@@ -2,7 +2,6 @@
 <mt-search v-model="schWords" :show="true">
   <mt-radio
     v-if="isForWork"
-    style="margin-top: 60px"
     align="right"
     v-model="form.cmpId"
     :options="mchHouses.map(company => ({
@@ -11,7 +10,6 @@
     }))"/>
   <mt-radio
     v-else
-    style="margin-top: 60px"
     align="right"
     v-model="form.lvAddress"
     :options="mchHouses.map(house => house.address)"/>
@@ -33,9 +31,9 @@ export default {
   },
   watch: {
     "form.cmpId": function(n, o) {
-      for (let comp of this.mchComps) {
+      for (let comp of this.mchHouses) {
         if (comp.id === n) {
-          this.form.company = comp.name
+          this.form.company = comp.shopName
         }
       }
     }

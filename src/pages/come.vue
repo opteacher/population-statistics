@@ -1,6 +1,6 @@
 <template>
   <div style="overflow: hidden">
-    <ul class="nav nav-pills nav-fill" style="padding: 10px 5px">
+    <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">来此目的</a>
       </li>
@@ -19,7 +19,7 @@
         <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
       </li>
     </ul>
-    <div>
+    <div style="position: absolute; top: 60px; left: 0; right: 0">
       <purpose-form v-if="curStep === 'purpose'" :form="form"/>
       <cm-psn-form v-if="curStep === 'person'" :form="form"/>
       <house-form v-if="curStep === 'house'" :form="form"/>
@@ -92,7 +92,9 @@ export default {
         if (action !== "confirm") {
           return
         }
-        this.form.cmpId = parseInt(this.form.cmpId)
+        if (typeof this.form.cmpId === "string" && this.form.cmpId !== "") {
+          this.form.cmpId = parseInt(this.form.cmpId)
+        }
         const res = await this.axios.post("/population-statistics/mdl/v1/record", this.form)
         if (res.status !== 200) {
           Toast({

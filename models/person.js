@@ -7,7 +7,8 @@ module.exports = db.defineModel({
   phone:      db.Types.String,
   hhAddress:  db.Types.String,
   lvAddress:  db.Types.String,
-  cmpId:      db.Types.Number
+  cmpId:      db.Types.Number,
+  company:    db.Types.String
 }, {
   router: {
     methods: [

@@ -24,6 +24,10 @@
   margin-top: 3px !important;
 }
 
+.mt-40 {
+  margin-top: 40px;
+}
+
 .mb-1pc {
   margin-bottom: 1vh;
 }
@@ -53,4 +57,12 @@
 
 .mint-cell-title label {
   margin-bottom: 0 !important;
+}
+
+.nav-header {
+  padding: 10px 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0
 }

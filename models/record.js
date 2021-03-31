@@ -12,6 +12,7 @@ module.exports = db.defineModel({
   hhAddress:  db.Types.String,
   toAddress:  db.Types.String,
   cmpId:      db.Types.Number,
+  company:    db.Types.String,
   passed:     db.Types.Boolean// 是否审批通过
 }, {
   router: {

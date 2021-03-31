@@ -140,6 +140,9 @@ class Mysql {
 
     let conds = {}
     if(_.keys(condition).length !== 0) {
+      if (condition.id) {
+        condition.id = parseInt(condition.id)
+      }
       conds["where"] = condition
       if(condition.order_by) {
         conds.order = conds.order_by
@@ -221,6 +224,9 @@ class Mysql {
   }
 
   delete(model, condition, options) {
+    if (condition.id) {
+      condition.id = parseInt(condition.id)
+    }
     return model.destroy({ where: condition }).catch(err => getErrContent(err))
   }
 

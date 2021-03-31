@@ -1,6 +1,6 @@
 <template>
   <div style="overflow: hidden">
-    <ul class="nav nav-pills nav-fill" style="padding: 10px 5px">
+    <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
       </li>
@@ -13,7 +13,7 @@
         <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
       </li>
     </ul>
-    <div>
+    <div style="position: absolute; top: 60px; left: 0; right: 0">
       <lv-psn-form v-if="curStep === 'person'" :form="form"/>
       <where-to-form v-if="curStep === 'whereto'" :form="form"/>
       <connect-form v-if="curStep === 'connect'" :form="form"/>
@@ -101,4 +101,3 @@ export default {
   }
 }
 </script>
-

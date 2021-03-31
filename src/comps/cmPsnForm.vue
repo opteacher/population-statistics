@@ -28,12 +28,12 @@
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="old">
-        <mt-search v-model="schWords">
+        <mt-search v-model="searchOldPsn.schWords" :show="true" @input="onSchWdsChanged('searchOldPsn', ['name', 'idCard'])">
           <mt-radio
             align="right"
-            v-model="oldPerson"
-            :options="people.map(person => ({
-              label: person.name,
+            v-model="form.idCard"
+            :options="searchOldPsn.mchItems.map(person => ({
+              label: `${person.name} (${person.idCard})`,
               value: person.idCard
             }))"/>
         </mt-search>
@@ -50,9 +50,11 @@ export default {
   data() {
     return {
       selTab: "new",
-      oldPerson: "",
-      schWords: "",
-      people: [],
+      searchOldPsn: {
+        schWords: "",
+        allItems: [],
+        mchItems: []
+      },
       houses: [],
       schHouses: []
     }
@@ -69,24 +71,73 @@ export default {
           this.schHouses.push(house)
         }
       }
+    },
+    "form.idCard": function(n, o) {
+      for (let person of this.searchOldPsn.mchItems) {
+        if (person.idCard === n) {
+          this.form.name = person.name
+          this.form.phone = person.phone
+          this.form.hhAddress = person.hhAddress
+          this.form.lvAddress = person.lvAddress
+          this.form.cmpId = person.cmpId
+          this.form.company = person.company
+          break
+        }
+      }
+    },
+    async selTab(n, o) {
+      if (n === "old") {
+        const res = await this.axios.get("/population-statistics/mdl/v1/records?type=leave")
+        if (res.status != 200) {
+          Toast({
+            message: `系统错误！${res.statusText}`,
+            iconClass: "iconfont icon-close-bold"
+          })
+        } else {
+          this.searchOldPsn.allItems = res.data.data.map(record => {
+            delete record.type
+            delete record.purpose
+            delete record.psnId
+            return record
+          })
+          this.searchOldPsn.mchItems = this.searchOldPsn.allItems
+        }
+      }
     }
   },
   async created() {
-    const res = await this.axios.get("/population-statistics/mdl/v1/companys")
-    if (res.status != 200) {
-      Toast({
-        message: `系统错误！${res.statusText}`,
-        iconClass: "iconfont icon-close-bold"
-      })
-    } else {
-      this.houses = res.data.data
-      this.schHouses = this.houses
+    if (this.form.purpose === "work") {
+      const res = await this.axios.get("/population-statistics/mdl/v1/companys")
+      if (res.status != 200) {
+        Toast({
+          message: `系统错误！${res.statusText}`,
+          iconClass: "iconfont icon-close-bold"
+        })
+      } else {
+        this.houses = res.data.data
+        this.schHouses = this.houses
+      }
     }
   },
   methods: {
     onHouseLnkClick(address) {
       this.form.lvAddress = address
-    }
+    },
+    onSchWdsChanged(schInfo, incProps) {
+      if (!this[schInfo].schWords) {
+        this[schInfo].mchItems = this[schInfo].allItems
+      } else {
+        this[schInfo].mchItems = []
+        this[schInfo].allItems.map(item => {
+          for (let incProp of incProps) {
+            if (item[incProp].includes(this[schInfo].schWords)) {
+              this[schInfo].mchItems.push(item)
+              break
+            }
+          }
+        })
+      }
+    },
   }
 }
 </script>
