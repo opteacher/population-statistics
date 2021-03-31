@@ -10,7 +10,7 @@
       <span style="color: gray">{{form.workComp || "请选择所在单位"}}</span>
     </mt-cell>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="mlr-1pc mtb-1pc" type="primary" style="width: 98vw" @click="onSubmitClick">提交</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
     <mt-field label="法人身份证" placeholder="请输入法人身份证" v-model="form.lglId"/>
     <mt-field label="法人手机号" placeholder="请输入法人手机号" type="tel" v-model="form.lglPhone"/>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onSubmitClick">提交</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>
 </template>

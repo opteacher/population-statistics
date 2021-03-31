@@ -4,17 +4,17 @@
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">来此目的</a>
       </li>
-      <i class="iconfont icon-arrow-right"/>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
       </li>
-      <i class="iconfont icon-arrow-right"/>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'house', 'disabled': !stepOrder['house']}" v-on:click="curStep = 'house'">
           {{form.purpose === "work" ? "单位" : "住宅"}}
         </a>
       </li>
-      <i class="iconfont icon-arrow-right"/>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
       </li>
@@ -113,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss">
-.iconfont::before {
+.icon-align-middle::before {
   position: relative;
   top: 8px;
 }
