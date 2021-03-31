@@ -2,12 +2,8 @@
   <div>
     <div v-if="logined" style="position: fixed; top: 0; bottom: 55px; left: 0; right: 0; overflow-y: scroll">
       <!-- 审批列表 -->
-      <mt-cell v-for="record in waitForPass"
-        :title="record.name"
-        :key="record.id"
-        is-link
-        @click="onShwPsnDetailClick(record)">
-          
+      <mt-cell v-for="record in waitForPass" :title="`${record.name} | ${record.lvAddress}`" :key="record.id" is-link @click="onShwPsnDetailClick(record)">
+        <mt-badge slot="icon" :type="record.type === 'leave' ? 'error' : 'success'">{{record.type === "leave" ? "去" : "来"}}</mt-badge>
         <mt-button size="small" type="primary" @click="onPassPsnClick(record)">通过</mt-button>
       </mt-cell>
     </div>
@@ -61,7 +57,6 @@ export default {
 
     },
     onPassPsnClick(record) {
-      console.log(record)
       MessageBox({
         title: "提示",
         message: "确认通过该审批?",
@@ -70,9 +65,13 @@ export default {
         if (action !== "confirm") {
           return
         }
+        // @TODO
+        if (record.type === "leave") {
+          this.axios.post("/population-statistics/mdl/v1/person", record)
+        }
         const ress = await Promise.all([
           this.axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true}),
-          this.axios.post("/population-statistics/mdl/v1/person", record)
+          
         ])
         for (let res of ress) {
           if (res.status != 200) {
