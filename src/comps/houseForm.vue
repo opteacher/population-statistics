@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <mt-cell title="房屋类型" is-link :value="form.lvAddrType || '请选择'" @click.native="selHouseTypeVisible = true"/>
-    <mt-actionsheet :actions="houseTypes" v-model="selHouseTypeVisible"/>
-    <mt-field label="居住地址" placeholder="居住地址" v-model="form.lvAddress"/>
-    <div class="sch-houses-panel">
-      <div class="h-100">
-        <mt-cell v-for="house in schHouses"
-          :title="house.address"
-          :key="house.id"
-          is-link @click.native="onHouseLnkClick(house.address)"/>
-      </div>
-    </div>
-  </div>
+<mt-search v-model="schWords" :show="true">
+  <mt-radio
+    v-if="isForWork"
+    style="margin-top: 60px"
+    align="right"
+    v-model="form.cmpId"
+    :options="mchHouses.map(company => ({
+      label: company.name,
+      value: company.id
+    }))"/>
+  <mt-radio
+    v-else
+    style="margin-top: 60px"
+    align="right"
+    v-model="form.lvAddress"
+    :options="mchHouses.map(house => house.address)"/>
+</mt-search>
 </template>
 
 <script>
@@ -21,69 +25,36 @@ export default {
   },
   data() {
     return {
-      selHouseTypeVisible: false,
-      houseTypes: [{
-        name: "居住",
-        method: () => {
-          this.form.lvAddrType = "居住"
-        }
-      }, {
-        name: "工作",
-        method: () => {
-          this.form.lvAddrType = "工作"
-        }
-      }, {
-        name: "半住半工",
-        method: () => {
-          this.form.lvAddrType = "半住半工"
-        }
-      }],
-      houses: [],
-      schHouses: []
+      isForWork: false,
+      schWords: "",
+      mchHouses: [],
+      houses: []
     }
   },
   watch: {
-    "form.lvAddress": function(n, o) {
-      if (!n) {
-        this.schHouses = this.houses
-        return
-      }
-      this.schHouses = []
-      for (let house of this.houses) {
-        if (house.address.includes(n)) {
-          this.schHouses.push(house)
+    "form.cmpId": function(n, o) {
+      for (let comp of this.mchComps) {
+        if (comp.id === n) {
+          this.form.company = comp.name
         }
       }
     }
   },
   async created() {
-    const res = await this.axios.get("/population-statistics/mdl/v1/companys")
+    this.isForWork = this.form.purpose === "work"
+    const res = await this.axios.get(`/population-statistics/mdl/v1/companys?shopName=${this.isForWork ? '!' : '='}=&shopName=`)
     if (res.status != 200) {
       Toast({
         message: `系统错误！${res.statusText}`,
         iconClass: "iconfont icon-close-bold"
       })
     } else {
-      this.houses = res.data.data
-      this.schHouses = this.houses
-    }
-  },
-  methods: {
-    onHouseLnkClick(address) {
-      this.form.lvAddress = address
+      this.houses = res.data.data.map(house => {
+        house.id = house.id.toString()
+        return house
+      })
+      this.mchHouses = this.houses
     }
   }
 }
 </script>
-
-<style lang="scss">
-.sch-houses-panel {
-  position: fixed;
-  margin-top: 1vh;
-  right: 0;
-  left: 0;
-  top: 156px;
-  bottom: 60px;
-  overflow-y: scroll
-}
-</style>

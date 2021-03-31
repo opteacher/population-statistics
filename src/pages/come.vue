@@ -2,7 +2,7 @@
   <div style="overflow: hidden">
     <ul class="nav nav-pills nav-fill" style="padding: 10px 5px">
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'house', 'disabled': !stepOrder['house']}" v-on:click="curStep = 'house'">房屋</a>
+        <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">来此目的</a>
       </li>
       <i class="iconfont icon-arrow-right"/>
       <li class="nav-item">
@@ -10,7 +10,9 @@
       </li>
       <i class="iconfont icon-arrow-right"/>
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'company', 'disabled': !stepOrder['company']}" v-on:click="curStep = 'company'">单位</a>
+        <a class="nav-link" :class="{'active': curStep === 'house', 'disabled': !stepOrder['house']}" v-on:click="curStep = 'house'">
+          {{form.purpose === "work" ? "单位" : "住宅"}}
+        </a>
       </li>
       <i class="iconfont icon-arrow-right"/>
       <li class="nav-item">
@@ -18,13 +20,13 @@
       </li>
     </ul>
     <div>
-      <house-form v-if="curStep === 'house'" :form="form"/>
+      <purpose-form v-if="curStep === 'purpose'" :form="form"/>
       <cm-psn-form v-if="curStep === 'person'" :form="form"/>
-      <wk-spc-form v-if="curStep === 'company'" :form="form"/>
+      <house-form v-if="curStep === 'house'" :form="form"/>
       <connect-form v-if="curStep === 'connect'" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px">
-      <mt-button v-if="curStep !== 'house'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" type="primary" @click="onFinishBtnClick">完成</mt-button>
     </div>
@@ -32,36 +34,37 @@
 </template>
 
 <script>
-import houseForm from "../comps/houseForm"
+import purposeForm from "../comps/purposeForm"
 import cmPsnForm from "../comps/cmPsnForm"
-import wkSpcForm from "../comps/wkSpcForm"
+import houseForm from "../comps/houseForm"
 import connectForm from "../comps/connectForm"
 import { MessageBox, Toast } from "mint-ui"
 
 export default {
   components: {
-    "house-form": houseForm,
+    "purpose-form": purposeForm,
     "cm-psn-form": cmPsnForm,
-    "wk-spc-form": wkSpcForm,
+    "house-form": houseForm,
     "connect-form": connectForm
   },
   data() {
     return {
       stepOrder: {
-        "house": false,
+        "purpose": false,
         "person": false,
-        "company": false,
+        "house": false,
         "connect": false
       },
-      curStep: "house",
+      curStep: "purpose",
       form: {
         idCard: "",
         name: "",
         lvAddress: "",
-        lvAddrType: "",
         hhAddress: "",
-        workComp: "",
-        workCompId: "",
+        purpose: "",
+        purposeCn: "",
+        cmpId: "",
+        company: "",
         phone: ""
       }
     }
@@ -87,29 +90,22 @@ export default {
         if (action !== "confirm") {
           return
         }
-        const ress = await Promise.all([
-          this.axios.post("/population-statistics/mdl/v1/record", Object.assign({
-            type: "come", purpose: this.form.lvAddrType === "工作" ? "work" : "live"
-          }, this.form)),
-          this.axios.post("/population-statistics/mdl/v1/person", Object.assign({
-            cmpId: parseInt(this.form.workCompId)
-          }, this.form))
-        ])
-        for (let res of ress) {
-          console.log(res)
-          if (res.status !== 200) {
-            Toast({
-              message: `系统错误！${res.statusText}`,
-              iconClass: "iconfont icon-close-bold"
-            })
-            return
-          }
+        this.form.cmpId = parseInt(this.form.cmpId)
+        const res = await this.axios.post("/population-statistics/mdl/v1/record", Object.assign({
+          type: "come", passed: false
+        }, this.form))
+        if (res.status !== 200) {
+          Toast({
+            message: `系统错误！${res.statusText}`,
+            iconClass: "iconfont icon-close-bold"
+          })
+        } else {
+          Toast({
+            message: "来登成功！请等待协管核实",
+            iconClass: "iconfont icon-select-bold"
+          })
+          this.$router.go(-1)
         }
-        Toast({
-          message: "来登成功！",
-          iconClass: "iconfont icon-select-bold"
-        })
-        this.$router.go(-1)
       })
     }
   }

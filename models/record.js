@@ -8,13 +8,17 @@ module.exports = db.defineModel({
   idCard:     db.Types.String,
   phone:      db.Types.String,
   lvAddress:  db.Types.String,
-  toAddress:  db.Types.String
+  hhAddress:  db.Types.String,
+  toAddress:  db.Types.String,
+  cmpId:      db.Types.Number,
+  passed:     db.Types.Boolean// 是否审批通过
 }, {
   router: {
     methods: [
       "GET",
       "ALL",
-      "POST"
+      "POST",
+      "PUT",
     ]
   }
 })
