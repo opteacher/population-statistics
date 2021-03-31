@@ -71,6 +71,7 @@ export default {
     selPsnId(n, o) {
       for (let person of this.people) {
         if (person.id === n) {
+          this.form.psnId = parseInt(person.id)
           this.form.name = person.name
           this.form.idCard = person.idCard
           this.form.phone = person.phone

@@ -49,6 +49,7 @@ export default {
       form: {
         type: "leave",
         purpose: "",
+        psnId: -1,
         name: "",
         idCard: "",
         phone: "",

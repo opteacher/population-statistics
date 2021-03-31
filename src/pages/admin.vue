@@ -65,16 +65,18 @@ export default {
         if (action !== "confirm") {
           return
         }
-        // @TODO
         if (record.type === "leave") {
           this.axios.post("/population-statistics/mdl/v1/person", record)
         }
+        console.log(`/population-statistics/mdl/v1/person/${record.psnId}`)
         const ress = await Promise.all([
           this.axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true}),
-          
+          (record.type === "leave" ?
+            this.axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`) :
+            this.axios.post("/population-statistics/mdl/v1/person", record))
         ])
         for (let res of ress) {
-          if (res.status != 200) {
+          if (res.status !== 200) {
             Toast({
               message: `系统错误！${res.statusText}`,
               iconClass: "iconfont icon-close-bold"
