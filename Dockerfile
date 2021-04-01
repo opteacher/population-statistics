@@ -8,5 +8,10 @@ COPY package.json /app
 RUN apk --update add git \
   && apk --update add curl \
   && rm -rf /tmp/* /var/cache/apk/* \
-  && npm install
+  && npm install --unsafe-perm=true --allow-root \
+  && npm run build
 COPY . /app
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "start" ]
