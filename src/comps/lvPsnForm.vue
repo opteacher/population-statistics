@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import {onSchWdsChanged} from "../utils"
+
 export default {
   props: {
     "form": Object
@@ -69,7 +71,7 @@ export default {
   },
   watch: {
     selPsnId(n, o) {
-      for (let person of this.people) {
+      for (let person of this.selTab === "house" ? this.people : this.searchPerson.mchItems) {
         if (person.id === n) {
           this.form.psnId = parseInt(person.id)
           this.form.name = person.name
@@ -104,21 +106,6 @@ export default {
         })
       }
     },
-    onSchWdsChanged(schInfo, incProps) {
-      if (!this[schInfo].schWords) {
-        this[schInfo].mchItems = this[schInfo].allItems
-      } else {
-        this[schInfo].mchItems = []
-        this[schInfo].allItems.map(item => {
-          for (let incProp of incProps) {
-            if (item[incProp].includes(this[schInfo].schWords)) {
-              this[schInfo].mchItems.push(item)
-              break
-            }
-          }
-        })
-      }
-    },
     async _updateHouses() {
       const res = await this.axios.get("/population-statistics/mdl/v1/companys?shopName===&shopName=")
       if (res.status != 200) {
@@ -145,7 +132,8 @@ export default {
         })
         this.searchPerson.mchItems = this.searchPerson.allItems
       }
-    }
+    },
+    onSchWdsChanged
   }
 }
 </script>

@@ -82,3 +82,18 @@
 //   text-overflow: ellipsis;/* 文字隐藏后添加省略号 */
 //   white-space: nowrap; /* 强制不换行 */
 // }
+
+.bottom-half-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 48vw;
+  display: inline-block;
+}
+
+.bottom-half-btn:first-child {
+  margin-left: 3px;
+}
+
+.bottom-half-btn:last-child {
+  margin-right: 3px;
+}

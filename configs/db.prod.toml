@@ -1,0 +1,6 @@
+[mysql]
+database="population_statistics"
+username="root"
+password="12345"
+host="database"
+port=3306

@@ -3,13 +3,8 @@
     <div v-if="logined" class="approval-panel">
       <!-- 审批列表 -->
       <div v-if="!selRecord">
-        <mt-cell v-for="record in waitForPass"
-        :title="`${record.name} | ${record.lvAddress}`"
-        :key="record.id"
-        is-link @click.native="selRecord = record">
-          <mt-badge slot="icon" :type="record.isLeave ? 'error' : 'success'">{{record.typeCn}}</mt-badge>
-          <mt-button size="small" type="primary" @click="onPassPsnClick(record)">通过</mt-button>
-        </mt-cell>
+        <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
+          :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
       </div>
       <div v-else>
         <mt-header fixed title="人员信息">
@@ -20,14 +15,17 @@
           <mt-cell v-if="!selRecord.isLeave" title="来此目的" :value="selRecord.purpose === 'work' ? '工作' : '居住'"/>
           <mt-cell title="姓名" :value="selRecord.name"/>
           <mt-cell title="身份证" :value="selRecord.idCard"/>
+          <mt-cell v-if="!selRecord.cmpId" title="性别" :value="selRecord.gender"/>
+          <mt-cell v-if="!selRecord.cmpId" title="民族" :value="selRecord.nation"/>
           <mt-cell title="手机号" :value="selRecord.phone"/>
           <mt-cell title="居住地" :value="selRecord.lvAddress"/>
           <mt-cell v-if="selRecord.isLeave" title="目的地" :value="selRecord.toAddress"/>
           <mt-cell v-if="selRecord.cmpId" title="单位" :value="selRecord.company"/>
-          <mt-cell title="申请时间" :value="selRecord.createdAt"/>
+          <mt-cell title="申请时间" :value="(new Date(selRecord.createdAt)).toLocaleString()"/>
         </div>
         <div class="pass-btn-area">
-          <mt-button class="w-100" type="primary" @click="onPassPsnClick(selRecord)">通过</mt-button>
+          <mt-button class="bottom-half-btn" type="primary" @click="onPassPsnClick">通过</mt-button>
+          <mt-button class="bottom-half-btn" type="danger" @click="onRejectPsnClick">拒绝</mt-button>
         </div>
       </div>
     </div>
@@ -46,12 +44,14 @@
 </template>
 
 <script>
+import recordCell from "../comps/recordCell"
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
 
 export default {
   components: {
-    "btm-navi-bar": btmNaviBar
+    "btm-navi-bar": btmNaviBar,
+    "record-cell": recordCell
   },
   data() {
     return {
@@ -65,9 +65,7 @@ export default {
     }
   },
   methods: {
-    async onLgnBtnClick() {
-      this.logined = true
-
+    async _refreshRecords() {
       const res = await this.axios.get("/population-statistics/mdl/v1/records?passed=0")
       if (res.status != 200) {
         Toast({
@@ -82,7 +80,11 @@ export default {
         })
       }
     },
-    onPassPsnClick(record) {
+    onLgnBtnClick() {
+      this.logined = true
+      this._refreshRecords()
+    },
+    onPassPsnClick() {
       MessageBox({
         title: "提示",
         message: "确认通过该审批?",
@@ -92,10 +94,10 @@ export default {
           return
         }
         const ress = await Promise.all([
-          this.axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true}),
-          (record.type === "leave" ?
-            this.axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`) :
-            this.axios.post("/population-statistics/mdl/v1/person", record))
+          this.axios.put(`/population-statistics/mdl/v1/record/${this.selRecord.id}`, {passed: true}),
+          (this.selRecord.type === "leave" ?
+            this.axios.delete(`/population-statistics/mdl/v1/person/${this.selRecord.psnId}`) :
+            this.axios.post("/population-statistics/mdl/v1/person", this.selRecord))
         ])
         for (let res of ress) {
           if (res.status !== 200) {
@@ -112,6 +114,25 @@ export default {
         })
         this.$router.push({path: "/population-statistics/list?type=person"})
       })
+    },
+    async onRejectPsnClick() {
+      const res = await this.axios.delete(`/population-statistics/mdl/v1/record/${this.selRecord.id}`)
+      if (res.status != 200) {
+        Toast({
+          message: `系统错误！${res.statusText}`,
+          iconClass: "iconfont icon-close-bold"
+        })
+      } else {
+        Toast({
+          message: "审批拒绝！",
+          iconClass: "iconfont icon-select-bold"
+        })
+        this.selRecord = null
+        await this._refreshRecords()
+      }
+    },
+    onRecordClick(record) {
+      this.selRecord = record
     }
   }
 }
@@ -128,7 +149,6 @@ export default {
 }
 
 .pass-btn-area {
-  padding: 5px 3px;
   position: fixed;
   bottom: 55px;
   left: 0;

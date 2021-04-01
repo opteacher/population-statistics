@@ -5,17 +5,19 @@
         <mt-button icon="back">返回</mt-button>
       </router-link>
     </mt-header>
-    <div>
+    <div style="position: absolute; top: 40px; left: 0; right: 0; bottom: 106px; overflow-y: scroll">
       <mt-cell title="姓名" :value="person.name"/>
       <mt-cell title="身份证" :value="person.idCard"/>
+      <mt-cell v-if="person.gender" title="性别" :value="person.gender"/>
+      <mt-cell v-if="person.nation" title="民族" :value="person.nation"/>
       <mt-cell title="手机号" :value="person.phone"/>
       <mt-cell title="户籍地址" :value="person.hhAddress"/>
       <mt-cell title="居住地址" :value="person.lvAddress"/>
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
     </div>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="ml-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="primary" @click="onUpdateClick">编辑</mt-button>
-      <mt-button class="mr-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="danger" @click="onDeleteClick">删除</mt-button>
+      <mt-button class="bottom-half-btn" type="primary" @click="onUpdateClick">编辑</mt-button>
+      <mt-button class="bottom-half-btn" type="danger" @click="onDeleteClick">删除</mt-button>
     </div>
     <btm-navi-bar select="person"/>
   </div>

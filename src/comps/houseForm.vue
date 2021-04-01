@@ -1,22 +1,24 @@
 <template>
-<mt-search v-model="schWords" :show="true">
-  <mt-radio
-    v-if="isForWork"
-    align="right"
-    v-model="form.cmpId"
-    :options="mchHouses.map(company => ({
-      label: company.name,
-      value: company.id
-    }))"/>
-  <mt-radio
-    v-else
-    align="right"
-    v-model="form.lvAddress"
-    :options="mchHouses.map(house => house.address)"/>
-</mt-search>
+  <mt-search class="house-company-searcher" v-model="searchHouse.schWords" :show="true" @input="onSchWdsChanged('searchHouse', ['address'])">
+    <mt-radio
+      v-if="isForWork"
+      align="right"
+      v-model="form.cmpId"
+      :options="searchHouse.mchItems.map(company => ({
+        label: company.shopName || company.name,
+        value: company.id
+      }))"/>
+    <mt-radio
+      v-else
+      align="right"
+      v-model="form.lvAddress"
+      :options="searchHouse.mchItems.map(house => house.address)"/>
+  </mt-search>
 </template>
 
 <script>
+import {onSchWdsChanged} from "../utils"
+
 export default {
   props: {
     "form": Object
@@ -24,14 +26,16 @@ export default {
   data() {
     return {
       isForWork: false,
-      schWords: "",
-      mchHouses: [],
-      houses: []
+      searchHouse: {
+        schWords: "",
+        allItems: [],
+        mchItems: []
+      }
     }
   },
   watch: {
     "form.cmpId": function(n, o) {
-      for (let comp of this.mchHouses) {
+      for (let comp of this.searchHouse.mchItems) {
         if (comp.id === n) {
           this.form.company = comp.shopName
         }
@@ -47,12 +51,22 @@ export default {
         iconClass: "iconfont icon-close-bold"
       })
     } else {
-      this.houses = res.data.data.map(house => {
+      this.searchHouse.allItems = res.data.data.map(house => {
         house.id = house.id.toString()
         return house
       })
-      this.mchHouses = this.houses
+      this.searchHouse.mchItems = this.searchHouse.allItems
     }
+  },
+  methods: {
+    onSchWdsChanged
   }
 }
 </script>
+
+<style lang="scss">
+.house-company-searcher .mint-search-list {
+  bottom: 61px !important;
+  overflow-y: scroll !important;
+}
+</style>

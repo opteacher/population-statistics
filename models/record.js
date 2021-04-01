@@ -23,6 +23,7 @@ module.exports = db.defineModel({
       "ALL",
       "POST",
       "PUT",
+      "DELETE"
     ]
   }
 })

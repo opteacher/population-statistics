@@ -5,12 +5,14 @@
         <mt-button icon="back">返回</mt-button>
       </router-link>
     </mt-header>
-    <mt-search v-model="schWords" :show="true" @input="onSchWdsChanged">
+    <mt-search v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
+      'name', 'shopName', 'address', 'lglName', 'lglPhone', 'phone', 'lvAddress', 'company'
+    ])">
       <mt-radio v-if="lsMode === 'select'"
         align="right"
         v-model="selCmp"
-        :options="mchItems.map(item => item.name)"/>
-      <mt-cell v-else v-for="item in mchItems"
+        :options="searchItem.mchItems.map(item => item.name)"/>
+      <mt-cell v-else v-for="item in searchItem.mchItems"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
         :label="lsType === 'company' ? item.name : ''"
         :key="item.id"
@@ -30,6 +32,7 @@
 
 <script>
 import btmNaviBar from "../comps/btmNaviBar"
+import {onSchWdsChanged} from "../utils"
 import "url"
 import { MessageBox, Toast } from "mint-ui"
 
@@ -41,9 +44,11 @@ export default {
     return {
       lsType: "",
       lsMode: "display",
-      schWords: "",
-      mchItems: [],
-      data: [],
+      searchItem: {
+        schWords: "",
+        allItems: [],
+        mchItems: []
+      },
       URLSearchParams,
       selCmp: "",
       edtEmployee: {}
@@ -51,7 +56,7 @@ export default {
   },
   created() {
     if (this.$route.query.search) {
-      this.schWords = this.$route.query.search
+      this.searchItem.schWords = this.$route.query.search
     }
     this.lsMode = this.$route.query.mode || "display"
     this.onSelTabChanged(this.$route.query.type)
@@ -63,35 +68,6 @@ export default {
     }
   },
   methods: {
-    onSchWdsChanged(e) {
-      if (!e) {
-        this.mchItems = this.data
-      } else {
-        this.mchItems = []
-        this.data.map(item => {
-          if (this.lsType === "company") {
-            if (item.name.includes(e)
-            || item.shopName.includes(e)
-            || item.address.includes(e)
-            || item.lglName.includes(e)
-            || item.lglPhone.includes(e)) {
-              this.mchItems.push(item)
-            }
-          } else if (this.lsType === "person") {
-            if (item.name.includes(e)
-            || item.phone.includes(e)
-            || item.lvAddress.includes(e)
-            || item.company.includes(e)) {
-              this.mchItems.push(item)
-            }
-          } else {
-            if (item.address.includes(e)) {
-              this.mchItems.push(item)
-            }
-          }
-        })
-      }
-    },
     async onSelTabChanged(selTab) {
       this.lsType = selTab
       let urlParamStr = ""
@@ -108,8 +84,8 @@ export default {
           iconClass: "iconfont icon-close-bold"
         })
       } else {
-        this.data = res.data.data
-        this.mchItems = this.data
+        this.searchItem.allItems = res.data.data
+        this.searchItem.mchItems = this.searchItem.allItems
       }
     },
     onCfmSelClick() {
@@ -149,7 +125,8 @@ export default {
         message: "房屋录入成功！",
         iconClass: "iconfont icon-select-bold"
       })
-    }
+    },
+    onSchWdsChanged
   }
 }
 </script>

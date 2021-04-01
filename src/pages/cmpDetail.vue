@@ -17,8 +17,8 @@
         :to="`/population-statistics/list?type=person&search=${company.shopName || company.address}`" is-link/>
     </div>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="ml-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="primary" @click="onUpdateClick">编辑</mt-button>
-      <mt-button class="mr-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="danger" @click="onDeleteClick">删除</mt-button>
+      <mt-button class="bottom-half-btn" type="primary" @click="onUpdateClick">编辑</mt-button>
+      <mt-button class="bottom-half-btn" type="danger" @click="onDeleteClick">删除</mt-button>
     </div>
     <btm-navi-bar select="company"/>
   </div>

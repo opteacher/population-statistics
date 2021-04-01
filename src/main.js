@@ -5,7 +5,7 @@ import axios from "axios"
 import routes from "./routes"
 import "./styles/common.scss"
 import "mint-ui/lib/style.min.css"
-import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell, CellSwipe, Search, Tabbar, Radio, Actionsheet, Header, Badge, Picker } from "mint-ui"
+import { Field, Button, Navbar, TabItem, TabContainer, TabContainerItem, Cell, CellSwipe, Search, Tabbar, Radio, Actionsheet, Header, Badge, Popup, Picker } from "mint-ui"
 
 Vue.component(Field.name, Field)
 Vue.component(Button.name, Button)
@@ -21,6 +21,7 @@ Vue.component(Radio.name, Radio)
 Vue.component(Actionsheet.name, Actionsheet)
 Vue.component(Header.name, Header)
 Vue.component(Badge.name, Badge)
+Vue.component(Popup.name, Popup)
 Vue.component(Picker.name, Picker)
 
 Vue.use(VueRouter)

@@ -25,7 +25,7 @@
       <house-form v-if="curStep === 'house'" :form="form"/>
       <connect-form v-if="curStep === 'connect'" :form="form"/>
     </div>
-    <div class="fixed-bottom" style="padding: 10px 5px">
+    <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
       <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" type="primary" @click="onFinishBtnClick">完成</mt-button>
@@ -60,6 +60,8 @@ export default {
         type: "come",
         idCard: "",
         name: "",
+        gender: "男",
+        nation: "汉族",
         lvAddress: "",
         hhAddress: "",
         purpose: "",
