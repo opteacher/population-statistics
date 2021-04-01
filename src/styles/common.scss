@@ -71,3 +71,14 @@
   color: inherit !important;
   text-decoration: none !important;
 }
+
+.mint-search-list {
+  padding-bottom: 55px;
+  overflow-y: scroll;
+}
+
+// .mint-cell-label {
+//   overflow: hidden; /* 超出一行文字自动隐藏 */
+//   text-overflow: ellipsis;/* 文字隐藏后添加省略号 */
+//   white-space: nowrap; /* 强制不换行 */
+// }

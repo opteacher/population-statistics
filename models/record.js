@@ -7,6 +7,8 @@ module.exports = db.defineModel({
   psnId:      db.Types.Number,
   name:       db.Types.String,
   idCard:     db.Types.String,
+  gender:     db.Types.String,
+  nation:     db.Types.String,
   phone:      db.Types.String,
   lvAddress:  db.Types.String,
   hhAddress:  db.Types.String,

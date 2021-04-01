@@ -3,6 +3,14 @@
     <div>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
       <mt-field label="身份证" placeholder="请输入身份证号码" v-model="form.idCard"/>
+      <mt-cell class="mint-field" title="性别"
+        is-link @click.native="form.gender = form.gender === '男' ? '女' : '男'">
+        <span style="color: gray">{{form.gender}}</span>
+      </mt-cell>
+      <mt-cell class="mint-field" title="民族"
+        is-link @click.native="showNationBtmPopup = true">
+        <span style="color: gray">{{form.nation}}</span>
+      </mt-cell>
       <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="form.phone"/>
       <mt-field label="户籍地址" placeholder="请输入户籍地址" v-model="form.hhAddress"/>
       <mt-field label="居住地址" placeholder="请输入居住地址" v-model="form.lvAddress"/>
@@ -27,13 +35,16 @@ export default {
       form: {
         name: "",
         idCard: "",
+        gender: "男",
+        nation: "汉族",
         phone: "",
         hhAddress: "",
         lvAddress: "",
         cmpId: -1,
         company: ""
       },
-      URLSearchParams
+      URLSearchParams,
+      showNationBtmPopup: false
     }
   },
   created() {

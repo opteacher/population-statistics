@@ -4,6 +4,8 @@ module.exports = db.defineModel({
   __modelName: "person",
   name:       db.Types.String,
   idCard:     db.Types.String,
+  gender:     db.Types.String,
+  nation:     db.Types.String,
   phone:      db.Types.String,
   hhAddress:  db.Types.String,
   lvAddress:  db.Types.String,
