@@ -24,7 +24,7 @@
           <mt-radio
             v-model="selPsnId"
             :options="people.map(person => ({
-              label: `${person.name} (${person.idCard})`,
+              label: person.name,
               value: person.id
             }))"/>
         </div>
@@ -35,7 +35,7 @@
             align="right"
             v-model="selPsnId"
             :options="searchPerson.mchItems.map(person => ({
-              label: `${person.name} (${person.idCard})`,
+              label: person.name,
               value: person.id
             }))"/>
         </mt-search>
@@ -78,6 +78,7 @@ export default {
           this.form.hhAddress = person.hhAddress
           this.form.lvAddress = person.lvAddress
           this.form.cmpId = person.cmpId
+          this.form.company = person.company
           break
         }
       }

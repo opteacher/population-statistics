@@ -33,7 +33,7 @@
             align="right"
             v-model="form.idCard"
             :options="searchOldPsn.mchItems.map(person => ({
-              label: `${person.name} (${person.idCard})`,
+              label: person.name,
               value: person.idCard
             }))"/>
         </mt-search>

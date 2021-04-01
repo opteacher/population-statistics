@@ -8,7 +8,7 @@
       <mt-cell v-else v-for="item in mchItems"
         :title="lsType === 'company' ? `(${item.shopName}) ${item.name}` : (lsType === 'house' ? item.address : item.name)"
         :key="item.id"
-        :to="`/population-statistics/${lsType}-detail?${(new URLSearchParams(item)).toString()}`"
+        :to="`/population-statistics/${lsType === 'house' ? 'company' : lsType}-detail?${(new URLSearchParams(item)).toString()}`"
         is-link
         value="详情"/>
     </mt-search>
@@ -40,6 +40,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.search) {
+      this.schWords = this.$route.query.search
+    }
     this.lsMode = this.$route.query.mode || "display"
     this.onSelTabChanged(this.$route.query.type)
     if (this.lsMode === "select") {
@@ -56,7 +59,7 @@ export default {
       } else {
         this.mchItems = []
         this.data.map(item => {
-          if (this.lsType === "company") {
+          if (this.lsType === "company" || this.lsType === "house") {
             if (item.name.includes(e)
             || item.shopName.includes(e)
             || item.address.includes(e)
@@ -67,7 +70,8 @@ export default {
           } else {
             if (item.name.includes(e)
             || item.phone.includes(e)
-            || item.lvAddress.includes(e)) {
+            || item.lvAddress.includes(e)
+            || item.company.includes(e)) {
               this.mchItems.push(item)
             }
           }

@@ -1,11 +1,18 @@
 <template>
   <div>
-    <mt-cell title="姓名" :value="person.name"/>
-    <mt-cell title="身份证" :value="person.idCard"/>
-    <mt-cell title="手机号" :value="person.phone"/>
-    <mt-cell title="户籍地址" :value="person.hhAddress"/>
-    <mt-cell title="居住地址" :value="person.lvAddress"/>
-    <mt-cell title="所在单位" :value="person.workComp"/>
+    <mt-header title="人员详情">
+      <router-link to="/population-statistics/list?type=person" slot="left">
+        <mt-button icon="back">返回</mt-button>
+      </router-link>
+    </mt-header>
+    <div>
+      <mt-cell title="姓名" :value="person.name"/>
+      <mt-cell title="身份证" :value="person.idCard"/>
+      <mt-cell title="手机号" :value="person.phone"/>
+      <mt-cell title="户籍地址" :value="person.hhAddress"/>
+      <mt-cell title="居住地址" :value="person.lvAddress"/>
+      <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
+    </div>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
       <mt-button class="ml-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="primary" @click="onUpdateClick">编辑</mt-button>
       <mt-button class="mr-1pc mtb-1pc" style="width: 48vw; display: inline-block" type="danger" @click="onDeleteClick">删除</mt-button>
@@ -32,7 +39,7 @@ export default {
   },
   methods: {
     onUpdateClick() {
-
+      this.$router.push({path: `/population-statistics/input?type=person&${(new URLSearchParams(this.person)).toString()}`})
     },
     onDeleteClick() {
       MessageBox({

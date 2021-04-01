@@ -92,7 +92,10 @@ export default {
         if (action !== "confirm") {
           return
         }
-        if (typeof this.form.cmpId === "string" && this.form.cmpId !== "") {
+        if (this.form.cmpId === "") {
+          delete this.form.cmpId
+          delete this.form.company
+        } else if (typeof this.form.cmpId === "string") {
           this.form.cmpId = parseInt(this.form.cmpId)
         }
         const res = await this.axios.post("/population-statistics/mdl/v1/record", this.form)

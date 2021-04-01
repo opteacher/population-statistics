@@ -15,7 +15,7 @@
         <mt-header fixed title="人员信息">
           <mt-button slot="left" icon="back" @click="selRecord = null">返回</mt-button>
         </mt-header>
-        <div class="mt-40">
+        <div class="record-detail">
           <mt-cell title="类型" :value="selRecord.typeCn"/>
           <mt-cell v-if="!selRecord.isLeave" title="来此目的" :value="selRecord.purpose === 'work' ? '工作' : '居住'"/>
           <mt-cell title="姓名" :value="selRecord.name"/>
@@ -128,10 +128,19 @@ export default {
 }
 
 .pass-btn-area {
-  margin: 1vh 1vw;
+  padding: 5px 3px;
   position: fixed;
   bottom: 55px;
   left: 0;
   right: 0
+}
+
+.record-detail {
+  position: absolute;
+  top: 40px;
+  bottom: 51px;
+  left: 0;
+  right: 0;
+  overflow-y: scroll
 }
 </style>

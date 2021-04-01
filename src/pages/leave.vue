@@ -57,6 +57,7 @@ export default {
         lvAddress: "",
         toAddress: "",
         cmpId: -1,
+        company: "",
         passed: false
       }
     }
