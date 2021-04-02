@@ -1,6 +1,6 @@
 FROM node:latest
 
-ARG env
+ENV env prod
 
 WORKDIR /app
 
@@ -14,4 +14,4 @@ EXPOSE 3000
 CMD [ "npm", "run", "start" ]
 
 # sudo docker build -t=population-statistics .
-# sudo docker run -p 80:3000 population-statistics
+# sudo docker run --rm -p 80:3000 population-statistics
