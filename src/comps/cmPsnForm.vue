@@ -8,9 +8,11 @@
     <!-- tab-container -->
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="new">
-        <id-card-field :form="form"/>
+        <id-card-field :form="form" :error="error"/>
         <mt-field label="姓名" placeholder="请输入姓名" v-model="form.name"/>
+        <err-popup-tip :error="error" pname="name"/>
         <mt-field label="户籍地址" placeholder="请输入户籍地址（可选）" v-model="form.hhAddress"/>
+        <err-popup-tip :error="error" pname="hhAddress"/>
         <div v-if="form.purpose === 'work'">
           <sch-addr-field :form="form" pname="lvAddress"/>
         </div>
@@ -35,6 +37,7 @@
 </template>
 
 <script>
+import errPopupTip from "./errPopupTip"
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
@@ -43,13 +46,15 @@ import {onSchWdsChanged} from "../utils"
 
 export default {
   components: {
+    "err-popup-tip": errPopupTip,
     "id-card-field": idCardField,
     "nation-field": nationField,
     "gender-field": genderField,
     "sch-addr-field": schAddrField
   },
   props: {
-    "form": Object
+    "form": Object,
+    "error": Object
   },
   data() {
     return {
