@@ -1,9 +1,11 @@
 <template>
   <div>
-    <mt-cell class="mint-field" title="民族"
-      is-link @click.native="showBtmPopup = true">
-      <span style="color: gray">{{form.nation}}</span>
-    </mt-cell>
+    <div>
+      <mt-cell class="mint-field" title="民族"
+        is-link @click.native="showBtmPopup = true">
+        <span style="color: gray">{{form.nation}}</span>
+      </mt-cell>
+    </div>
     <mt-popup class="w-100" v-model="showBtmPopup" position="bottom">
       <mt-picker :slots="slots" :visible-item-count="5" :show-toolbar="false" @change="form.nation = arguments[1][0]"/>
     </mt-popup>

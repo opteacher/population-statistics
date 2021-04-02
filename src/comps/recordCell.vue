@@ -1,6 +1,10 @@
 <template>
-  <mt-cell :title="`${record.name} | ${record.phone}`" is-link @click.native="onRecordClick(record)">
-    <mt-badge slot="icon" :type="record.isLeave ? 'error' : 'success'">{{record.typeCn}}</mt-badge>
+  <mt-cell is-link @click.native="onRecordClick(record)">
+    <div slot="title">
+      <mt-badge :type="record.isLeave ? 'error' : 'success'">{{record.typeCn}}</mt-badge>
+      {{record.name}}
+      <mt-button type="default" size="small" @click="onCallReqPsnClick(record.phone)">{{record.phone}}</mt-button>
+    </div>
     <mt-button size="small" type="primary" @click="onPassPsnClick(record)">通过</mt-button>
   </mt-cell>
 </template>
@@ -11,6 +15,11 @@ export default {
     "record": Object,
     "onPassPsnClick": Function,
     "onRecordClick": Function
+  },
+  methods: {
+    onCallReqPsnClick(phone) {
+      console.log(phone)
+    }
   }
 }
 </script>

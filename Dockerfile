@@ -1,18 +1,17 @@
-FROM mhart/alpine-node:latest
+FROM node:latest
 
 ARG env
 
 WORKDIR /app
 
 COPY package.json /app
-RUN apk --update add git \
-  && apk --update add curl \
-  && apk --update add python2.7 \
-  && rm -rf /tmp/* /var/cache/apk/* \
-  && npm install --unsafe-perm=true --allow-root \
-  && npm run build
+RUN  npm install --unsafe-perm=true --allow-root
 COPY . /app
+RUN npm run build
 
 EXPOSE 3000
 
 CMD [ "npm", "run", "start" ]
+
+# sudo docker build -t=population-statistics .
+# sudo docker run -p 80:3000 population-statistics

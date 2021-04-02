@@ -1,6 +1,8 @@
 <template>
   <div>
-    <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+    <div>
+      <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+    </div>
     <div class="sch-list-panel">
       <div class="h-100">
         <mt-cell v-for="house in searchAddr.mchItems"
