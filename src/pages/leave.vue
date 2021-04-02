@@ -14,9 +14,9 @@
       </li>
     </ul>
     <div style="position: absolute; top: 60px; left: 0; right: 0">
-      <lv-psn-form v-if="curStep === 'person'" :form="form"/>
-      <where-to-form v-if="curStep === 'whereto'" :form="form"/>
-      <connect-form v-if="curStep === 'connect'" :form="form"/>
+      <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
+      <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>
+      <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
       <mt-button v-if="curStep !== 'person'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
@@ -61,10 +61,44 @@ export default {
         cmpId: -1,
         company: "",
         passed: false
+      },
+      error: {
+        active: false,
+        pname: "",
+        message: ""
       }
     }
   },
   methods: {
+    _validFormData() {
+      switch (this.curStep) {
+        case "person":
+          if (this.form.psnId === -1) {
+            this.error.pname = "psnId"
+            this.error.message = "必须选择将要离开的人员！"
+            this.error.active = true
+            return false
+          }
+          break
+        case "whereto":
+          if (this.form.toAddress === "") {
+            this.error.pname = "toAddress"
+            this.error.message = "必须填写将要去往的地址！"
+            this.error.active = true
+            return false
+          }
+          break
+        case "connect":
+          if (this.form.phone === "") {
+            this.error.pname = "phone"
+            this.error.message = "必须填写联系电话！"
+            this.error.active = true
+            return false
+          }
+          break
+      }
+      return true
+    },
     onStepBtnClick(idx) {
       const stepOrderKeys = Object.keys(this.stepOrder)
       const nxtIdx = stepOrderKeys.indexOf(this.curStep) + idx
@@ -72,6 +106,9 @@ export default {
         return
       }
       if (idx === 1) {
+        if (!this._validFormData()) {
+          return
+        }
         this.stepOrder[this.curStep] = true
       }
       this.curStep = stepOrderKeys[nxtIdx]

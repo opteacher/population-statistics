@@ -79,6 +79,58 @@ export default {
     }
   },
   methods: {
+    _validFormData() {
+      switch (this.curStep) {
+        case "purpose":
+          if (this.form.purpose === "") {
+            this.error.pname = "purpose"
+            this.error.message = "必须选择来此目的！"
+            this.error.active = true
+            return false
+          }
+          break
+        case "person":
+          if (this.form.idCard === "") {
+            this.error.pname = "idCard"
+            this.error.message = "必须填写身份证号码！"
+            this.error.active = true
+            return false
+          } else if (this.form.name === "") {
+            this.error.pname = "name"
+            this.error.message = "必须填写人员姓名！"
+            this.error.active = true
+            return false
+          } else if (this.form.purpose === "work" && this.form.lvAddress === "") {
+            this.error.pname = "lvAddress"
+            this.error.message = "必须填写现在居住地址！"
+            this.error.active = true
+            return false
+          }
+          break
+        case "house":
+          if (this.form.purpose === "work" && this.form.cmpId === "") {
+            this.error.pname = "cmpId"
+            this.error.message = "必须选择工作单位！"
+            this.error.active = true
+            return false
+          } else if (this.form.purpose === "live" && this.form.lvAddress === "") {
+            this.error.pname = "lvAddress"
+            this.error.message = "必须选择现在居住地址！"
+            this.error.active = true
+            return false
+          }
+          break
+        case "connect":
+          if (this.form.phone === "") {
+            this.error.pname = "phone"
+            this.error.message = "必须填写联系电话！"
+            this.error.active = true
+            return false
+          }
+          break
+      }
+      return true
+    },
     onStepBtnClick(idx) {
       const stepOrderKeys = Object.keys(this.stepOrder)
       const nxtIdx = stepOrderKeys.indexOf(this.curStep) + idx
@@ -86,28 +138,8 @@ export default {
         return
       }
       if (idx === 1) {
-        switch (this.curStep) {
-          case "purpose":
-            if (this.form.purpose === "") {
-              this.error.pname = "purpose"
-              this.error.message = "必须选择来此目的！"
-              this.error.active = true
-              return
-            }
-            break
-          case "person":
-            if (this.form.idCard === "") {
-              this.error.pname = "idCard"
-              this.error.message = "必须填写身份证号码！"
-              this.error.active = true
-              return
-            } else if (this.form.name === "") {
-              this.error.pname = "name"
-              this.error.message = "必须填写人员姓名！"
-              this.error.active = true
-              return
-            }
-            break
+        if (!this._validFormData()) {
+          return
         }
         this.stepOrder[this.curStep] = true
       }

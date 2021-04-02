@@ -1,26 +1,28 @@
 <template>
   <div>
-    <div>
-      <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
-    </div>
+    <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+    <err-popup-tip :error="error" :pname="pname" poppos="top"/>
     <div class="sch-list-panel">
-      <div class="h-100">
-        <mt-cell v-for="house in searchAddr.mchItems"
-          :title="house.address"
-          :key="house.id"
-          is-link @click.native="searchAddr.schWords = house.address"/>
-      </div>
+      <mt-cell v-for="house in searchAddr.mchItems"
+        :title="house.address"
+        :key="house.id"
+        is-link @click.native="searchAddr.schWords = house.address"/>
     </div>
   </div>
 </template>
 
 <script>
+import errPopupTip from "./errPopupTip"
 import {onSchWdsChanged} from "../utils"
 
 export default {
+  components: {
+    "err-popup-tip": errPopupTip
+  },
   props: {
     "form": Object,
-    "pname": String
+    "pname": String,
+    "error": Object
   },
   data() {
     return {
@@ -63,6 +65,7 @@ export default {
   left: 0;
   top: 301px;
   bottom: 60px;
-  overflow-y: scroll
+  overflow-y: scroll;
+  z-index: 100;
 }
 </style>

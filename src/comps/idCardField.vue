@@ -1,7 +1,7 @@
 <template>
   <div>
     <mt-field label="身份证" placeholder="请输入身份证" v-model="form.idCard" :attr="{ type: 'number', maxlength: 18 }">
-      <mt-button disabled size="small">
+      <mt-button size="small" @click="onCameraClick">
         <i class="iconfont icon-camera"/>
       </mt-button>
     </mt-field>
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui"
 import errPopupTip from "./errPopupTip"
 
 export default {
@@ -19,6 +20,14 @@ export default {
   props: {
     "form": Object,
     "error": Object
+  },
+  methods: {
+    onCameraClick() {
+      Toast({
+        message: "拍摄身份证录入功能还在开发中",
+        iconClass: "iconfont icon-warning"
+      })
+    }
   }
 }
 </script>

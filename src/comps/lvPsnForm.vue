@@ -1,5 +1,10 @@
 <template>
   <div>
+    <mt-cell class="sel-person mb-1pc" title="离开人员">
+      {{form.name || "请选择将要离开此地的人员"}}
+    </mt-cell>
+    <err-popup-tip :error="error" pname="psnId"/>
+
     <mt-navbar v-model="selTab">
       <mt-tab-item id="house">所在房屋</mt-tab-item>
       <mt-tab-item id="person">个人信息</mt-tab-item>
@@ -45,11 +50,16 @@
 </template>
 
 <script>
+import errPopupTip from "./errPopupTip"
 import {onSchWdsChanged} from "../utils"
 
 export default {
+  components: {
+    "err-popup-tip": errPopupTip
+  },
   props: {
-    "form": Object
+    "form": Object,
+    "error": Object
   },
   data() {
     return {
@@ -139,6 +149,12 @@ export default {
 </script>
 
 <style>
+.sel-person {
+  left: 0;
+  right: 0;
+  z-index: 100
+}
+
 .mint-header-title {
   margin-bottom: 0 !important;
 }

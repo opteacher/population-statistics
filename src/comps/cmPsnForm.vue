@@ -9,12 +9,10 @@
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="new">
         <id-card-field :form="form" :error="error"/>
-        <mt-field label="姓名" placeholder="请输入姓名" v-model="form.name"/>
-        <err-popup-tip :error="error" pname="name"/>
-        <mt-field label="户籍地址" placeholder="请输入户籍地址（可选）" v-model="form.hhAddress"/>
-        <err-popup-tip :error="error" pname="hhAddress"/>
+        <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
+        <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
         <div v-if="form.purpose === 'work'">
-          <sch-addr-field :form="form" pname="lvAddress"/>
+          <sch-addr-field :form="form" :error="error" pname="lvAddress"/>
         </div>
         <div v-else>
           <gender-field :form="form"/>
@@ -37,6 +35,7 @@
 </template>
 
 <script>
+import iptValidField from "./iptValidField"
 import errPopupTip from "./errPopupTip"
 import idCardField from "./idCardField"
 import nationField from "./nationField"
@@ -46,6 +45,7 @@ import {onSchWdsChanged} from "../utils"
 
 export default {
   components: {
+    "ipt-valid-field": iptValidField,
     "err-popup-tip": errPopupTip,
     "id-card-field": idCardField,
     "nation-field": nationField,
