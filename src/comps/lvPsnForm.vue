@@ -51,7 +51,7 @@
 
 <script>
 import errPopupTip from "./errPopupTip"
-import {onSchWdsChanged} from "../utils"
+import utils from "../utils"
 
 export default {
   components: {
@@ -103,47 +103,32 @@ export default {
   methods: {
     async onHsDetailClick(house) {
       this.houseDetail = house
-      const res = await this.axios.get(`/population-statistics/mdl/v1/persons?lvAddress=${house.address}`)
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
-        this.people = res.data.data.map(person => {
+      const url = `/population-statistics/mdl/v1/persons?lvAddress=${house.address}`
+      await utils.reqBackend(this.axios.get(url), data => {
+        this.people = data.map(person => {
           person.id = person.id.toString()
           return person
         })
-      }
+      })
     },
     async _updateHouses() {
-      const res = await this.axios.get("/population-statistics/mdl/v1/companys?shopName===&shopName=")
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
-        this.searchHouse.allItems = res.data.data
+      const url = "/population-statistics/mdl/v1/companys?shopName===&shopName="
+      await utils.reqBackend(this.axios.get(url), data => {
+        this.searchHouse.allItems = data
         this.searchHouse.mchItems = this.searchHouse.allItems
-      }
+      })
     },
     async _updatePerson() {
-      const res = await this.axios.get("/population-statistics/mdl/v1/persons")
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
-        this.searchPerson.allItems = res.data.data.map(person => {
+      const url = "/population-statistics/mdl/v1/persons"
+      await utils.reqBackend(this.axios.get(url), data => {
+        this.searchPerson.allItems = data.map(person => {
           person.id = person.id.toString()
           return person
         })
         this.searchPerson.mchItems = this.searchPerson.allItems
-      }
+      })
     },
-    onSchWdsChanged
+    onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>

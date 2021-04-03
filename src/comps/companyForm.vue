@@ -10,12 +10,13 @@
       <mt-field label="法人手机号" placeholder="请输入法人手机号" type="tel" v-model="form.lglPhone"/>
     </div>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click.prevent="onSubmitClick">提交</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" style="width: 98vw" type="primary" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>
 </template>
 
 <script>
+import { reqBackend } from "../utils"
 import { Toast } from "mint-ui"
 
 export default {
@@ -29,7 +30,8 @@ export default {
         lglName: "",
         lglId: "",
         lglPhone: ""
-      }
+      },
+      formSubmit: false
     }
   },
   created() {
@@ -46,21 +48,18 @@ export default {
   },
   methods: {
     async onSubmitClick() {
-      const res = (this.form.id ?
-        await this.axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
-        await this.axios.post("/population-statistics/mdl/v1/company", this.form))
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
+      this.formSubmit = true
+      const pms = (this.form.id ?
+        this.axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
+        this.axios.post("/population-statistics/mdl/v1/company", this.form))
+      const res = 
+      await reqBackend(pms, data => {
         Toast({
           message: "提交成功！",
           iconClass: "iconfont icon-select-bold"
         })
         this.$router.push({path: `/population-statistics/list?type=${this.form.shopName ? 'company' : 'house'}`})
-      }
+      })
     }
   }
 }

@@ -19,7 +19,14 @@ export default {
   },
   props: {
     "form": Object,
-    "error": Object
+    "error": {
+      type: Object,
+      default: () => ({
+        active: false,
+        pname: "",
+        message: ""
+      })
+    }
   },
   methods: {
     onCameraClick() {

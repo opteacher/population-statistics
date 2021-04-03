@@ -6,6 +6,7 @@ import list from "./pages/list"
 import cmpDetail from "./pages/cmpDetail"
 import psnDetail from "./pages/psnDetail"
 import admin from "./pages/admin"
+import approve from "./pages/approve"
 
 export default [{
     path: "/",
@@ -31,6 +32,9 @@ export default [{
 }, {
     path: "/population-statistics/person-detail",
     component: psnDetail
+}, {
+    path: "/population-statistics/approve",
+    component: approve
 }, {
     path: "/population-statistics/admin",
     component: admin

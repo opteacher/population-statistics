@@ -23,16 +23,13 @@
     <div  v-if="lsMode === 'select'" class="w-100 fixed-bottom mb-55" style="background-color: white">
       <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onCfmSelClick">确定</mt-button>
     </div>
-    <div v-show="false" v-if="lsType === 'house'" class="w-100 fixed-bottom mb-55">
-      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="default" @click="onGenHsClick">生成</mt-button>
-    </div>
     <btm-navi-bar :select="lsType" :onSelTabChanged="onSelTabChanged"/>
   </div>
 </template>
 
 <script>
 import btmNaviBar from "../comps/btmNaviBar"
-import {onSchWdsChanged} from "../utils"
+import utils from "../utils"
 import "url"
 import { MessageBox, Toast } from "mint-ui"
 
@@ -77,16 +74,11 @@ export default {
         selTab = "company"
         urlParamStr = "?shopName===&shopName="
       }
-      const res = await this.axios.get(`/population-statistics/mdl/v1/${selTab}s${urlParamStr}`)
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
-        this.searchItem.allItems = res.data.data
+      const url = `/population-statistics/mdl/v1/${selTab}s${urlParamStr}`
+      await utils.reqBackend(this.axios.get(url), data => {
+        this.searchItem.allItems = data
         this.searchItem.mchItems = this.searchItem.allItems
-      }
+      })
     },
     onCfmSelClick() {
       this.edtEmployee.workComp = this.selCmp
@@ -94,39 +86,7 @@ export default {
         path: `/population-statistics/home?type=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
       })
     },
-    async onGenHsClick() {
-      const pmss = []
-      for (let t = 1; t <= 2; ++t) {
-        for (let j = 1; j <= 14; ++j) {
-          for (let i = 1; i <= 25; ++i) {
-            pmss.push(this.axios.post("/population-statistics/mdl/v1/company", {
-              name: "",
-              shopName: "",
-              regId: "",
-              address: `福海路777弄${t}号${j}${`${i}`.padStart(2, "0")}室`,
-              lglName: "",
-              lglId: "",
-              lglPhone: ""
-            }))
-          }
-        }
-      }
-      const ress = await Promise.all(pmss)
-      for (let res of ress) {
-        if (res.status !== 200) {
-          Toast({
-            message: `系统错误！${res.statusText}`,
-            iconClass: "iconfont icon-close-bold"
-          })
-          return
-        }
-      }
-      Toast({
-        message: "房屋录入成功！",
-        iconClass: "iconfont icon-select-bold"
-      })
-    },
-    onSchWdsChanged
+    onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>

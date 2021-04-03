@@ -21,7 +21,10 @@
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
       <mt-button v-if="curStep !== 'person'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
-      <mt-button v-else class="float-right" type="primary" @click="onFinishBtnClick">完成</mt-button>
+      <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
+        <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>
+        完成
+      </mt-button>
     </div>
   </div>
 </template>
@@ -31,6 +34,7 @@ import lvPsnForm from "../comps/lvPsnForm"
 import whereToForm from "../comps/whereToForm"
 import connectForm from "../comps/connectForm"
 import { MessageBox, Toast } from "mint-ui"
+import utils from "../utils"
 
 export default {
   components: {
@@ -66,7 +70,8 @@ export default {
         active: false,
         pname: "",
         message: ""
-      }
+      },
+      formSubmit: false
     }
   },
   methods: {
@@ -89,12 +94,6 @@ export default {
           }
           break
         case "connect":
-          if (this.form.phone === "") {
-            this.error.pname = "phone"
-            this.error.message = "必须填写联系电话！"
-            this.error.active = true
-            return false
-          }
           break
       }
       return true
@@ -114,28 +113,34 @@ export default {
       this.curStep = stepOrderKeys[nxtIdx]
     },
     onFinishBtnClick() {
+      // 最后检查联系电话是否正确
+      if (this.form.phone === "") {
+        this.error.pname = "phone"
+        this.error.message = "必须填写联系电话！"
+        this.error.active = true
+        return
+      }
+
+      // 正式提交
+      this.formSubmit = true
       MessageBox({
         title: "提示",
         message: "确认该人员已离开?",
         showCancelButton: true
       }).then(async action => {
         if (action !== "confirm") {
+          this.formSubmit = false
           return
         }
         this.form.cmpId = parseInt(this.form.cmpId)
-        const res = await this.axios.post("/population-statistics/mdl/v1/record", this.form)
-        if (res.status !== 200) {
-          Toast({
-            message: `系统错误！${res.statusText}`,
-            iconClass: "iconfont icon-close-bold"
-          })
-        } else {
+        const url = "/population-statistics/mdl/v1/record"
+        await utils.reqBackend(this.axios.post(url, this.form), data => {
           Toast({
             message: "去销成功！请等待协管核实",
             iconClass: "iconfont icon-select-bold"
           })
           this.$router.go(-1)
-        }
+        })
       })
     }
   }

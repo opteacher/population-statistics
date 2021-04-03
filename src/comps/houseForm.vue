@@ -25,7 +25,7 @@
 
 <script>
 import errPopupTip from "./errPopupTip"
-import {onSchWdsChanged} from "../utils"
+import utils from "../utils"
 
 export default {
   components: {
@@ -61,22 +61,17 @@ export default {
   },
   async created() {
     this.isForWork = this.form.purpose === "work"
-    const res = await this.axios.get(`/population-statistics/mdl/v1/companys?shopName=${this.isForWork ? '!' : '='}=&shopName=`)
-    if (res.status != 200) {
-      Toast({
-        message: `系统错误！${res.statusText}`,
-        iconClass: "iconfont icon-close-bold"
-      })
-    } else {
-      this.searchHouse.allItems = res.data.data.map(house => {
+    const url = `/population-statistics/mdl/v1/companys?shopName=${this.isForWork ? '!' : '='}=&shopName=`
+    await utils.reqBackend(this.axios.get(url), data => {
+      this.searchHouse.allItems = data.map(house => {
         house.id = house.id.toString()
         return house
       })
       this.searchHouse.mchItems = this.searchHouse.allItems
-    }
+    })
   },
   methods: {
-    onSchWdsChanged
+    onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>

@@ -12,7 +12,7 @@
         <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
         <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
         <div v-if="form.purpose === 'work'">
-          <sch-addr-field :form="form" :error="error" pname="lvAddress"/>
+          <sch-addr-field :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName="/>
         </div>
         <div v-else>
           <gender-field :form="form"/>
@@ -41,7 +41,7 @@ import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
 import schAddrField from "./schAddrField"
-import {onSchWdsChanged} from "../utils"
+import utils from "../utils"
 
 export default {
   components: {
@@ -84,26 +84,21 @@ export default {
     },
     async selTab(n, o) {
       if (n === "old") {
-        const res = await this.axios.get("/population-statistics/mdl/v1/records?type=leave")
-        if (res.status != 200) {
-          Toast({
-            message: `系统错误！${res.statusText}`,
-            iconClass: "iconfont icon-close-bold"
-          })
-        } else {
-          this.searchOldPsn.allItems = res.data.data.map(record => {
+        const url = "/population-statistics/mdl/v1/records?type=leave"
+        await utils.reqBackend(this.axios.get(url), data => {
+          this.searchOldPsn.allItems = data.map(record => {
             delete record.type
             delete record.purpose
             delete record.psnId
             return record
           })
           this.searchOldPsn.mchItems = this.searchOldPsn.allItems
-        }
+        })
       }
     }
   },
   methods: {
-    onSchWdsChanged
+    onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>

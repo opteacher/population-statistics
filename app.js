@@ -11,6 +11,7 @@ const cors = require("koa2-cors")
 
 const configs = require("./utils/tools").readConfig("./configs/server")
 const models = require("./models/index").index
+const router = require("./routes/index")
 
 const app = new Koa()
 
@@ -34,6 +35,9 @@ app.use(models.routes(), models.allowedMethods())
 
 // 指定页面目录
 app.use(views(path.resolve("./"), {extension: "html"}));
+
+// 路径分配
+app.use(router.routes(), router.allowedMethods())
 
 // 指定页面目录
 app.use(async ctx => await ctx.render("index"))

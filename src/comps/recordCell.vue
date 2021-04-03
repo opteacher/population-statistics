@@ -3,9 +3,9 @@
     <div slot="title">
       <mt-badge :type="record.isLeave ? 'error' : 'success'">{{record.typeCn}}</mt-badge>
       {{record.name}}
-      <mt-button type="default" size="small" @click="onCallReqPsnClick(record.phone)">{{record.phone}}</mt-button>
+      <mt-button type="default" size="small" @click.stop="onCallReqPsnClick(record.phone)">{{record.phone}}</mt-button>
     </div>
-    <mt-button size="small" type="primary" @click="onPassPsnClick(record)">通过</mt-button>
+    <mt-button size="small" type="primary" @click.stop="onPassPsnClick(record)">通过</mt-button>
   </mt-cell>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     onCallReqPsnClick(phone) {
-      console.log(phone)
+      window.location.href = `tel:${phone}`
     }
   }
 }

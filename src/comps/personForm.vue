@@ -14,7 +14,7 @@
       </mt-cell>
     </div>
     <div class="w-100 fixed-bottom mb-55" style="background-color: white">
-      <mt-button class="mlr-1pc mtb-1pc" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
+import { reqBackend } from "../utils"
 import { Toast } from "mint-ui"
 import "url"
 
@@ -45,7 +46,8 @@ export default {
         cmpId: -1,
         company: ""
       },
-      URLSearchParams
+      URLSearchParams,
+      formSubmit: false
     }
   },
   created() {
@@ -53,6 +55,8 @@ export default {
       this.form.id = parseInt(this.$route.query.id)
       this.form.name = this.$route.query.name || ""
       this.form.idCard = this.$route.query.idCard || ""
+      this.form.gender = this.$route.query.gender || ""
+      this.form.nation = this.$route.query.nation || ""
       this.form.phone = this.$route.query.phone || ""
       this.form.hhAddress = this.$route.query.hhAddress || ""
       this.form.lvAddress = this.$route.query.lvAddress || ""
@@ -62,21 +66,18 @@ export default {
   },
   methods: {
     async onSubmitClick() {
-      const res = (this.form.id ?
-        await this.axios.put(`/population-statistics/mdl/v1/person/${this.form.id}`, this.form) :
-        await this.axios.post("/population-statistics/mdl/v1/person", this.form))
-      if (res.status != 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-      } else {
+      this.formSubmit = true
+      const pms = (this.form.id ?
+        this.axios.put(`/population-statistics/mdl/v1/person/${this.form.id}`, this.form) :
+        this.axios.post("/population-statistics/mdl/v1/person", this.form))
+      const res = 
+      await reqBackend(pms, data => {
         Toast({
           message: "提交成功！",
           iconClass: "iconfont icon-select-bold"
         })
         this.$router.push({path: "/population-statistics/list?type=person"})
-      }
+      })
     }
   }
 }

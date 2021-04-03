@@ -12,8 +12,8 @@
     <mt-tab-item id="person">
       <img slot="icon" src="/assets/imgs/user.png">实有人员
     </mt-tab-item>
-    <mt-tab-item id="admin">
-      <img slot="icon" src="/assets/imgs/lock.png">管理员
+    <mt-tab-item id="approve">
+      <img slot="icon" src="/assets/imgs/approve.png">审批
     </mt-tab-item>
   </mt-tabbar>
 </template>
@@ -32,7 +32,7 @@ export default {
         "house": "/population-statistics/list?type=house",
         "company": "/population-statistics/list?type=company",
         "person": "/population-statistics/list?type=person",
-        "admin": "/population-statistics/admin"
+        "approve": "/population-statistics/approve"
       }
     }
   },

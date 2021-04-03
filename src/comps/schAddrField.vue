@@ -13,7 +13,7 @@
 
 <script>
 import errPopupTip from "./errPopupTip"
-import {onSchWdsChanged} from "../utils"
+import utils from "../utils"
 
 export default {
   components: {
@@ -22,7 +22,11 @@ export default {
   props: {
     "form": Object,
     "pname": String,
-    "error": Object
+    "error": Object,
+    "params": {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
@@ -39,20 +43,15 @@ export default {
     }
   },
   async created() {
-    const res = await this.axios.get(`/population-statistics/mdl/v1/companys${this.urlParams || ''}`)
-    if (res.status != 200) {
-      Toast({
-        message: `系统错误！${res.statusText}`,
-        iconClass: "iconfont icon-close-bold"
-      })
-    } else {
-      this.searchAddr.allItems = res.data.data
+    const url = `/population-statistics/mdl/v1/companys${this.params}`
+    await utils.reqBackend(this.axios.get(url), data => {
+      this.searchAddr.allItems = data
       this.searchAddr.mchItems = this.searchAddr.allItems
       this.searchAddr.schWords = this.form[this.pname]
-    }
+    })
   },
   methods: {
-    onSchWdsChanged
+    onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>
