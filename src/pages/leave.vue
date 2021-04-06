@@ -22,7 +22,7 @@
       </li>
     </ul>
     <div style="position: absolute; top: 60px; left: 0; right: 0">
-      <login-form v-if="curStep === 'login'" :form="form" :error="error"/>
+      <login-form ref="login-form" v-if="curStep === 'login'" :form="form" :error="error"/>
       <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
@@ -32,8 +32,7 @@
       <mt-button v-if="curStep !== 'login'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
-        <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>
-        完成
+        <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>完成
       </mt-button>
     </div>
   </div>
@@ -78,7 +77,7 @@ export default {
         hhAddress: "",
         lvAddress: "",
         toAddress: "",
-        cmpId: -1,
+        cmpId: "",
         company: "",
         passed: false
       },
@@ -104,9 +103,14 @@ export default {
             this.error.message = "必须填写身份证号码！"
             this.error.active = true
             return false
-          } else if (this.form.purpose === "live" && this.form.lvAddress === "") {
+          } else if (this.form.lvAddress === "" && this.form.cmpId === "") {
             this.error.pname = "lvAddress"
-            this.error.message = "必须选择现在居住地址！"
+            this.error.message = "必须选择现在居住地址或者工作单位！"
+            this.error.active = true
+            return false
+          } else if (!this.$refs["login-form"].onNextBtnClick()) {
+            this.error.pname = "name"
+            this.error.message = "该单位/房屋不存在该人员信息！"
             this.error.active = true
             return false
           }

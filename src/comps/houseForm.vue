@@ -90,7 +90,7 @@ export default {
 
 .house-company-searcher .mint-search-list {
   padding-top: 92px !important;
-  margin-bottom: 61px !important;
+  padding-bottom: 61px !important;
   overflow-y: scroll !important;
 }
 </style>

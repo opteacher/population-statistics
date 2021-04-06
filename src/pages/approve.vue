@@ -2,7 +2,7 @@
   <div>
     <div v-if="!selRecord">
       <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
-        :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
+        :onPassPsnClick="onPassPsnClick(record)" :onRecordClick="onRecordClick"/>
     </div>
     <div v-else>
       <mt-header fixed title="人员信息">
@@ -12,7 +12,7 @@
         <record-form :record="selRecord"/>
       </div>
       <div class="pass-btn-area">
-        <mt-button class="bottom-half-btn" type="primary" @click="onPassPsnClick">通过</mt-button>
+        <mt-button class="bottom-half-btn" type="primary" @click="onPassPsnClick(selRecord)">通过</mt-button>
         <mt-button class="bottom-half-btn" type="danger" @click="onRejectPsnClick">拒绝</mt-button>
       </div>
     </div>
@@ -48,33 +48,35 @@ export default {
         this.waitForPass = data
       })
     },
-    onPassPsnClick() {
-      MessageBox({
-        title: "提示",
-        message: "确认通过该审批?",
-        showCancelButton: true
-      }).then(async action => {
-        if (action !== "confirm") {
-          return
-        }
-        let pmss = [
-          this.axios.put(`/population-statistics/mdl/v1/record/${this.selRecord.id}`, {passed: true})
-        ]
-        if (this.selRecord.type === "leave") {
-          pmss.push(this.axios.delete(`/population-statistics/mdl/v1/person/${this.selRecord.psnId}`))
-        } else {
-          pmss.push(this.axios.post("/population-statistics/mdl/v1/person", this.selRecord))
-        }
-        if (!await utils.reqBackend(pmss, data => {
-          Toast({
-            message: "审批通过！人员已更新到实有人口",
-            iconClass: "iconfont icon-select-bold"
-          })
-          this.$router.push({path: "/population-statistics/list?type=person"})
-        })) {
-          return
-        }
-      })
+    onPassPsnClick(record) {
+      return () => {
+        MessageBox({
+          title: "提示",
+          message: "确认通过该审批?",
+          showCancelButton: true
+        }).then(async action => {
+          if (action !== "confirm") {
+            return
+          }
+          let pmss = [
+            this.axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true})
+          ]
+          if (record.type === "leave") {
+            pmss.push(this.axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`))
+          } else {
+            pmss.push(this.axios.post("/population-statistics/mdl/v1/person", record))
+          }
+          if (!await utils.reqBackend(pmss, data => {
+            Toast({
+              message: "审批通过！人员已更新到实有人口",
+              iconClass: "iconfont icon-select-bold"
+            })
+            this.$router.push({path: "/population-statistics/list?type=person"})
+          })) {
+            return
+          }
+        })
+      }
     },
     onRejectPsnClick() {
       MessageBox({
