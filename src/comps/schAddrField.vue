@@ -1,8 +1,10 @@
 <template>
   <div>
-    <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+    <div>
+      <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+    </div>
     <err-popup-tip :error="error" :pname="pname" poppos="top"/>
-    <div class="sch-list-panel">
+    <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
       <mt-cell v-for="house in searchAddr.mchItems"
         :title="house.address"
         :key="house.id"
@@ -26,6 +28,14 @@ export default {
     "params": {
       type: String,
       default: ""
+    },
+    "top": {
+      type: Number,
+      default: 0
+    },
+    "bottom": {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -62,8 +72,6 @@ export default {
   margin-top: 1vh;
   right: 0;
   left: 0;
-  top: 301px;
-  bottom: 60px;
   overflow-y: scroll;
   z-index: 100;
 }

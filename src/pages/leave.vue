@@ -2,6 +2,10 @@
   <div style="overflow: hidden">
     <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
+        <a class="nav-link" :class="{'active': curStep === 'login', 'disabled': !stepOrder['login']}" v-on:click="curStep = 'login'">登陆</a>
+      </li>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
+      <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
       </li>
       <i class="iconfont icon-arrow-right icon-align-middle"/>
@@ -10,17 +14,23 @@
       </li>
       <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
+        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系</a>
+      </li>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
+      <li class="nav-item">
+        <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
       </li>
     </ul>
     <div style="position: absolute; top: 60px; left: 0; right: 0">
+      <login-form v-if="curStep === 'login'" :form="form" :error="error"/>
       <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
+      <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
-      <mt-button v-if="curStep !== 'person'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
-      <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
+      <mt-button v-if="curStep !== 'login'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
         <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>
         完成
@@ -30,25 +40,31 @@
 </template>
 
 <script>
+import loginForm from "../comps/loginForm"
 import lvPsnForm from "../comps/lvPsnForm"
 import whereToForm from "../comps/whereToForm"
 import connectForm from "../comps/connectForm"
+import confirmForm from "../comps/confirmForm"
 import { MessageBox, Toast } from "mint-ui"
 import utils from "../utils"
 
 export default {
   components: {
+    "login-form": loginForm,
     "lv-psn-form": lvPsnForm,
     "where-to-form": whereToForm,
-    "connect-form": connectForm
+    "connect-form": connectForm,
+    "confirm-form": confirmForm
   },
   data() {
     return {
-      curStep: "person",
+      curStep: "login",
       stepOrder: {
+        "login": false,
         "person": false,
         "whereto": false,
-        "connect": false
+        "connect": false,
+        "confirm": false
       },
       form: {
         type: "leave",
@@ -77,6 +93,24 @@ export default {
   methods: {
     _validFormData() {
       switch (this.curStep) {
+        case "login":
+          if (this.form.name === "") {
+            this.error.pname = "name"
+            this.error.message = "必须填写人员姓名！"
+            this.error.active = true
+            return false
+          } else if (this.form.idCard === "") {
+            this.error.pname = "idCard"
+            this.error.message = "必须填写身份证号码！"
+            this.error.active = true
+            return false
+          } else if (this.form.purpose === "live" && this.form.lvAddress === "") {
+            this.error.pname = "lvAddress"
+            this.error.message = "必须选择现在居住地址！"
+            this.error.active = true
+            return false
+          }
+          break
         case "person":
           if (this.form.psnId === -1) {
             this.error.pname = "psnId"
@@ -94,6 +128,12 @@ export default {
           }
           break
         case "connect":
+          if (this.form.phone === "") {
+            this.error.pname = "phone"
+            this.error.message = "必须填写联系电话！"
+            this.error.active = true
+            return false
+          }
           break
       }
       return true
@@ -113,15 +153,6 @@ export default {
       this.curStep = stepOrderKeys[nxtIdx]
     },
     onFinishBtnClick() {
-      // 最后检查联系电话是否正确
-      if (this.form.phone === "") {
-        this.error.pname = "phone"
-        this.error.message = "必须填写联系电话！"
-        this.error.active = true
-        return
-      }
-
-      // 正式提交
       this.formSubmit = true
       MessageBox({
         title: "提示",

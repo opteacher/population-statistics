@@ -2,11 +2,7 @@
   <div style="overflow: hidden">
     <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">来此目的</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
+        <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">目的</a>
       </li>
       <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
@@ -16,18 +12,27 @@
       </li>
       <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系方式</a>
+        <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
+      </li>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
+      <li class="nav-item">
+        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系</a>
+      </li>
+      <i class="iconfont icon-arrow-right icon-align-middle"/>
+      <li class="nav-item">
+        <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
       </li>
     </ul>
     <div style="position: absolute; top: 60px; left: 0; right: 0">
       <purpose-form v-if="curStep === 'purpose'" :form="form" :error="error"/>
-      <cm-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <house-form v-if="curStep === 'house'" :form="form" :error="error"/>
+      <cm-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
+      <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
       <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
-      <mt-button v-if="curStep !== 'connect'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
+      <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
         <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>
         完成
@@ -41,6 +46,7 @@ import purposeForm from "../comps/purposeForm"
 import cmPsnForm from "../comps/cmPsnForm"
 import houseForm from "../comps/houseForm"
 import connectForm from "../comps/connectForm"
+import confirmForm from "../comps/confirmForm"
 import { MessageBox, Toast } from "mint-ui"
 import utils from "../utils"
 
@@ -49,15 +55,17 @@ export default {
     "purpose-form": purposeForm,
     "cm-psn-form": cmPsnForm,
     "house-form": houseForm,
-    "connect-form": connectForm
+    "connect-form": connectForm,
+    "confirm-form": confirmForm
   },
   data() {
     return {
       stepOrder: {
         "purpose": false,
-        "person": false,
         "house": false,
-        "connect": false
+        "person": false,
+        "connect": false,
+        "confirm": false
       },
       curStep: "purpose",
       form: {
@@ -126,7 +134,12 @@ export default {
           }
           break
         case "connect":
-          // 联系电话在完成逻辑中检测
+          if (this.form.phone === "") {
+            this.error.pname = "phone"
+            this.error.message = "必须填写联系电话！"
+            this.error.active = true
+            return false
+          }
           break
       }
       return true
@@ -146,14 +159,6 @@ export default {
       this.curStep = stepOrderKeys[nxtIdx]
     },
     onFinishBtnClick() {
-      // 最后检查联系电话是否正确
-      if (this.form.phone === "") {
-        this.error.pname = "phone"
-        this.error.message = "必须填写联系电话！"
-        this.error.active = true
-        return
-      }
-
       // 正式提交
       this.formSubmit = true
       MessageBox({

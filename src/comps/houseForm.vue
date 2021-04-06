@@ -33,7 +33,11 @@ export default {
   },
   props: {
     "form": Object,
-    "error": Object
+    "error": Object,
+    "purpose": {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
@@ -60,7 +64,7 @@ export default {
     }
   },
   async created() {
-    this.isForWork = this.form.purpose === "work"
+    this.isForWork = this.purpose ? this.purpose === "work" : this.form.purpose === "work"
     const url = `/population-statistics/mdl/v1/companys?shopName=${this.isForWork ? '!' : '='}=&shopName=`
     await utils.reqBackend(this.axios.get(url), data => {
       this.searchHouse.allItems = data.map(house => {
