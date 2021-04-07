@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <mt-cell title="提交人员">{{sbtPsn}}</mt-cell>
+      <mt-cell title="代办人员">{{sbtPsn}}</mt-cell>
       <dsp-valid-cell title="离去人员" :form="form" pname="name" :error="error"/>
     </div>
 

@@ -39,7 +39,7 @@ subPathAry.map(file => {
             routePath = preRoutePath
         }
         let method = content.substring(i, bracket).toLocaleUpperCase()
-        console.log(`${method}${method.length > 3 ? "" : "\t"}\t${routePath}`)
+        console.log(`${method}\t${routePath}`)
     }
     router.use(preRoutePath, refIdx.routes(), refIdx.allowedMethods())
 })

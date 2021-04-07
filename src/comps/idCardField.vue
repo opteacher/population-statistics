@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <mt-field label="身份证" placeholder="请输入身份证" v-model="form.idCard" :attr="{ type: 'number', maxlength: 18 }">
+      <mt-field :label="label" placeholder="请输入身份证" v-model="form.idCard" :attr="{ type: 'number', maxlength: 18 }">
         <mt-button size="small" @click="onCameraClick">
           <i class="iconfont icon-camera"/>
         </mt-button>
@@ -28,6 +28,10 @@ export default {
         pname: "",
         message: ""
       })
+    },
+    "label": {
+      type: String,
+      default: "身份证"
     }
   },
   methods: {

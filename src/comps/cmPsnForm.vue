@@ -11,12 +11,10 @@
         <id-card-field :form="form" :error="error"/>
         <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
         <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
+        <gender-field :form="form"/>
+        <nation-field :form="form"/>
         <div v-if="form.purpose === 'work'">
-          <sch-addr-field :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="301" :bottom="61"/>
-        </div>
-        <div v-else>
-          <gender-field :form="form"/>
-          <nation-field :form="form"/>
+          <sch-addr-field :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="397" :bottom="61"/>
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="old">
@@ -84,7 +82,12 @@ export default {
     },
     async selTab(n, o) {
       if (n === "old") {
-        const url = "/population-statistics/mdl/v1/records?type=leave"
+        let url = "/population-statistics/mdl/v1/records?type=leave"
+        if (this.form.purpose === "work") {
+          url += `&cmpId=${this.form.cmpId}`
+        } else {
+          url += `&lvAddress=${this.form.lvAddress}`
+        }
         await utils.reqBackend(this.axios.get(url), data => {
           this.searchOldPsn.allItems = data.map(record => {
             delete record.type

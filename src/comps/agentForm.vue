@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" :error="error" pname="name"/>
-    <id-card-field :form="form" :error="error"/>
+    <ipt-valid-field label="代办人姓名" placeholder="请输入姓名" :form="form" :error="error" pname="name"/>
+    <id-card-field label="代办人身份证" :form="form" :error="error"/>
     <mt-navbar v-model="selTab">
       <mt-tab-item id="house">居住房屋</mt-tab-item>
       <mt-tab-item id="company">工作单位</mt-tab-item>

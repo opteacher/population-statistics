@@ -2,7 +2,7 @@
   <div style="overflow: hidden">
     <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'login', 'disabled': !stepOrder['login']}" v-on:click="curStep = 'login'">登陆</a>
+        <a class="nav-link" :class="{'active': curStep === 'agent', 'disabled': !stepOrder['agent']}" v-on:click="curStep = 'agent'">代办</a>
       </li>
       <i class="iconfont icon-arrow-right icon-align-middle"/>
       <li class="nav-item">
@@ -22,14 +22,14 @@
       </li>
     </ul>
     <div style="position: absolute; top: 60px; left: 0; right: 0">
-      <login-form ref="login-form" v-if="curStep === 'login'" :form="form" :error="error"/>
+      <agent-form ref="agent-form" v-if="curStep === 'agent'" :form="form" :error="error"/>
       <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
       <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
-      <mt-button v-if="curStep !== 'login'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 'agent'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
         <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>完成
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import loginForm from "../comps/loginForm"
+import agentForm from "../comps/agentForm"
 import lvPsnForm from "../comps/lvPsnForm"
 import whereToForm from "../comps/whereToForm"
 import connectForm from "../comps/connectForm"
@@ -49,7 +49,7 @@ import utils from "../utils"
 
 export default {
   components: {
-    "login-form": loginForm,
+    "agent-form": agentForm,
     "lv-psn-form": lvPsnForm,
     "where-to-form": whereToForm,
     "connect-form": connectForm,
@@ -57,9 +57,9 @@ export default {
   },
   data() {
     return {
-      curStep: "login",
+      curStep: "agent",
       stepOrder: {
-        "login": false,
+        "agent": false,
         "person": false,
         "whereto": false,
         "connect": false,
@@ -92,7 +92,7 @@ export default {
   methods: {
     async _validFormData() {
       switch (this.curStep) {
-        case "login":
+        case "agent":
           if (this.form.name === "") {
             this.error.pname = "name"
             this.error.message = "必须填写人员姓名！"
@@ -108,7 +108,7 @@ export default {
             this.error.message = "必须选择现在居住地址或者工作单位！"
             this.error.active = true
             return Promise.resolve(false)
-          } else if (!await this.$refs["login-form"].onNextBtnClick()) {
+          } else if (!await this.$refs["agent-form"].onNextBtnClick()) {
             this.error.pname = "name"
             this.error.message = "该单位/房屋不存在该人员信息！"
             this.error.active = true
