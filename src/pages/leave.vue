@@ -90,37 +90,37 @@ export default {
     }
   },
   methods: {
-    _validFormData() {
+    async _validFormData() {
       switch (this.curStep) {
         case "login":
           if (this.form.name === "") {
             this.error.pname = "name"
             this.error.message = "必须填写人员姓名！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           } else if (this.form.idCard === "") {
             this.error.pname = "idCard"
             this.error.message = "必须填写身份证号码！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           } else if (this.form.lvAddress === "" && this.form.cmpId === "") {
             this.error.pname = "lvAddress"
             this.error.message = "必须选择现在居住地址或者工作单位！"
             this.error.active = true
-            return false
-          } else if (!this.$refs["login-form"].onNextBtnClick()) {
+            return Promise.resolve(false)
+          } else if (!await this.$refs["login-form"].onNextBtnClick()) {
             this.error.pname = "name"
             this.error.message = "该单位/房屋不存在该人员信息！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           }
           break
         case "person":
-          if (this.form.psnId === -1) {
-            this.error.pname = "psnId"
+          if (this.form.name === "") {
+            this.error.pname = "name"
             this.error.message = "必须选择将要离开的人员！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           }
           break
         case "whereto":
@@ -128,7 +128,7 @@ export default {
             this.error.pname = "toAddress"
             this.error.message = "必须填写将要去往的地址！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           }
           break
         case "connect":
@@ -136,20 +136,20 @@ export default {
             this.error.pname = "phone"
             this.error.message = "必须填写联系电话！"
             this.error.active = true
-            return false
+            return Promise.resolve(false)
           }
           break
       }
-      return true
+      return Promise.resolve(true)
     },
-    onStepBtnClick(idx) {
+    async onStepBtnClick(idx) {
       const stepOrderKeys = Object.keys(this.stepOrder)
       const nxtIdx = stepOrderKeys.indexOf(this.curStep) + idx
       if (nxtIdx === -1 || nxtIdx === this.stepOrder.length) {
         return
       }
       if (idx === 1) {
-        if (!this._validFormData()) {
+        if (!await this._validFormData()) {
           return
         }
         this.stepOrder[this.curStep] = true
@@ -174,7 +174,7 @@ export default {
             message: "去销成功！请等待协管核实",
             iconClass: "iconfont icon-select-bold"
           })
-          this.$router.go(-1)
+          this.$router.push({path: "/"})
         })
       })
     }

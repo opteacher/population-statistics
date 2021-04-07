@@ -15,7 +15,8 @@ module.exports = db.defineModel({
   toAddress:  db.Types.String,
   cmpId:      db.Types.Number,
   company:    db.Types.String,
-  passed:     db.Types.Boolean// 是否审批通过
+  passed:     db.Types.Boolean,// 是否审批通过
+  submit:     db.Types.String// 提交者
 }, {
   router: {
     methods: [

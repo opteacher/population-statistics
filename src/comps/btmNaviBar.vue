@@ -1,5 +1,5 @@
 <template>
-  <mt-tabbar v-model="selected">
+  <mt-tabbar v-model="selected" style="position: fixed">
     <mt-tab-item id="input">
       <img slot="icon" src="/assets/imgs/import.png">录入
     </mt-tab-item>

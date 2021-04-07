@@ -63,10 +63,12 @@ export default {
           })
         })
       } catch(e) {
-        return false
+        return Promise.resolve(false)
       }
-      console.log(sbtPerson.cmpId || sbtPerson.lvAddress)
-      return true
+      this.form.psnId = sbtPerson.id
+      this.form.submit = sbtPerson.name
+      this.form.phone = sbtPerson.phone
+      return Promise.resolve(true)
     }
   }
 }

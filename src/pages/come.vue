@@ -182,7 +182,7 @@ export default {
             message: "来登成功！请等待协管核实",
             iconClass: "iconfont icon-select-bold"
           })
-          this.$router.go(-1)
+          this.$router.push({path: "/"})
         })
       })
     }
