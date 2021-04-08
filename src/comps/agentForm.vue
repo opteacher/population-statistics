@@ -1,6 +1,11 @@
 <template>
   <div>
-    <ipt-valid-field label="代办人姓名" placeholder="请输入姓名" :form="form" :error="error" pname="name"/>
+    <mt-field label="代办人姓名" placeholder="请输入姓名" v-model="form.name">
+      <mt-button size="small" @click="onInforBtnClick">
+        <i class="iconfont icon-tishi"/>
+      </mt-button>
+    </mt-field>
+    <err-popup-tip :error="error" pname="name"/>
     <id-card-field label="代办人身份证" :form="form" :error="error"/>
     <mt-navbar v-model="selTab">
       <mt-tab-item id="house">居住房屋</mt-tab-item>
@@ -22,10 +27,13 @@ import iptValidField from "./iptValidField"
 import idCardField from "./idCardField"
 import schAddrField from "./schAddrField"
 import houseForm from "./houseForm"
+import errPopupTip from "./errPopupTip"
 import { reqBackend } from "../utils"
+import { MessageBox } from "mint-ui"
 
 export default {
   components: {
+    "err-popup-tip": errPopupTip,
     "ipt-valid-field": iptValidField,
     "id-card-field": idCardField,
     "sch-addr-field": schAddrField,
@@ -69,6 +77,9 @@ export default {
       this.form.submit = sbtPerson.name
       this.form.phone = sbtPerson.phone
       return Promise.resolve(true)
+    },
+    onInforBtnClick() {
+      MessageBox("提示", "代办人可代替将离去的人员申报相关信息，现暂定为同住一屋或者共同工作的人员可代办该业务，代办人需提供自己真实的姓名、身份证以及住址/单位。如自身就是将离人员，代办人填写自身信息即可。")
     }
   }
 }

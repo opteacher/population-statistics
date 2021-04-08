@@ -98,9 +98,19 @@ export default {
             this.error.message = "必须填写人员姓名！"
             this.error.active = true
             return Promise.resolve(false)
+          } else if (!utils.PsnNameRegexp.test(this.form.name)) {
+            this.error.pname = "name"
+            this.error.message = "必须填写正确的人员姓名！"
+            this.error.active = true
+            return Promise.resolve(false)
           } else if (this.form.idCard === "") {
             this.error.pname = "idCard"
             this.error.message = "必须填写身份证号码！"
+            this.error.active = true
+            return Promise.resolve(false)
+          } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
+            this.error.pname = "idCard"
+            this.error.message = "必须填写正确的身份证号码！"
             this.error.active = true
             return Promise.resolve(false)
           } else if (this.form.lvAddress === "" && this.form.cmpId === "") {
@@ -137,6 +147,11 @@ export default {
             this.error.message = "必须填写联系电话！"
             this.error.active = true
             return Promise.resolve(false)
+          } else if (!utils.PhoneRegexp.test(this.form.phone)) {
+            this.error.pname = "phone"
+            this.error.message = "必须填写正确联系电话！"
+            this.error.active = true
+            return false
           }
           break
       }

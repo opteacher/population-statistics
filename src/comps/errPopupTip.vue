@@ -3,7 +3,7 @@
     <mt-popup class="popup-error-tip text-center" v-model="showTip" popup-transition="popup-fade"
       :class="`popup-error-tip-${poppos}`" :style="`top: ${poppos === 'top' ? '-72px' : '24px'}`">
       {{error.message}}
-      </mt-popup>
+    </mt-popup>
   </div>
 </template>
 
@@ -44,6 +44,7 @@ export default {
   width: 50vw;
   padding: 10px 5px;
   border-radius: 5%;
+  color: #ef4f4f;
 }
 
 .popup-error-tip-bottom::before {
