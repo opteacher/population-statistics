@@ -1,9 +1,7 @@
 <template>
   <div>
     <mt-header title="人员详情">
-      <router-link to="/population-statistics/list?type=person" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+      <mt-button icon="back" slot="left" @click.native="$router.go(-1)">返回</mt-button>
     </mt-header>
     <div style="position: absolute; top: 40px; left: 0; right: 0; bottom: 106px; overflow-y: scroll">
       <mt-cell title="姓名" :value="person.name"/>

@@ -1,9 +1,7 @@
 <template>
   <div>
     <mt-header v-if="lsMode === 'select'" title="选择模式">
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+      <mt-button icon="back" slot="left" @click.native="$router.go(-1)">返回</mt-button>
     </mt-header>
     <mt-search :class="{'sel-search': lsMode === 'select'}" v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
       'name', 'shopName', 'address', 'lglName', 'lglPhone', 'phone', 'lvAddress', 'company'

@@ -5,9 +5,7 @@
     </div>
     <err-popup-tip :error="error" :pname="pname" poppos="top"/>
     <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
-      <mt-cell v-for="house in searchAddr.mchItems"
-        :title="house.address"
-        :key="house.id"
+      <mt-cell v-for="house in searchAddr.mchItems" :title="house.address" :key="house.id"
         is-link @click.native="searchAddr.schWords = house.address"/>
     </div>
   </div>
