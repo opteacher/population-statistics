@@ -9,7 +9,7 @@
       <mt-field label="户籍地址" placeholder="请输入户籍地址" v-model="form.hhAddress"/>
       <mt-field label="居住地址" placeholder="请输入居住地址" v-model="form.lvAddress"/>
       <mt-cell class="mint-field" title="所在单位"
-        is-link :to="`/population-statistics/list?type=company&mode=select&search=${form.company}`">
+        is-link :to="`/population-statistics/list?type=company&mode=select&${(new URLSearchParams(form)).toString()}`">
         <span style="color: gray">{{form.company || "请选择所在单位"}}</span>
       </mt-cell>
     </div>
@@ -53,16 +53,16 @@ export default {
   created() {
     if (this.$route.query.id) {
       this.form.id = parseInt(this.$route.query.id)
-      this.form.name = this.$route.query.name || ""
-      this.form.idCard = this.$route.query.idCard || ""
-      this.form.gender = this.$route.query.gender || ""
-      this.form.nation = this.$route.query.nation || ""
-      this.form.phone = this.$route.query.phone || ""
-      this.form.hhAddress = this.$route.query.hhAddress || ""
-      this.form.lvAddress = this.$route.query.lvAddress || ""
-      this.form.cmpId = parseInt(this.$route.query.cmpId) || -1
-      this.form.company = this.$route.query.company || ""
     }
+    this.form.name = this.$route.query.name || ""
+    this.form.idCard = this.$route.query.idCard || ""
+    this.form.gender = this.$route.query.gender || ""
+    this.form.nation = this.$route.query.nation || ""
+    this.form.phone = this.$route.query.phone || ""
+    this.form.hhAddress = this.$route.query.hhAddress || ""
+    this.form.lvAddress = this.$route.query.lvAddress || ""
+    this.form.cmpId = parseInt(this.$route.query.cmpId) || -1
+    this.form.company = this.$route.query.company || ""
   },
   methods: {
     async onSubmitClick() {

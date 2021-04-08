@@ -5,13 +5,16 @@
         <mt-button icon="back">返回</mt-button>
       </router-link>
     </mt-header>
-    <mt-search v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
+    <mt-search :class="{'sel-search': lsMode === 'select'}" v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
       'name', 'shopName', 'address', 'lglName', 'lglPhone', 'phone', 'lvAddress', 'company'
     ])">
       <mt-radio v-if="lsMode === 'select'"
         align="right"
-        v-model="selCmp"
-        :options="searchItem.mchItems.map(item => item.name)"/>
+        v-model="edtEmployee.cmpId"
+        :options="searchItem.mchItems.map(item => ({
+          label: item.shopName,
+          value: item.id.toString()
+        }))"/>
       <mt-cell v-else v-for="item in searchItem.mchItems"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
         :label="lsType === 'company' ? item.name : ''"
@@ -47,8 +50,17 @@ export default {
         mchItems: []
       },
       URLSearchParams,
-      selCmp: "",
       edtEmployee: {}
+    }
+  },
+  watch: {
+    "edtEmployee.cmpId": function(n, o) {
+      for (let item of this.searchItem.mchItems) {
+        if (item.id == n) {
+          this.edtEmployee.company = item.shopName
+          break
+        }
+      }
     }
   },
   created() {
@@ -61,7 +73,7 @@ export default {
       this.edtEmployee = Object.assign(this.$route.query)
       delete this.edtEmployee.type
       delete this.edtEmployee.mode
-      this.selCmp = this.edtEmployee.workComp || ""
+      this.edtEmployee.cmpId = this.edtEmployee.cmpId === -1 ? "" : this.edtEmployee.cmpId.toString()
     }
   },
   methods: {
@@ -81,12 +93,19 @@ export default {
       })
     },
     onCfmSelClick() {
-      this.edtEmployee.workComp = this.selCmp
       this.$router.push({
-        path: `/population-statistics/home?type=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
+        path: `/population-statistics/input?type=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
       })
     },
     onSchWdsChanged: utils.onSchWdsChanged
   }
 }
 </script>
+
+<style lang="scss">
+.sel-search .mint-search-list {
+  padding-top: 0 !important;
+  top: 84px !important;
+  bottom: 53px !important;
+}
+</style>
