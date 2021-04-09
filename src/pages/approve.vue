@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import _ from "lodash"
 import utils from "../utils"
 import recordCell from "../comps/recordCell"
 import recordForm from "../comps/recordForm"
@@ -63,7 +64,9 @@ export default {
         if (record.type === "leave") {
           pmss.push(this.axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`))
         } else {
-          pmss.push(this.axios.post("/population-statistics/mdl/v1/person", record))
+          pmss.push(this.axios.post("/population-statistics/mdl/v1/person", _.pick(record, [
+            "name", "idCard", "gender", "nation", "phone", "hhAddress", "lvAddress", "cmpId", "company"
+          ])))
         }
         await utils.reqBackend(pmss, data => {
           Toast({

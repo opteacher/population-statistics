@@ -1,4 +1,4 @@
 version=1
 prefix="population-statistics"
 type="mysql"
-syncIdentified=["Record", "Admin"]
+syncIdentified=["Admin"]

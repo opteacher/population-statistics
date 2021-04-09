@@ -15,7 +15,7 @@
         }))"/>
       <mt-cell v-else v-for="item in searchItem.mchItems"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
-        :label="lsType === 'company' ? item.name : ''"
+        :label="lsType === 'company' ? item.name : (item.company || item.lvAddress)"
         :key="item.id"
         :to="`/population-statistics/${lsType === 'house' ? 'company' : lsType}-detail?${(new URLSearchParams(item)).toString()}`"
         is-link
