@@ -13,13 +13,13 @@
           label: item.shopName,
           value: item.id.toString()
         }))"/>
-      <mt-cell v-else v-for="item in searchItem.mchItems"
+      <mt-cell v-else v-for="item in searchItem.mchItems" :key="item.id"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
         :label="lsType === 'company' ? item.name : (item.company || item.lvAddress)"
-        :key="item.id"
-        :to="`/population-statistics/${lsType === 'house' ? 'company' : lsType}-detail?${(new URLSearchParams(item)).toString()}`"
-        is-link
-        value="详情"/>
+        is-link :to="`/population-statistics/${lsType === 'house' ? 'company' : lsType}-detail?${(new URLSearchParams(item)).toString()}`">
+        <mt-badge v-if="lsType === 'house'" type="success" slot="icon">{{`${item.psnNum}人`}}</mt-badge>
+        <span>详情</span>
+      </mt-cell>
     </mt-search>
     <div  v-if="lsMode === 'select'" class="w-100 fixed-bottom mb-55" style="background-color: white">
       <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onCfmSelClick">确定</mt-button>
@@ -78,13 +78,18 @@ export default {
     async onSelTabChanged(selTab) {
       this.lsType = selTab
       let urlParamStr = ""
-      if (selTab === "company") {
-        urlParamStr = "?shopName=!=&shopName="
-      } else if (selTab === "house") {
-        selTab = "company"
-        urlParamStr = "?shopName===&shopName="
+      let url = ""
+      switch (selTab) {
+      case "company":
+        url = "/population-statistics/mdl/v1/companys?shopName=!=&shopName="
+        break
+      case "house":
+        url = "/population-statistics/api/v1/bdata/houses/number-of-people"
+        break
+      case "person":
+        url = "/population-statistics/mdl/v1/persons"
+        break
       }
-      const url = `/population-statistics/mdl/v1/${selTab}s${urlParamStr}`
       await utils.reqBackend(this.axios.get(url), data => {
         this.searchItem.allItems = data
         this.searchItem.mchItems = this.searchItem.allItems

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div style="overflow-y: scroll">
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
       <mt-field label="注册编号" placeholder="请输入注册编号" v-model="form.regId"/>

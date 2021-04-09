@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div style="overflow-y: scroll">
       <id-card-field :form="form"/>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
       <gender-field :form="form"/>

@@ -1,0 +1,5 @@
+selHouseWithPersonNum="""
+SELECT `id`, `name`, `shopName`, `regId`, `address`, `lglName`, `lglId`, `lglPhone`, `createdAt`, `updatedAt`, (
+  SELECT COUNT(`person`.`id`) FROM `people` AS `person` WHERE `person`.`lvAddress` = `company`.`address`
+) AS `psnNum` FROM `companies` AS `company` WHERE `company`.`shopName` = ''
+"""

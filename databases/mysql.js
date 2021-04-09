@@ -180,12 +180,15 @@ class Mysql {
         }
       }
     }
-
     if(options.selCols) {
       conds["attributes"] = options.selCols
     }
-
     return model.findAll(conds).catch(err => getErrContent(err))
+  }
+
+  exec(sql, params, options) {
+    const type = (options && options.type) || Sequelize.QueryTypes.SELECT
+    return this.connect().query(sql, { replacements: params }, type)
   }
 
   async save(model, values, condition, options) {
