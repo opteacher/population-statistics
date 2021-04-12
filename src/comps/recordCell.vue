@@ -1,7 +1,7 @@
 <template>
   <mt-cell is-link @click.native="onRecordClick(record)">
     <div slot="title">
-      <mt-badge :type="record.isLeave ? 'error' : 'success'">{{record.type === "leave" ? "离去" : "到来"}}</mt-badge>
+      <mt-badge :type="record.isLeave ? 'error' : 'success'">{{record.type === "leave" ? "离开此地" : "来到此地"}}</mt-badge>
       {{record.name}}
       <mt-button type="default" size="small" @click.stop="onCallReqPsnClick(record.phone)">{{record.phone}}</mt-button>
     </div>

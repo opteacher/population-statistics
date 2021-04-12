@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <mt-field label="居住地址" placeholder="居住地址" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
+      <mt-field label="居住地址" placeholder="居住地址（可关键字检索）" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
     </div>
     <err-popup-tip :error="error" :pname="pname" poppos="top"/>
     <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
