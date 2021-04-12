@@ -45,7 +45,8 @@ export default {
   },
   data() {
     return {
-      selTab: "house"
+      selTab: "house",
+      tip: "代办人可代替将离开此地的人员申报相关信息，现暂定为同住一屋或者共同工作的人员可代办该业务，代办人需提供自己真实的姓名、身份证以及住址/单位。如自身就是将离开此地的人员，代办人填写自身信息即可。"
     }
   },
   watch: {
@@ -58,6 +59,9 @@ export default {
         this.form.company = ""
       }
     }
+  },
+  created() {
+    MessageBox("提示", this.tip)
   },
   methods: {
     async onNextBtnClick() {
@@ -79,7 +83,7 @@ export default {
       return Promise.resolve(true)
     },
     onInforBtnClick() {
-      MessageBox("提示", "代办人可代替将离去的人员申报相关信息，现暂定为同住一屋或者共同工作的人员可代办该业务，代办人需提供自己真实的姓名、身份证以及住址/单位。如自身就是将离人员，代办人填写自身信息即可。")
+      MessageBox("提示", this.tip)
     }
   }
 }

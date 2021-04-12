@@ -3,7 +3,7 @@
     <mt-header v-if="lsMode === 'select'" title="选择模式">
       <mt-button icon="back" slot="left" @click.native="$router.go(-1)">返回</mt-button>
     </mt-header>
-    <mt-search :class="{'sel-search': lsMode === 'select'}" v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
+    <mt-search class="nml-search" :class="{'sel-search': lsMode === 'select'}" v-model="searchItem.schWords" :show="true" @input="onSchWdsChanged('searchItem', [
       'name', 'shopName', 'address', 'lglName', 'lglPhone', 'phone', 'lvAddress', 'company'
     ])">
       <mt-radio v-if="lsMode === 'select'"
@@ -106,6 +106,10 @@ export default {
 </script>
 
 <style lang="scss">
+.nml-search .mint-search-list {
+  padding-bottom: 55px !important;
+}
+
 .sel-search .mint-search-list {
   padding-top: 0 !important;
   top: 84px !important;

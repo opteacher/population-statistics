@@ -21,7 +21,7 @@ export default {
   },
   created() {
     this.record.isLeave = this.record.type === "leave"
-    this.record.typeCn = this.record.isLeave ? "离去" : "到来"
+    this.record.typeCn = this.record.isLeave ? "离开此地" : "来到此地"
   }
 }
 </script>
