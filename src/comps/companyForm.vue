@@ -50,8 +50,8 @@ export default {
     async onSubmitClick() {
       this.formSubmit = true
       const pms = (this.form.id ?
-        this.axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
-        this.axios.post("/population-statistics/mdl/v1/company", this.form))
+        axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
+        axios.post("/population-statistics/mdl/v1/company", this.form))
       const res = 
       await reqBackend(pms, data => {
         Toast({

@@ -70,12 +70,12 @@ export default {
   },
   async created() {
     const cmpUrl = `/population-statistics/mdl/v1/persons?cmpId=${this.form.cmpId}`
-    await reqBackend(this.axios.get(cmpUrl), data => {
+    await reqBackend(axios.get(cmpUrl), data => {
       this.psnInSameCmp = data
     })
 
     const hsUrl = `/population-statistics/mdl/v1/persons?lvAddress=${this.form.lvAddress}`
-    await reqBackend(this.axios.get(hsUrl), data => {
+    await reqBackend(axios.get(hsUrl), data => {
       this.psnInSameHs = data
     })
 

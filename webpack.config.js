@@ -3,6 +3,12 @@ const {VueLoaderPlugin} = require("vue-loader")
 
 module.exports = {
   entry: "./src/main.js",
+  externals: { 
+    "vue": "Vue",
+    "vue-router": "VueRouter",
+    "mint-ui": "MINT", //注意element-ui的引用时纯大写
+    "axios": "axios",
+  },
   output: {
     path: resolve(__dirname, "public/dist"),
     filename: "build.js"
@@ -25,7 +31,7 @@ module.exports = {
       {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
         use: [{
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 10000
           }
@@ -35,10 +41,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src'),
-      'vue$': 'vue/dist/vue.esm.js'
+      "~": resolve(__dirname, "src"),
+      "vue$": "vue/dist/vue.esm.js"
     },
-    extensions: ['.js', '.vue', '.json', '.css']
+    extensions: [".js", ".vue", ".json", ".css"]
   },
   plugins: [
     new VueLoaderPlugin()

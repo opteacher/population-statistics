@@ -50,7 +50,7 @@ export default {
         if (action !== "confirm") {
           return
         }
-        const res = await this.axios.delete(`/population-statistics/mdl/v1/person/${this.person.id}`)
+        const res = await axios.delete(`/population-statistics/mdl/v1/person/${this.person.id}`)
         if (res.status != 200) {
           Toast({
             message: `系统错误！${res.statusText}`,

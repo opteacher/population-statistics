@@ -90,7 +90,7 @@ export default {
         url = "/population-statistics/mdl/v1/persons"
         break
       }
-      await utils.reqBackend(this.axios.get(url), data => {
+      await utils.reqBackend(axios.get(url), data => {
         this.searchItem.allItems = data
         this.searchItem.mchItems = this.searchItem.allItems
       })

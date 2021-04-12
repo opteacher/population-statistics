@@ -56,7 +56,7 @@ export default {
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
     }
-    await reqBackend(this.axios.get(url), data => {
+    await reqBackend(axios.get(url), data => {
       this.company = Object.assign(this.$route.query, {people: data})
     })
   },
@@ -73,7 +73,7 @@ export default {
         if (action !== "confirm") {
           return
         }
-        const res = await this.axios.delete(`/population-statistics/mdl/v1/company/${this.company.id}`)
+        const res = await axios.delete(`/population-statistics/mdl/v1/company/${this.company.id}`)
         if (res.status != 200) {
           Toast({
             message: `系统错误！${res.statusText}`,

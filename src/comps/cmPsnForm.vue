@@ -88,7 +88,7 @@ export default {
         } else {
           url += `&lvAddress=${this.form.lvAddress}`
         }
-        await utils.reqBackend(this.axios.get(url), data => {
+        await utils.reqBackend(axios.get(url), data => {
           this.searchOldPsn.allItems = data.map(record => {
             delete record.type
             delete record.purpose

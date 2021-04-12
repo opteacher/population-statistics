@@ -66,7 +66,7 @@ export default {
       let sbtPerson = null
       try {
         sbtPerson = await new Promise((res, rej) => {
-          reqBackend(this.axios.get(url), data => {
+          reqBackend(axios.get(url), data => {
             (!data || data.length !== 1) ? rej() : res(data[0])
           })
         })

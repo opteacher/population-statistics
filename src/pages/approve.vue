@@ -45,7 +45,7 @@ export default {
   methods: {
     async _refreshRecords() {
       const url = "/population-statistics/mdl/v1/records?passed=0"
-      await utils.reqBackend(this.axios.get(url), data => {
+      await utils.reqBackend(axios.get(url), data => {
         this.waitForPass = data
       })
     },
@@ -59,12 +59,12 @@ export default {
           return
         }
         let pmss = [
-          this.axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true})
+          axios.put(`/population-statistics/mdl/v1/record/${record.id}`, {passed: true})
         ]
         if (record.type === "leave") {
-          pmss.push(this.axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`))
+          pmss.push(axios.delete(`/population-statistics/mdl/v1/person/${record.psnId}`))
         } else {
-          pmss.push(this.axios.post("/population-statistics/mdl/v1/person", _.pick(record, [
+          pmss.push(axios.post("/population-statistics/mdl/v1/person", _.pick(record, [
             "name", "idCard", "gender", "nation", "phone", "hhAddress", "lvAddress", "cmpId", "company"
           ])))
         }
@@ -87,7 +87,7 @@ export default {
           return
         }
         const url = `/population-statistics/mdl/v1/record/${this.selRecord.id}`
-        await utils.reqBackend(this.axios.delete(url), data => {
+        await utils.reqBackend(axios.delete(url), data => {
           Toast({
             message: "审批拒绝！",
             iconClass: "iconfont icon-select-bold"

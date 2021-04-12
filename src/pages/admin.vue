@@ -50,12 +50,12 @@ export default {
     },
     async onLgnBtnClick() {
       if (this.form.regCode) {
-        if (!await this._reqBackend(this.axios.post("/population-statistics/api/v1/admin/log/in", {
+        if (!await this._reqBackend(axios.post("/population-statistics/api/v1/admin/log/in", {
           username: "*ADMIN#", password: this.form.regCode
         }))) {
           return
         }
-        if (!await this._reqBackend(this.axios.post("/population-statistics/api/v1/admin/log/up", this.form))) {
+        if (!await this._reqBackend(axios.post("/population-statistics/api/v1/admin/log/up", this.form))) {
           return
         }
         Indicator.close()
