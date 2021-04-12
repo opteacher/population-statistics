@@ -8,11 +8,13 @@
     <!-- tab-container -->
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="new">
-        <id-card-field :form="form" :error="error"/>
-        <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
-        <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
-        <gender-field :form="form"/>
-        <nation-field :form="form"/>
+        <div style="overflow-y: scroll">
+          <id-card-field :form="form" :error="error"/>
+          <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
+          <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
+          <gender-field :form="form"/>
+          <nation-field :form="form"/>
+        </div>
         <div v-if="form.purpose === 'work'">
           <sch-addr-field :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="397" :bottom="61"/>
         </div>

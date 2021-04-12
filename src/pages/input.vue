@@ -4,7 +4,7 @@
       <mt-tab-item id="company">实有单位</mt-tab-item>
       <mt-tab-item id="person">实有人口</mt-tab-item>
     </mt-navbar>
-    <mt-tab-container class="mt-3" v-model="selected">
+    <mt-tab-container class="mt-3 mb-55" v-model="selected">
       <mt-tab-container-item id="company">
         <company-form :edtCompany="selected === 'company' ? edtSubject : undefined"/>
       </mt-tab-container-item>

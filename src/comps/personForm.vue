@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="overflow-y: scroll">
+    <div>
       <id-card-field :form="form"/>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
       <gender-field :form="form"/>
@@ -13,7 +13,7 @@
         <span style="color: gray">{{form.company || "请选择所在单位"}}</span>
       </mt-cell>
     </div>
-    <div class="w-100 fixed-bottom mb-55" style="background-color: white">
+    <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>

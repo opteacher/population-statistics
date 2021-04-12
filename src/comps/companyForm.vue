@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="overflow-y: scroll">
+    <div>
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
       <mt-field label="注册编号" placeholder="请输入注册编号" v-model="form.regId"/>
@@ -9,7 +9,7 @@
       <mt-field label="法人身份证" placeholder="请输入法人身份证" v-model="form.lglId"/>
       <mt-field label="法人手机号" placeholder="请输入法人手机号" type="tel" v-model="form.lglPhone"/>
     </div>
-    <div class="w-100 fixed-bottom mb-55" style="background-color: white">
+    <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" style="width: 98vw" type="primary" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
   </div>

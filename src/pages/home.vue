@@ -1,9 +1,9 @@
 <template>
   <div class="center-container">
     <div>
-      <mt-button class="large-circle-btn" type="primary" @click="$router.push({path: '/population-statistics/come'})">来沪登记</mt-button>
+      <mt-button class="large-circle-btn" type="primary" @click="$router.push({path: '/population-statistics/come'})">来此地登记</mt-button>
       <hr/>
-      <mt-button class="large-circle-btn" type="danger" @click="$router.push({path: '/population-statistics/leave'})">离沪注销</mt-button>
+      <mt-button class="large-circle-btn" type="danger" @click="$router.push({path: '/population-statistics/leave'})">离此地注销</mt-button>
     </div>
   </div>
 </template>
@@ -24,6 +24,6 @@ export default {
   width: 50vw;
   height: 50vw !important;
   border-radius: 100% !important;
-  font-size: 25pt !important;
+  font-size: 20pt !important;
 }
 </style>
