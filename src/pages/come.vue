@@ -23,7 +23,7 @@
         <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
       </li>
     </ul>
-    <div style="position: absolute; top: 60px; left: 0; right: 0">
+    <div style="position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
       <purpose-form v-if="curStep === 'purpose'" :form="form" :error="error"/>
       <house-form v-if="curStep === 'house'" :form="form" :error="error"/>
       <cm-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
