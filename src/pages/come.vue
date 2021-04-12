@@ -30,7 +30,7 @@
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
       <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
     </div>
-    <div class="fixed-bottom" style="padding: 10px 5px; background-color: white">
+    <div class="fixed-bottom" style="padding: 10px 5px; background-color: transparent">
       <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
       <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
