@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
     <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">目的</a>
@@ -23,9 +23,9 @@
         <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
       </li>
     </ul>
-    <div style="position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
+    <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
       <purpose-form v-if="curStep === 'purpose'" :form="form" :error="error"/>
-      <house-form v-if="curStep === 'house'" :form="form" :error="error"/>
+      <house-form v-if="curStep === 'house'" :form="form" :error="error" :top="152"/>
       <cm-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
       <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>

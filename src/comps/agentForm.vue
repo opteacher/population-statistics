@@ -16,7 +16,7 @@
         <sch-addr-field ref="sch-addr-field" :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="253" :bottom="61"/>
       </mt-tab-container-item>
       <mt-tab-container-item id="company">
-        <house-form :form="form" :error="error" purpose="work"/>
+        <house-form :form="form" :error="error" purpose="work" :top="297"/>
       </mt-tab-container-item>
     </mt-tab-container>
   </div>

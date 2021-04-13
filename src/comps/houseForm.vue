@@ -1,24 +1,26 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
     <mt-cell class="sel-house" :title="isForWork ? '工作单位' : '居住房屋'">
       {{(isForWork ? form.company : form.lvAddress) || `请选择${isForWork ? '单位' : '房屋'}`}}
     </mt-cell>
-    <mt-search class="house-company-searcher" v-model="searchHouse.schWords"
+    <mt-search v-model="searchHouse.schWords"
       :show="true" @input="onSchWdsChanged('searchHouse', ['name', 'shopName', 'address'])">
       <err-popup-tip :error="error" :pname="isForWork ? 'cmpId' : 'lvAddress'"/>
-      <mt-radio
-        v-if="isForWork"
-        align="right"
-        v-model="form.cmpId"
-        :options="searchHouse.mchItems.map(company => ({
-          label: company.shopName || company.name,
-          value: company.id
-        }))"/>
-      <mt-radio
-        v-else
-        align="right"
-        v-model="form.lvAddress"
-        :options="searchHouse.mchItems.map(house => house.address)"/>
+      <div class="sel-house-list" :style="`top: ${this.top}px`">
+        <mt-radio
+          v-if="isForWork"
+          align="right"
+          v-model="form.cmpId"
+          :options="searchHouse.mchItems.map(company => ({
+            label: company.shopName || company.name,
+            value: company.id
+          }))"/>
+        <mt-radio
+          v-else
+          align="right"
+          v-model="form.lvAddress"
+          :options="searchHouse.mchItems.map(house => house.address)"/>
+      </div>
     </mt-search>
   </div>
 </template>
@@ -37,6 +39,10 @@ export default {
     "purpose": {
       type: String,
       default: ""
+    },
+    "top": {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -88,7 +94,11 @@ export default {
   z-index: 100
 }
 
-.house-company-searcher .mint-search-list {
-  padding-top: 92px !important;
+.sel-house-list {
+  overflow-y: scroll;
+  position: fixed;
+  bottom: 61px;
+  left: 0;
+  right: 0;
 }
 </style>

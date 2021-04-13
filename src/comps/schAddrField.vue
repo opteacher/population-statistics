@@ -3,7 +3,7 @@
     <div>
       <mt-field label="居住地址" placeholder="居住地址（可关键字检索）" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
     </div>
-    <err-popup-tip :error="error" :pname="pname" poppos="top"/>
+    <err-popup-tip :error="error" :pname="pname" poppos="right"/>
     <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
       <mt-cell v-for="house in searchAddr.mchItems" :title="house.address" :key="house.id"
         is-link @click.native="searchAddr.schWords = house.address"/>

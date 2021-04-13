@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
     <ul class="nav nav-pills nav-fill nav-header">
       <li class="nav-item">
         <a class="nav-link" :class="{'active': curStep === 'agent', 'disabled': !stepOrder['agent']}" v-on:click="curStep = 'agent'">代办</a>
@@ -21,7 +21,7 @@
         <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
       </li>
     </ul>
-    <div style="position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
+    <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
       <agent-form ref="agent-form" v-if="curStep === 'agent'" :form="form" :error="error"/>
       <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
       <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>

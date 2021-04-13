@@ -1,7 +1,7 @@
 <template>
   <div class="err-popup-container" style="position: relative">
     <mt-popup class="popup-error-tip text-center" v-model="showTip" popup-transition="popup-fade"
-      :class="`popup-error-tip-${poppos}`" :style="`top: ${poppos === 'top' ? '-72px' : '24px'}`">
+      :class="`popup-error-tip-${poppos}`" :style="`top: ${top}`">
       {{error.message}}
     </mt-popup>
   </div>
@@ -19,7 +19,8 @@ export default {
   },
   data() {
     return {
-      showTip: false
+      showTip: false,
+      top: 0
     }
   },
   watch: {
@@ -30,6 +31,19 @@ export default {
           this.error.active = false
         }
       }
+    }
+  },
+  created() {
+    switch (this.poppos) {
+      case "top":
+        this.top = "-72px"
+        break
+      case "bottom":
+        this.top = "24px"
+        break
+      default:
+        this.top = "-24px"
+        break
     }
   }
 }
@@ -75,4 +89,33 @@ export default {
   bottom: -10px;
   right: 50px;
 }
+
+// .popup-error-tip-right::before {
+//   display: inline-block;
+//   width: 0;
+//   height: 0;
+//   border: solid transparent;
+//   border-top-width: 10px;
+//   border-right-width: 10px;
+//   border-bottom-width: 10px;
+//   border-left-width: 0px;
+//   border-bottom-color: #fff;
+//   content: "";
+//   position: absolute;
+//   top: 25px;
+//   left: -10px;
+// }
+
+// .popup-error-tip-right::after {
+//   display: inline-block;
+//   width: 0;
+//   height: 0;
+//   border: solid transparent;
+//   border-width: 10px;
+//   border-bottom-color: #fff;
+//   content: "";
+//   position: absolute;
+//   top: 25px;
+//   left: -10px;
+// }
 </style>
