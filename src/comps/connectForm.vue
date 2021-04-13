@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui"
 import errPopupTip from "./errPopupTip"
 export default {
   components: {
@@ -36,6 +37,10 @@ export default {
           this.cdTime--
         }
       }, 1000)
+      Toast({
+        message: "手机号验证功能还在开发中，填写正确的手机号点击下一步即可。",
+        iconClass: "iconfont icon-warning"
+      })
     }
   }
 }
