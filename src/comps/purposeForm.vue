@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <mt-cell title="来沪目的" label="半工作半居住的请选择工作" is-link :value="form.purposeCn || '请选择'" @click.native="selHouseTypeVisible = true"/>
+      <mt-cell title="来此地目的" label="半工作半居住的请选择工作" is-link :value="form.purposeCn || '请选择'" @click.native="selHouseTypeVisible = true"/>
     </div>
     <err-popup-tip :error="error" pname="purpose"/>
     <mt-actionsheet :actions="houseTypes" v-model="selHouseTypeVisible"/>
