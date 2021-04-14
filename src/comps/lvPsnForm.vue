@@ -7,36 +7,15 @@
       </mt-cell>
     </div>
 
-    <mt-navbar v-model="selTab">
-      <mt-tab-item id="house">同住</mt-tab-item>
-      <mt-tab-item id="company">同工</mt-tab-item>
-    </mt-navbar>
-
-    <!-- tab-container -->
-    <mt-tab-container class="mt-3" v-model="selTab">
-      <mt-tab-container-item id="house">
-        <div class="scroll-panel">
-          <mt-radio
-            align="right"
-            v-model="form.idCard"
-            :options="psnInSameHs.map(person => ({
-              label: person.name,
-              value: person.idCard
-            }))"/>
-        </div>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="company">
-        <div class="scroll-panel">
-          <mt-radio
-            align="right"
-            v-model="form.idCard"
-            :options="psnInSameCmp.map(person => ({
-              label: person.name,
-              value: person.idCard
-            }))"/>
-        </div>
-      </mt-tab-container-item>
-    </mt-tab-container>
+    <div class="mt-3 scroll-panel">
+      <mt-radio
+        align="right"
+        v-model="form.idCard"
+        :options="people.map(person => ({
+          label: person.name,
+          value: person.idCard
+        }))"/>
+    </div>
   </div>
 </template>
 
@@ -49,15 +28,13 @@ export default {
   },
   data() {
     return {
-      selTab: "house",
       sbtPsn: "",
-      psnInSameHs: [],
-      psnInSameCmp: []
+      people: []
     }
   },
   watch: {
     "form.idCard": function(n, o) {
-      for (let person of this.selTab === "house" ? this.psnInSameHs : this.psnInSameCmp) {
+      for (let person of this.people) {
         if (person.idCard === n) {
           this._copyPerson(person)
           break
@@ -66,14 +43,14 @@ export default {
     }
   },
   async created() {
-    const cmpUrl = `/population-statistics/mdl/v1/persons?cmpId=${this.form.cmpId}`
-    await reqBackend(axios.get(cmpUrl), data => {
-      this.psnInSameCmp = data
-    })
-
-    const hsUrl = `/population-statistics/mdl/v1/persons?lvAddress=${this.form.lvAddress}`
-    await reqBackend(axios.get(hsUrl), data => {
-      this.psnInSameHs = data
+    let url = ""
+    if (this.form.relation === "同工") {
+      url = `/population-statistics/mdl/v1/persons?cmpId=${this.form.cmpId}`
+    } else {
+      url = `/population-statistics/mdl/v1/persons?lvAddress=${this.form.lvAddress}`
+    }
+    await reqBackend(axios.get(url), data => {
+      this.people = data
     })
 
     this.sbtPsn = this.form.submit
@@ -111,7 +88,7 @@ export default {
   position: fixed;
   left: 0;
   right: 0;
-  top: 205px;
+  top: 156px;
   bottom: 61px;
   overflow-y: scroll;
 }

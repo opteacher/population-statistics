@@ -79,7 +79,8 @@ export default {
         toAddress: "",
         cmpId: "",
         company: "",
-        passed: false
+        passed: false,
+        relation: "同工"
       },
       formSubmit: false
     }
@@ -101,7 +102,7 @@ export default {
             utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
             return Promise.resolve(false)
           } else if (this.form.lvAddress === "" && this.form.cmpId === "") {
-            utils.popoverErrTip("#lvAddress", "必须选择现在居住地址或者工作单位！")
+            utils.popoverErrTip("#cmpId_lvAddr", "必须选择现在居住地址或者工作单位！")
             return Promise.resolve(false)
           } else if (!await this.$refs["agent-form"].onNextBtnClick()) {
             utils.popoverErrTip("#name", "该单位/房屋不存在该人员信息！")
