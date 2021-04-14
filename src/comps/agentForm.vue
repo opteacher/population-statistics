@@ -1,47 +1,40 @@
 <template>
   <div>
-    <mt-field label="代办人姓名" placeholder="请输入姓名" v-model="form.name">
-      <mt-button size="small" @click="onInforBtnClick">
-        <i class="iconfont icon-tishi"/>
-      </mt-button>
+    <mt-field id="name" label="代办人姓名" placeholder="请输入姓名" v-model="form.name"
+      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
+      <mt-button size="small" @click="onInforBtnClick"><i class="iconfont icon-tishi"/></mt-button>
     </mt-field>
-    <err-popup-tip :error="error" pname="name"/>
-    <id-card-field label="代办人身份证" :form="form" :error="error"/>
+    <id-card-field label="代办人身份证" :form="form"/>
     <mt-navbar v-model="selTab">
       <mt-tab-item id="house">居住房屋</mt-tab-item>
       <mt-tab-item id="company">工作单位</mt-tab-item>
     </mt-navbar>
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="house">
-        <sch-addr-field ref="sch-addr-field" :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="253" :bottom="61"/>
+        <sch-addr-field ref="sch-addr-field" :form="form" pname="lvAddress" params="?shopName===&shopName=" :top="253" :bottom="61"/>
       </mt-tab-container-item>
       <mt-tab-container-item id="company">
-        <house-form :form="form" :error="error" purpose="work" :top="297"/>
+        <house-form :form="form" purpose="work" :top="297"/>
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
 </template>
 
 <script>
-import iptValidField from "./iptValidField"
 import idCardField from "./idCardField"
 import schAddrField from "./schAddrField"
 import houseForm from "./houseForm"
-import errPopupTip from "./errPopupTip"
 import { reqBackend } from "../utils"
 import { MessageBox } from "mint-ui"
 
 export default {
   components: {
-    "err-popup-tip": errPopupTip,
-    "ipt-valid-field": iptValidField,
     "id-card-field": idCardField,
     "sch-addr-field": schAddrField,
     "house-form": houseForm
   },
   props: {
-    "form": Object,
-    "error": Object
+    "form": Object
   },
   data() {
     return {

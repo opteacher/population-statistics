@@ -24,11 +24,11 @@
       </li>
     </ul>
     <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
-      <purpose-form v-if="curStep === 'purpose'" :form="form" :error="error"/>
-      <house-form v-if="curStep === 'house'" :form="form" :error="error" :top="152"/>
-      <cm-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
-      <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
-      <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
+      <purpose-form v-if="curStep === 'purpose'" :form="form"/>
+      <house-form v-if="curStep === 'house'" :form="form" :top="152"/>
+      <cm-psn-form v-if="curStep === 'person'" :form="form"/>
+      <connect-form v-if="curStep === 'connect'" :form="form"/>
+      <confirm-form v-if="curStep === 'confirm'" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: transparent">
       <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
@@ -83,11 +83,6 @@ export default {
         phone: "",
         passed: false
       },
-      error: {
-        active: false,
-        pname: "",
-        message: ""
-      },
       formSubmit: false
     }
   },
@@ -117,32 +112,22 @@ export default {
             utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
             return false
           } else if (this.form.name === "") {
-            this.error.pname = "name"
-            this.error.message = "必须填写人员姓名！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "必须填写人员姓名！")
             return false
           } else if (!utils.PsnNameRegexp.test(this.form.name)) {
-            this.error.pname = "name"
-            this.error.message = "必须填写正确的人员姓名！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "必须填写正确的人员姓名！")
             return false
           } else if (this.form.purpose === "work" && this.form.lvAddress === "") {
-            this.error.pname = "lvAddress"
-            this.error.message = "必须填写现在居住地址！"
-            this.error.active = true
+            utils.popoverErrTip("#lvAddress", "必须填写现在居住地址！")
             return false
           }
           break
         case "connect":
           if (this.form.phone === "") {
-            this.error.pname = "phone"
-            this.error.message = "必须填写联系电话！"
-            this.error.active = true
+            utils.popoverErrTip("#phone", "必须填写联系电话！")
             return false
           } else if (!utils.PhoneRegexp.test(this.form.phone)) {
-            this.error.pname = "phone"
-            this.error.message = "必须填写正确联系电话！"
-            this.error.active = true
+            utils.popoverErrTip("#phone", "必须填写正确联系电话！")
             return false
           }
           break

@@ -22,11 +22,11 @@
       </li>
     </ul>
     <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
-      <agent-form ref="agent-form" v-if="curStep === 'agent'" :form="form" :error="error"/>
-      <lv-psn-form v-if="curStep === 'person'" :form="form" :error="error"/>
-      <where-to-form v-if="curStep === 'whereto'" :form="form" :error="error"/>
-      <connect-form v-if="curStep === 'connect'" :form="form" :error="error"/>
-      <confirm-form v-if="curStep === 'confirm'" :form="form" :error="error"/>
+      <agent-form ref="agent-form" v-if="curStep === 'agent'" :form="form"/>
+      <lv-psn-form v-if="curStep === 'person'" :form="form"/>
+      <where-to-form v-if="curStep === 'whereto'" :form="form"/>
+      <connect-form v-if="curStep === 'connect'" :form="form"/>
+      <confirm-form v-if="curStep === 'confirm'" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: transparent">
       <mt-button v-if="curStep !== 'agent'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
@@ -81,11 +81,6 @@ export default {
         company: "",
         passed: false
       },
-      error: {
-        active: false,
-        pname: "",
-        message: ""
-      },
       formSubmit: false
     }
   },
@@ -94,63 +89,43 @@ export default {
       switch (this.curStep) {
         case "agent":
           if (this.form.name === "") {
-            this.error.pname = "name"
-            this.error.message = "必须填写人员姓名！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "必须填写人员姓名！")
             return Promise.resolve(false)
           } else if (!utils.PsnNameRegexp.test(this.form.name)) {
-            this.error.pname = "name"
-            this.error.message = "必须填写正确的人员姓名！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "必须填写正确的人员姓名！")
             return Promise.resolve(false)
           } else if (this.form.idCard === "") {
-            this.error.pname = "idCard"
-            this.error.message = "必须填写身份证号码！"
-            this.error.active = true
+            utils.popoverErrTip("#idCard", "必须填写身份证号码！")
             return Promise.resolve(false)
           } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
-            this.error.pname = "idCard"
-            this.error.message = "必须填写正确的身份证号码！"
-            this.error.active = true
+            utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
             return Promise.resolve(false)
           } else if (this.form.lvAddress === "" && this.form.cmpId === "") {
-            this.error.pname = "lvAddress"
-            this.error.message = "必须选择现在居住地址或者工作单位！"
-            this.error.active = true
+            utils.popoverErrTip("#lvAddress", "必须选择现在居住地址或者工作单位！")
             return Promise.resolve(false)
           } else if (!await this.$refs["agent-form"].onNextBtnClick()) {
-            this.error.pname = "name"
-            this.error.message = "该单位/房屋不存在该人员信息！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "该单位/房屋不存在该人员信息！")
             return Promise.resolve(false)
           }
           break
         case "person":
           if (this.form.name === "") {
-            this.error.pname = "name"
-            this.error.message = "必须选择将要离开的人员！"
-            this.error.active = true
+            utils.popoverErrTip("#name", "必须选择将要离开的人员！")
             return Promise.resolve(false)
           }
           break
         case "whereto":
           if (this.form.toAddress === "") {
-            this.error.pname = "toAddress"
-            this.error.message = "必须填写将要去往的地址！"
-            this.error.active = true
+            utils.popoverErrTip("#toAddress", "必须填写将要去往的地址！")
             return Promise.resolve(false)
           }
           break
         case "connect":
           if (this.form.phone === "") {
-            this.error.pname = "phone"
-            this.error.message = "必须填写联系电话！"
-            this.error.active = true
+            utils.popoverErrTip("#phone", "必须填写联系电话！")
             return Promise.resolve(false)
           } else if (!utils.PhoneRegexp.test(this.form.phone)) {
-            this.error.pname = "phone"
-            this.error.message = "必须填写正确联系电话！"
-            this.error.active = true
+            utils.popoverErrTip("#phone", "必须填写正确联系电话！")
             return false
           }
           break

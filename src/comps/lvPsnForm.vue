@@ -2,7 +2,9 @@
   <div>
     <div>
       <mt-cell title="代办人员">{{sbtPsn}}</mt-cell>
-      <dsp-valid-cell title="离去人员" :form="form" pname="name" :error="error"/>
+      <mt-cell id="name" title="离去人员" data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
+        {{form.name}}
+      </mt-cell>
     </div>
 
     <mt-navbar v-model="selTab">
@@ -39,16 +41,11 @@
 </template>
 
 <script>
-import dspValidCell from "./dspValidCell"
 import { reqBackend } from "../utils"
 
 export default {
-  components: {
-    "dsp-valid-cell": dspValidCell
-  },
   props: {
-    "form": Object,
-    "error": Object
+    "form": Object
   },
   data() {
     return {

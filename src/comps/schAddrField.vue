@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div>
-      <mt-field label="居住地址" placeholder="居住地址（可关键字检索）" v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"/>
-    </div>
-    <err-popup-tip :error="error" :pname="pname" poppos="right"/>
+    <mt-field id="lvAddress" label="居住地址" placeholder="居住地址（可关键字检索）"
+      v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"
+      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="top"/>
     <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
       <mt-cell v-for="house in searchAddr.mchItems" :title="house.address" :key="house.id"
         is-link @click.native="searchAddr.schWords = house.address"/>
@@ -12,17 +11,12 @@
 </template>
 
 <script>
-import errPopupTip from "./errPopupTip"
 import utils from "../utils"
 
 export default {
-  components: {
-    "err-popup-tip": errPopupTip
-  },
   props: {
     "form": Object,
     "pname": String,
-    "error": Object,
     "params": {
       type: String,
       default: ""

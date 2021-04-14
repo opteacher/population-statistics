@@ -8,13 +8,15 @@
     <!-- tab-container -->
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="new" style="overflow-y: scroll">
-        <id-card-field :form="form" :error="error"/>
-        <ipt-valid-field label="姓名" placeholder="请输入姓名" :form="form" pname="name" :error="error"/>
-        <ipt-valid-field label="户籍地址" placeholder="请输入户籍地址（可选）" :form="form" pname="hhAddress" :error="error"/>
+        <id-card-field :form="form"/>
+        <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
+          data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
+        <mt-field id="hhAddress" label="户籍地址" placeholder="请输入户籍地址（可选）" v-model="form.hhAddress"
+          data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
         <gender-field :form="form"/>
         <nation-field :form="form"/>
         <div v-if="form.purpose === 'work'">
-          <sch-addr-field :form="form" :error="error" pname="lvAddress" params="?shopName===&shopName=" :top="397" :bottom="61"/>
+          <sch-addr-field :form="form" pname="lvAddress" params="?shopName===&shopName=" :top="397" :bottom="61"/>
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="old">
@@ -33,8 +35,6 @@
 </template>
 
 <script>
-import iptValidField from "./iptValidField"
-import errPopupTip from "./errPopupTip"
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
@@ -43,16 +43,13 @@ import utils from "../utils"
 
 export default {
   components: {
-    "ipt-valid-field": iptValidField,
-    "err-popup-tip": errPopupTip,
     "id-card-field": idCardField,
     "nation-field": nationField,
     "gender-field": genderField,
     "sch-addr-field": schAddrField
   },
   props: {
-    "form": Object,
-    "error": Object
+    "form": Object
   },
   data() {
     return {
