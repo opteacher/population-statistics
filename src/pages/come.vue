@@ -96,35 +96,25 @@ export default {
       switch (this.curStep) {
         case "purpose":
           if (this.form.purpose === "") {
-            this.error.pname = "purpose"
-            this.error.message = "必须选择来此目的！"
-            this.error.active = true
+            utils.popoverErrTip("#purpose", "必须选择来此目的！")
             return false
           }
           break
         case "house":
           if (this.form.purpose === "work" && this.form.cmpId === "") {
-            this.error.pname = "cmpId"
-            this.error.message = "必须选择工作单位！"
-            this.error.active = true
+            utils.popoverErrTip("#cmpId_lvAddr", "必须选择工作单位！")
             return false
           } else if (this.form.purpose === "live" && this.form.lvAddress === "") {
-            this.error.pname = "lvAddress"
-            this.error.message = "必须选择现在居住地址！"
-            this.error.active = true
+            utils.popoverErrTip("#cmpId_lvAddr", "必须选择现在居住地址！")
             return false
           }
           break
         case "person":
           if (this.form.idCard === "") {
-            this.error.pname = "idCard"
-            this.error.message = "必须填写身份证号码！"
-            this.error.active = true
+            utils.popoverErrTip("#idCard", "必须填写身份证号码！")
             return false
           } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
-            this.error.pname = "idCard"
-            this.error.message = "必须填写正确的身份证号码！"
-            this.error.active = true
+            utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
             return false
           } else if (this.form.name === "") {
             this.error.pname = "name"

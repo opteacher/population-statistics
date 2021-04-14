@@ -1,34 +1,19 @@
 <template>
-  <div>
-    <div>
-      <mt-field :label="label" placeholder="请输入身份证" v-model="form.idCard" :attr="{ maxlength: 18 }">
-        <mt-button size="small" @click="onCameraClick">
-          <i class="iconfont icon-camera"/>
-        </mt-button>
-      </mt-field>
-    </div>
-    <err-popup-tip :error="error" pname="idCard"/>
-  </div>
+  <mt-field id="idCard" :label="label" placeholder="请输入身份证" v-model="form.idCard" :attr="{ maxlength: 18 }"
+    data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
+
+    <mt-button size="small" @click="onCameraClick">
+      <i class="iconfont icon-camera"/>
+    </mt-button>
+  </mt-field>
 </template>
 
 <script>
 import { Toast } from "mint-ui"
-import errPopupTip from "./errPopupTip"
 
 export default {
-  components: {
-    "err-popup-tip": errPopupTip
-  },
   props: {
     "form": Object,
-    "error": {
-      type: Object,
-      default: () => ({
-        active: false,
-        pname: "",
-        message: ""
-      })
-    },
     "label": {
       type: String,
       default: "身份证"

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <mt-cell class="sel-house" :title="isForWork ? '工作单位' : '居住房屋'">
+    <mt-cell id="cmpId_lvAddr" class="sel-house" :title="isForWork ? '工作单位' : '居住房屋'"
+      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
+
       {{(isForWork ? form.company : form.lvAddress) || `请选择${isForWork ? '单位' : '房屋'}`}}
     </mt-cell>
     <mt-search v-model="searchHouse.schWords"
       :show="true" @input="onSchWdsChanged('searchHouse', ['name', 'shopName', 'address'])">
-      <err-popup-tip :error="error" :pname="isForWork ? 'cmpId' : 'lvAddress'"/>
       <div class="sel-house-list" :style="`top: ${this.top}px`">
         <mt-radio
           v-if="isForWork"
@@ -26,13 +27,9 @@
 </template>
 
 <script>
-import errPopupTip from "./errPopupTip"
 import utils from "../utils"
 
 export default {
-  components: {
-    "err-popup-tip": errPopupTip
-  },
   props: {
     "form": Object,
     "error": Object,

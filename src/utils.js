@@ -49,5 +49,20 @@ module.exports = {
   },
   IdCardRegexp: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
   PsnNameRegexp: /^(?:[\u4e00-\u9fa5]+)(?:·[\u4e00-\u9fa5]+)*$|^[a-zA-Z0-9]+\s?[\.·\-()a-zA-Z]*[a-zA-Z]+$/,
-  PhoneRegexp: /^((\+|00)86)?((134\d{4})|((13[0-3|5-9]|14[1|5-9]|15[0-9]|16[2|5|6|7]|17[0-8]|18[0-9]|19[0-2|5-9])\d{8}))$/
+  PhoneRegexp: /^((\+|00)86)?((134\d{4})|((13[0-3|5-9]|14[1|5-9]|15[0-9]|16[2|5|6|7]|17[0-8]|18[0-9]|19[0-2|5-9])\d{8}))$/,
+  popoverErrTip(fieldId, errContent) {
+    $(fieldId).popover({content: errContent})
+    $(fieldId).on("shown.bs.popover", () => {
+      if (!$(".popover-mask").length) {
+        $(".popover").after("<div class='popover-mask' style='position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 1059; background-color: rgba(.5, .5, .5, .5)'/>")
+      }
+      var onHideClick = function () {
+        $(fieldId).popover("hide")
+        $(".popover-mask").remove()
+      }
+      $(".popover").on("click", onHideClick)
+      $(".popover-mask").on("click", onHideClick)
+    })
+    $(fieldId).popover("show")
+  }
 }
