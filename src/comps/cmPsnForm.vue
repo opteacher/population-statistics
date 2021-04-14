@@ -8,9 +8,9 @@
     <!-- tab-container -->
     <mt-tab-container class="mt-3" v-model="selTab">
       <mt-tab-container-item id="new" style="overflow-y: scroll">
-        <id-card-field :form="form"/>
         <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
           data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
+        <id-card-field :form="form"/>
         <mt-field id="hhAddress" label="户籍地址" placeholder="请输入户籍地址（可选）" v-model="form.hhAddress"
           data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
         <gender-field :form="form"/>

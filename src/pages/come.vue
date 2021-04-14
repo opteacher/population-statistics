@@ -1,38 +1,16 @@
 <template>
   <div>
-    <ul class="nav nav-pills nav-fill nav-header">
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'purpose', 'disabled': !stepOrder['purpose']}" v-on:click="curStep = 'purpose'">目的</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'house', 'disabled': !stepOrder['house']}" v-on:click="curStep = 'house'">
-          {{form.purpose === "work" ? "单位" : "住宅"}}
-        </a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
-      </li>
-    </ul>
-    <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
-      <purpose-form v-if="curStep === 'purpose'" :form="form"/>
-      <house-form v-if="curStep === 'house'" :form="form" :top="152"/>
-      <cm-psn-form v-if="curStep === 'person'" :form="form"/>
-      <connect-form v-if="curStep === 'connect'" :form="form"/>
-      <confirm-form v-if="curStep === 'confirm'" :form="form"/>
+    <steps-header-bar :stepArr="steps" :active="curStep"/>
+    <div style="overflow-x: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
+      <purpose-form v-if="curStep === 0" :form="form"/>
+      <house-form v-if="curStep === 1" :form="form" :top="152"/>
+      <cm-psn-form v-if="curStep === 2" :form="form"/>
+      <connect-form v-if="curStep === 3" :form="form"/>
+      <confirm-form v-if="curStep === 4" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: transparent">
-      <mt-button v-if="curStep !== 'purpose'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
-      <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
+      <mt-button v-if="curStep !== 0" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 4" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
         <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>
         完成
@@ -42,6 +20,7 @@
 </template>
 
 <script>
+import stepsHeaderBar from "../comps/stepsHeaderBar"
 import purposeForm from "../comps/purposeForm"
 import cmPsnForm from "../comps/cmPsnForm"
 import houseForm from "../comps/houseForm"
@@ -52,6 +31,7 @@ import utils from "../utils"
 
 export default {
   components: {
+    "steps-header-bar": stepsHeaderBar,
     "purpose-form": purposeForm,
     "cm-psn-form": cmPsnForm,
     "house-form": houseForm,
@@ -60,14 +40,8 @@ export default {
   },
   data() {
     return {
-      stepOrder: {
-        "purpose": false,
-        "house": false,
-        "person": false,
-        "connect": false,
-        "confirm": false
-      },
-      curStep: "purpose",
+      steps: ["目的", "单位", "人员", "联系", "确认"],
+      curStep: 0,
       form: {
         type: "come",
         idCard: "",
@@ -86,16 +60,21 @@ export default {
       formSubmit: false
     }
   },
+  watch: {
+    "form.purpose": function(n, o) {
+      this.steps[1] = (n === "work" ? "单位" : "房屋")
+    }
+  },
   methods: {
     _validFormData() {
       switch (this.curStep) {
-        case "purpose":
+        case 0:
           if (this.form.purpose === "") {
             utils.popoverErrTip("#purpose", "必须选择来此目的！")
             return false
           }
           break
-        case "house":
+        case 1:
           if (this.form.purpose === "work" && this.form.cmpId === "") {
             utils.popoverErrTip("#cmpId_lvAddr", "必须选择工作单位！")
             return false
@@ -104,25 +83,25 @@ export default {
             return false
           }
           break
-        case "person":
-          if (this.form.idCard === "") {
-            utils.popoverErrTip("#idCard", "必须填写身份证号码！")
-            return false
-          } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
-            utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
-            return false
-          } else if (this.form.name === "") {
+        case 2:
+          if (this.form.name === "") {
             utils.popoverErrTip("#name", "必须填写人员姓名！")
             return false
           } else if (!utils.PsnNameRegexp.test(this.form.name)) {
             utils.popoverErrTip("#name", "必须填写正确的人员姓名！")
+            return false
+          } else if (this.form.idCard === "") {
+            utils.popoverErrTip("#idCard", "必须填写身份证号码！")
+            return false
+          } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
+            utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
             return false
           } else if (this.form.purpose === "work" && this.form.lvAddress === "") {
             utils.popoverErrTip("#lvAddress", "必须填写现在居住地址！")
             return false
           }
           break
-        case "connect":
+        case 3:
           if (this.form.phone === "") {
             utils.popoverErrTip("#phone", "必须填写联系电话！")
             return false
@@ -135,18 +114,10 @@ export default {
       return true
     },
     onStepBtnClick(idx) {
-      const stepOrderKeys = Object.keys(this.stepOrder)
-      const nxtIdx = stepOrderKeys.indexOf(this.curStep) + idx
-      if (nxtIdx === -1 || nxtIdx === this.stepOrder.length) {
+      if (idx === 1 && !this._validFormData()) {
         return
       }
-      if (idx === 1) {
-        if (!this._validFormData()) {
-          return
-        }
-        this.stepOrder[this.curStep] = true
-      }
-      this.curStep = stepOrderKeys[nxtIdx]
+      this.curStep += idx
     },
     onFinishBtnClick() {
       // 正式提交
@@ -189,5 +160,62 @@ export default {
 .nav-item a {
   padding-left: 0;
   padding-right: 0;
+}
+
+.triangle_step {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  li{
+    height: 40px;
+    background: #d7d8da;
+    color:#666;
+    text-align: center;
+    line-height: 40px;
+    /*width: 20%;*/
+    /*flex-basis: 100%;*/
+    position: relative;
+  }
+  li.cur{
+    background: #E8514A;
+    color:#fff;
+  }
+  /*三角形绘制*/
+  .jiao{
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;/*高度一半*/
+    border-left: 20px solid #d7d8da; /*调整宽度*/
+    border-bottom: 20px solid transparent;/*高度一半*/
+    position: absolute;
+    right:-20px;/*跟宽度保持一致*/
+    top:0;
+    z-index: 9999;
+  }
+  .jiaoActive{
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;/*高度一半*/
+    border-left: 20px solid #E8514A; /*调整宽度*/
+    border-bottom: 20px solid transparent;/*高度一半*/
+    position: absolute;
+    right:-20px;/*跟宽度保持一致*/
+    top:0;
+    z-index: 2;
+  }
+  /*大3个px的边 26-20/2*/
+  .interval{
+    width: 0;
+    height: 0;
+    border-top: 26px solid transparent;/*高度一半*/
+    border-left: 26px solid #fff; /*调整宽度*/
+    border-bottom: 26px solid transparent;/*高度一半*/
+    position: absolute;
+    right:-26px;/*跟宽度保持一致*/
+    top:-6px;
+    z-index: 1;
+  }
 }
 </style>

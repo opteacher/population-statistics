@@ -1,36 +1,16 @@
 <template>
   <div>
-    <ul class="nav nav-pills nav-fill nav-header">
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'agent', 'disabled': !stepOrder['agent']}" v-on:click="curStep = 'agent'">代办</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'person', 'disabled': !stepOrder['person']}" v-on:click="curStep = 'person'">人员</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'whereto', 'disabled': !stepOrder['whereto']}" v-on:click="curStep = 'whereto'">去向</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'connect', 'disabled': !stepOrder['connect']}" v-on:click="curStep = 'connect'">联系</a>
-      </li>
-      <i class="iconfont icon-arrow-right icon-align-middle"/>
-      <li class="nav-item">
-        <a class="nav-link" :class="{'active': curStep === 'confirm', 'disabled': !stepOrder['confirm']}" v-on:click="curStep = 'confirm'">确认</a>
-      </li>
-    </ul>
-    <div style="overflow: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
-      <agent-form ref="agent-form" v-if="curStep === 'agent'" :form="form"/>
-      <lv-psn-form v-if="curStep === 'person'" :form="form"/>
-      <where-to-form v-if="curStep === 'whereto'" :form="form"/>
-      <connect-form v-if="curStep === 'connect'" :form="form"/>
-      <confirm-form v-if="curStep === 'confirm'" :form="form"/>
+    <steps-header-bar :stepArr="steps" :active="curStep"/>
+    <div style="overflow-x: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
+      <agent-form ref="agent-form" v-if="curStep === 0" :form="form"/>
+      <lv-psn-form v-if="curStep === 1" :form="form"/>
+      <where-to-form v-if="curStep === 2" :form="form"/>
+      <connect-form v-if="curStep === 3" :form="form"/>
+      <confirm-form v-if="curStep === 4" :form="form"/>
     </div>
     <div class="fixed-bottom" style="padding: 10px 5px; background-color: transparent">
-      <mt-button v-if="curStep !== 'agent'" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
-      <mt-button v-if="curStep !== 'confirm'" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
+      <mt-button v-if="curStep !== 0" type="default" @click="onStepBtnClick(-1)">上一步</mt-button>
+      <mt-button v-if="curStep !== 4" class="float-right" type="primary" @click="onStepBtnClick(1)">下一步</mt-button>
       <mt-button v-else class="float-right" :disable="formSubmit" type="primary" @click="onFinishBtnClick">
         <mt-spinner v-if="formSubmit" type="snake" slot="icon" color="white"/>完成
       </mt-button>
@@ -39,6 +19,7 @@
 </template>
 
 <script>
+import stepsHeaderBar from "../comps/stepsHeaderBar"
 import agentForm from "../comps/agentForm"
 import lvPsnForm from "../comps/lvPsnForm"
 import whereToForm from "../comps/whereToForm"
@@ -49,6 +30,7 @@ import utils from "../utils"
 
 export default {
   components: {
+    "steps-header-bar": stepsHeaderBar,
     "agent-form": agentForm,
     "lv-psn-form": lvPsnForm,
     "where-to-form": whereToForm,
@@ -57,14 +39,8 @@ export default {
   },
   data() {
     return {
-      curStep: "agent",
-      stepOrder: {
-        "agent": false,
-        "person": false,
-        "whereto": false,
-        "connect": false,
-        "confirm": false
-      },
+      curStep: 0,
+      steps: ["代理", "人员", "去向", "联系", "确认"],
       form: {
         type: "leave",
         purpose: "",
@@ -88,7 +64,7 @@ export default {
   methods: {
     async _validFormData() {
       switch (this.curStep) {
-        case "agent":
+        case 0:
           if (this.form.name === "") {
             utils.popoverErrTip("#name", "必须填写人员姓名！")
             return Promise.resolve(false)
@@ -109,19 +85,19 @@ export default {
             return Promise.resolve(false)
           }
           break
-        case "person":
+        case 1:
           if (this.form.name === "") {
             utils.popoverErrTip("#name", "必须选择将要离开的人员！")
             return Promise.resolve(false)
           }
           break
-        case "whereto":
+        case 2:
           if (this.form.toAddress === "") {
             utils.popoverErrTip("#toAddress", "必须填写将要去往的地址！")
             return Promise.resolve(false)
           }
           break
-        case "connect":
+        case 3:
           if (this.form.phone === "") {
             utils.popoverErrTip("#phone", "必须填写联系电话！")
             return Promise.resolve(false)
@@ -134,18 +110,10 @@ export default {
       return Promise.resolve(true)
     },
     async onStepBtnClick(idx) {
-      const stepOrderKeys = Object.keys(this.stepOrder)
-      const nxtIdx = stepOrderKeys.indexOf(this.curStep) + idx
-      if (nxtIdx === -1 || nxtIdx === this.stepOrder.length) {
+      if (idx === 1 && !await this._validFormData()) {
         return
       }
-      if (idx === 1) {
-        if (!await this._validFormData()) {
-          return
-        }
-        this.stepOrder[this.curStep] = true
-      }
-      this.curStep = stepOrderKeys[nxtIdx]
+      this.curStep += idx
     },
     onFinishBtnClick() {
       this.formSubmit = true

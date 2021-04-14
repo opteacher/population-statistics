@@ -6,8 +6,8 @@
         {{form.name}}
       </mt-cell>
     </div>
-
-    <div class="mt-3 scroll-panel">
+    <div style="padding: 5px 10px">{{form.relation + "人员："}}</div>
+    <div class="scroll-panel">
       <mt-radio
         align="right"
         v-model="form.idCard"
@@ -88,7 +88,7 @@ export default {
   position: fixed;
   left: 0;
   right: 0;
-  top: 156px;
+  top: 190px;
   bottom: 61px;
   overflow-y: scroll;
 }
