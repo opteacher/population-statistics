@@ -7,7 +7,7 @@
 
     <!-- tab-container -->
     <mt-tab-container class="mt-3" v-model="selTab">
-      <mt-tab-container-item id="new" style="overflow-y: scroll">
+      <mt-tab-container-item id="new">
         <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
           data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
         <id-card-field :form="form"/>

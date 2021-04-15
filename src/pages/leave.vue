@@ -1,7 +1,7 @@
 <template>
   <div>
     <steps-header-bar :stepArr="steps" :active="curStep"/>
-    <div style="overflow-x: hidden; position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
+    <div style="position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
       <agent-form ref="agent-form" v-if="curStep === 0" :form="form"/>
       <lv-psn-form v-if="curStep === 1" :form="form"/>
       <where-to-form v-if="curStep === 2" :form="form"/>
