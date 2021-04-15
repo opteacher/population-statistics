@@ -3,7 +3,7 @@
     <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
       data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
     <id-card-field :form="form"/>
-    <div class="mt-20">
+    <div class="mt-5">
       <mt-button type="primary w-98 mlr-1pc" @click="onConfirmClick">确认身份</mt-button>
     </div>
     <div id="selHouseOrCompany" class="modal" tabindex="-1">
@@ -22,6 +22,7 @@
 <script>
 import "url"
 import utils from "../utils"
+import cookies from "../cookies"
 import idCardField from "../comps/idCardField"
 
 export default {
@@ -41,8 +42,9 @@ export default {
   },
   methods: {
     onDlgBtnClick(foothold) {
+      cookies.set("uneditable", true)
       $("#selHouseOrCompany").modal("hide")
-      this.$router.push({path: `/population-statistics/company-detail?${(new URLSearchParams(foothold)).toString()}`})
+      this.$router.push({path: `/population-statistics/company-detail?${this._cmbParams(foothold)}`})
     },
     async onConfirmClick() {
       if (this.form.name === "") {
@@ -87,10 +89,16 @@ export default {
       if (this.company && this.house) {
         $("#selHouseOrCompany").modal("show")
       } else if (this.company) {
-        this.$router.push({path: `/population-statistics/company-detail?${(new URLSearchParams(this.company)).toString()}`})
+        this.onDlgBtnClick(this.company)
       } else if (this.house) {
-        this.$router.push({path: `/population-statistics/company-detail?${(new URLSearchParams(this.house)).toString()}`})
+        this.onDlgBtnClick(this.house)
       }
+    },
+    _cmbParams(foothold) {
+      return (new URLSearchParams(Object.assign(foothold, {
+        submit: this.form.name,
+        sbtPhone: this.form.phone
+      }))).toString()
     }
   }
 }

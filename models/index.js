@@ -15,7 +15,8 @@ const exp = {
   "Company": require("./company"),
   "Person": require("./person"),
   "Record": require("./record"),
-  "Admin": require("./admin")
+  "Admin": require("./admin"),
+  "Report": require("./report"),
 }
 
 // @step{}:同步数据库
