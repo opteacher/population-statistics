@@ -56,8 +56,8 @@ export default {
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
     }
-    await reqBackend(axios.get(url), data => {
-      this.company = Object.assign(this.$route.query, {people: data})
+    this.company = Object.assign(this.$route.query, {
+      people: await reqBackend(axios.get(url))
     })
   },
   methods: {

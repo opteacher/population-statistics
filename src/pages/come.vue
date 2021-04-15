@@ -138,84 +138,14 @@ export default {
           this.form.cmpId = parseInt(this.form.cmpId)
         }
         const url = "/population-statistics/mdl/v1/record"
-        await utils.reqBackend(axios.post(url, this.form), data => {
-          Toast({
-            message: "来登成功！请等待协管核实",
-            iconClass: "iconfont icon-select-bold"
-          })
-          this.$router.push({path: "/"})
+        await utils.reqBackend(axios.post(url, this.form))
+        Toast({
+          message: "来登成功！请等待协管核实",
+          iconClass: "iconfont icon-select-bold"
         })
+        this.$router.push({path: "/"})
       })
     }
   }
 }
 </script>
-
-<style lang="scss">
-.icon-align-middle::before {
-  position: relative;
-  top: 8px;
-}
-
-.nav-item a {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.triangle_step {
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px auto;
-  li{
-    height: 40px;
-    background: #d7d8da;
-    color:#666;
-    text-align: center;
-    line-height: 40px;
-    /*width: 20%;*/
-    /*flex-basis: 100%;*/
-    position: relative;
-  }
-  li.cur{
-    background: #E8514A;
-    color:#fff;
-  }
-  /*三角形绘制*/
-  .jiao{
-    width: 0;
-    height: 0;
-    border-top: 20px solid transparent;/*高度一半*/
-    border-left: 20px solid #d7d8da; /*调整宽度*/
-    border-bottom: 20px solid transparent;/*高度一半*/
-    position: absolute;
-    right:-20px;/*跟宽度保持一致*/
-    top:0;
-    z-index: 9999;
-  }
-  .jiaoActive{
-    width: 0;
-    height: 0;
-    border-top: 20px solid transparent;/*高度一半*/
-    border-left: 20px solid #E8514A; /*调整宽度*/
-    border-bottom: 20px solid transparent;/*高度一半*/
-    position: absolute;
-    right:-20px;/*跟宽度保持一致*/
-    top:0;
-    z-index: 2;
-  }
-  /*大3个px的边 26-20/2*/
-  .interval{
-    width: 0;
-    height: 0;
-    border-top: 26px solid transparent;/*高度一半*/
-    border-left: 26px solid #fff; /*调整宽度*/
-    border-bottom: 26px solid transparent;/*高度一半*/
-    position: absolute;
-    right:-26px;/*跟宽度保持一致*/
-    top:-6px;
-    z-index: 1;
-  }
-}
-</style>

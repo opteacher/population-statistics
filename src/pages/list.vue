@@ -90,10 +90,8 @@ export default {
         url = "/population-statistics/mdl/v1/persons"
         break
       }
-      await utils.reqBackend(axios.get(url), data => {
-        this.searchItem.allItems = data
-        this.searchItem.mchItems = this.searchItem.allItems
-      })
+      this.searchItem.allItems = await utils.reqBackend(axios.get(url))
+      this.searchItem.mchItems = this.searchItem.allItems
     },
     onCfmSelClick() {
       this.$router.push({

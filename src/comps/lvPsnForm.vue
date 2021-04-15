@@ -49,10 +49,7 @@ export default {
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.form.lvAddress}`
     }
-    await reqBackend(axios.get(url), data => {
-      this.people = data
-    })
-
+    this.people = await reqBackend(axios.get(url))
     this.sbtPsn = this.form.submit
   },
   methods: {

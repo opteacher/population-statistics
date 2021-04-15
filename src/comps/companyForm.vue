@@ -49,17 +49,14 @@ export default {
   methods: {
     async onSubmitClick() {
       this.formSubmit = true
-      const pms = (this.form.id ?
+      await reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
         axios.post("/population-statistics/mdl/v1/company", this.form))
-      const res = 
-      await reqBackend(pms, data => {
-        Toast({
-          message: "提交成功！",
-          iconClass: "iconfont icon-select-bold"
-        })
-        this.$router.push({path: `/population-statistics/list?type=${this.form.shopName ? 'company' : 'house'}`})
+      Toast({
+        message: "提交成功！",
+        iconClass: "iconfont icon-select-bold"
       })
+      this.$router.push({path: `/population-statistics/list?type=${this.form.shopName ? 'company' : 'house'}`})
     }
   }
 }

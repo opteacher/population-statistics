@@ -71,38 +71,31 @@ export default {
   },
   created() {
     MessageBox("提示", this.tip).then(async () => {
-      await utils.reqBackend([
+      const data = await utils.reqBackend([
         axios.get("/population-statistics/mdl/v1/companys?shopName=!=&shopName="), // 单位
         axios.get("/population-statistics/mdl/v1/companys?shopName===&shopName="), // 房屋
-      ], data => {
-        this.companies = data[0].map(item => ({
-          label: item.shopName,
-          value: item.id.toString()
-        }))
-        this.houses = data[1].map(item => ({
-          label: item.address,
-          value: item.address
-        }))
-        this.schFoothold.allItems = this.form.relation === '同工' ? this.companies : this.houses
-        this.schFoothold.mchItems = this.schFoothold.allItems
-      })
+      ])
+      this.companies = data[0].map(item => ({
+        label: item.shopName,
+        value: item.id.toString()
+      }))
+      this.houses = data[1].map(item => ({
+        label: item.address,
+        value: item.address
+      }))
+      this.schFoothold.allItems = this.form.relation === '同工' ? this.companies : this.houses
+      this.schFoothold.mchItems = this.schFoothold.allItems
     })
   },
   methods: {
     async onNextBtnClick() {
       let url = `/population-statistics/mdl/v1/persons?name=${this.form.name}&idCard=${this.form.idCard}`
       url += this.form.relation === "同工" ? `&cmpId=${this.form.cmpId}` : `&lvAddress=${this.form.lvAddress}`
-      let sbtPerson = null
-      try {
-        sbtPerson = await new Promise((res, rej) => {
-          utils.reqBackend(axios.get(url), data => {
-            (!data || data.length !== 1) ? rej() : res(data[0])
-          })
-        })
-      } catch(e) {
-        console.log(e)
+      const data = await utils.reqBackend(axios.get(url))
+      if (!data || data.length !== 1) {
         return Promise.resolve(false)
       }
+      const sbtPerson = data[0]
       this.form.psnId = sbtPerson.id
       this.form.submit = sbtPerson.name
       this.form.phone = sbtPerson.phone

@@ -5,7 +5,7 @@
       <hr/>
       <mt-button class="large-circle-btn" type="danger" @click="$router.push({path: '/population-statistics/leave'})">离开<br/>此地需<br/>注销</mt-button>
       <div style="margin-top: 30px"/>
-      <mt-button type="default" class="float-button" @click="$router.push({path: '/population-statistics/people'})">查看房屋/单位实有人口</mt-button>
+      <mt-button type="default" class="float-button" @click="$router.push({path: '/population-statistics/valid'})">查看房屋/单位实有人口</mt-button>
     </div>
   </div>
 </template>

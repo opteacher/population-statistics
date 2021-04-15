@@ -16,7 +16,7 @@ module.exports = {
       })
     }
   },
-  async reqBackend(pms, callback) {
+  async reqBackend(pms) {
     Indicator.open({text: "加载中..."})
     if (pms instanceof Array) {
       const ress = await Promise.all(pms)
@@ -27,11 +27,10 @@ module.exports = {
             message: `系统错误！${res.statusText}`,
             iconClass: "iconfont icon-close-bold"
           })
-          return false
+          return Promise.resolve(null)
         }
       }
-      callback(ress.map(res => res.data.data))
-      return true
+      return Promise.resolve(ress.map(res => res.data.data))
     } else {
       const res = await pms
       Indicator.close()
@@ -40,10 +39,9 @@ module.exports = {
           message: `系统错误！${res.statusText}`,
           iconClass: "iconfont icon-close-bold"
         })
-        return false
+        return Promise.resolve(null)
       } else {
-        callback(res.data.data)
-        return true
+        return Promise.resolve(res.data.data)
       }
     }
   },

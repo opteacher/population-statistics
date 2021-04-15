@@ -46,11 +46,9 @@ export default {
   },
   async created() {
     const url = `/population-statistics/mdl/v1/companys${this.params}`
-    await utils.reqBackend(axios.get(url), data => {
-      this.searchAddr.allItems = data
-      this.searchAddr.mchItems = this.searchAddr.allItems
-      this.searchAddr.schWords = this.form[this.pname]
-    })
+    this.searchAddr.allItems = await utils.reqBackend(axios.get(url))
+    this.searchAddr.mchItems = this.searchAddr.allItems
+    this.searchAddr.schWords = this.form[this.pname]
   },
   methods: {
     onSchWdsChanged: utils.onSchWdsChanged

@@ -69,13 +69,12 @@ export default {
   async created() {
     this.isForWork = this.purpose ? this.purpose === "work" : this.form.purpose === "work"
     const url = `/population-statistics/mdl/v1/companys?shopName=${this.isForWork ? '!' : '='}=&shopName=`
-    await utils.reqBackend(axios.get(url), data => {
-      this.searchHouse.allItems = data.map(house => {
-        house.id = house.id.toString()
-        return house
-      })
-      this.searchHouse.mchItems = this.searchHouse.allItems
+    const data = await utils.reqBackend(axios.get(url))
+    this.searchHouse.allItems = data.map(house => {
+      house.id = house.id.toString()
+      return house
     })
+    this.searchHouse.mchItems = this.searchHouse.allItems
   },
   methods: {
     onSchWdsChanged: utils.onSchWdsChanged

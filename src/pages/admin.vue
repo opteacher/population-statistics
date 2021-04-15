@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { reqBackend } from "../utils"
 import { Toast, Indicator } from "mint-ui"
 import crypto  from "crypto"
 export default {

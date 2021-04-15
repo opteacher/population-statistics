@@ -128,13 +128,12 @@ export default {
         }
         this.form.cmpId = parseInt(this.form.cmpId)
         const url = "/population-statistics/mdl/v1/record"
-        await utils.reqBackend(axios.post(url, this.form), data => {
-          Toast({
-            message: "去销成功！请等待协管核实",
-            iconClass: "iconfont icon-select-bold"
-          })
-          this.$router.push({path: "/"})
+        await utils.reqBackend(axios.post(url, this.form))
+        Toast({
+          message: "去销成功！请等待协管核实",
+          iconClass: "iconfont icon-select-bold"
         })
+        this.$router.push({path: "/"})
       })
     }
   }

@@ -45,9 +45,7 @@ export default {
   methods: {
     async _refreshRecords() {
       const url = "/population-statistics/mdl/v1/records?passed=0"
-      await utils.reqBackend(axios.get(url), data => {
-        this.waitForPass = data
-      })
+      this.waitForPass = await utils.reqBackend(axios.get(url))
     },
     onPassPsnClick(record) {
       MessageBox({
@@ -68,13 +66,12 @@ export default {
             "name", "idCard", "gender", "nation", "phone", "hhAddress", "lvAddress", "cmpId", "company"
           ])))
         }
-        await utils.reqBackend(pmss, data => {
-          Toast({
-            message: "审批通过！人员已更新到实有人口",
-            iconClass: "iconfont icon-select-bold"
-          })
-          this.$router.push({path: "/population-statistics/list?type=person"})
+        await utils.reqBackend(pmss)
+        Toast({
+          message: "审批通过！人员已更新到实有人口",
+          iconClass: "iconfont icon-select-bold"
         })
+        this.$router.push({path: "/population-statistics/list?type=person"})
       })
     },
     onRejectPsnClick() {
@@ -87,14 +84,13 @@ export default {
           return
         }
         const url = `/population-statistics/mdl/v1/record/${this.selRecord.id}`
-        await utils.reqBackend(axios.delete(url), data => {
-          Toast({
-            message: "审批拒绝！",
-            iconClass: "iconfont icon-select-bold"
-          })
-          this.selRecord = null
-          this._refreshRecords()
+        await utils.reqBackend(axios.delete(url))
+        Toast({
+          message: "审批拒绝！",
+          iconClass: "iconfont icon-select-bold"
         })
+        this.selRecord = null
+        this._refreshRecords()
       })
     },
     onRecordClick(record) {
