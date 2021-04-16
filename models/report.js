@@ -9,6 +9,7 @@ module.exports = db.defineModel({
   desc:     db.Types.String,
   submit:   db.Types.String,// 提交者
   sbtPhone: db.Types.String,// 提交者联系电话
+  solved:   db.Types.Boolean,
 }, {
   router: {
     methods: [

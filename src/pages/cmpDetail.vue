@@ -78,6 +78,7 @@ export default {
           desc: "",
           submit: "",
           sbtPhone: "",
+          solved: false
         }
       }
     }

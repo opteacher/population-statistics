@@ -1,13 +1,29 @@
 <template>
   <div class="h-100">
     <div v-if="!selRecord" class="h-100">
-      <div v-if="hasPassToApv">
-        <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
-          :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
-      </div>
-      <div v-else class="center-container">
-        <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">现在暂时没有人员的来去申请上报</p>
-      </div>
+      <mt-navbar v-model="selTab">
+        <mt-tab-item id="1">来等去销</mt-tab-item>
+        <mt-tab-item id="2">错误/更新</mt-tab-item>
+      </mt-navbar>
+      <mt-tab-container class="tab-container-h100" v-model="selTab">
+        <mt-tab-container-item id="1">
+          <div v-if="hasPassToApv">
+            <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
+              :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
+          </div>
+          <div v-else class="center-container">
+            <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">没有人员的来去申请上报</p>
+          </div>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="2">
+          <div v-if="hasErrUpdToApv">
+            <!-- @_@ -->
+          </div>
+          <div v-else class="center-container">
+            <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">没有上报的错误或更新信息</p>
+          </div>
+        </mt-tab-container-item>
+      </mt-tab-container>
     </div>
     <div v-else>
       <mt-header fixed title="人员信息">
@@ -41,8 +57,11 @@ export default {
   data() {
     return {
       selRecord: null,
+      selTab: "1",
       waitForPass: [],
-      hasPassToApv: false
+      hasPassToApv: false,
+      waitForSolve: [],
+      hasErrUpdToApv: false
     }
   },
   created() {
@@ -50,9 +69,13 @@ export default {
   },
   methods: {
     async _refreshRecords() {
-      const url = "/population-statistics/mdl/v1/records?passed=0"
+      let url = "/population-statistics/mdl/v1/records?passed=0"
       this.waitForPass = await utils.reqBackend(axios.get(url))
       this.hasPassToApv = Boolean(this.waitForPass.length)
+
+      url = "/population-statistics/mdl/v1/reports?solved=0"
+      this.waitForSolve = await utils.reqBackend(axios.get(url))
+      this.hasErrUpdToApv = Boolean(this.waitForSolve.length)
     },
     onPassPsnClick(record) {
       MessageBox({
@@ -123,5 +146,21 @@ export default {
   left: 0;
   right: 0;
   background-color: white;
+}
+
+.tab-container-h100 {
+  position: fixed;
+  top: 49px;
+  bottom: 55px;
+  left: 0;
+  right: 0;
+
+  .mint-tab-container-wrap {
+    height: 100%;
+
+    .mint-tab-container-item {
+      height: 100%;
+    }
+  }
 }
 </style>
