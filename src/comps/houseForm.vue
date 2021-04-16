@@ -7,7 +7,7 @@
     </mt-cell>
     <mt-search v-model="searchHouse.schWords"
       :show="true" @input="onSchWdsChanged('searchHouse', ['name', 'shopName', 'address'])">
-      <div class="sel-house-list" :style="`top: ${this.top}px`">
+      <div class="scroll-panel" :style="`top: ${this.top}px; bottom: 61px`">
         <mt-radio
           v-if="isForWork"
           align="right"
@@ -88,13 +88,5 @@ export default {
   left: 0;
   right: 0;
   z-index: 100
-}
-
-.sel-house-list {
-  overflow-y: scroll;
-  position: fixed;
-  bottom: 61px;
-  left: 0;
-  right: 0;
 }
 </style>

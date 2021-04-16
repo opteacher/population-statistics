@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
@@ -61,7 +61,3 @@ export default {
   }
 }
 </script>
-
-<style type="text/scss">
-
-</style>

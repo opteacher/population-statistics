@@ -5,7 +5,7 @@
         <mt-button icon="back">返回</mt-button>
       </router-link>
     </mt-header>
-    <div class="company-detail-panel" :style="uneditable ? 'top: 0; bottom: 50px' : 'top: 40px; bottom: 101px'">
+    <div class="scroll-panel" :style="uneditable ? 'top: 0; bottom: 50px' : 'top: 40px; bottom: 101px'">
       <div>
         <mt-cell v-if="company.name" title="单位注册名称" :value="company.name"/>
         <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"/>
@@ -159,12 +159,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.company-detail-panel {
-  position: fixed;
-  left: 0;
-  right: 0;
-  overflow-y: scroll;
-}
-</style>

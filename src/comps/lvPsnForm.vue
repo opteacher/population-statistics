@@ -7,7 +7,7 @@
       </mt-cell>
     </div>
     <div style="padding: 5px 10px">{{form.relation + "人员："}}</div>
-    <div class="scroll-panel">
+    <div class="scroll-panel" style="top: 190px; bottom: 61px">
       <mt-radio
         align="right"
         v-model="form.idCard"
@@ -79,14 +79,5 @@ export default {
 
 .mint-radiolist label {
   margin: 0 !important;
-}
-
-.scroll-panel {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 190px;
-  bottom: 61px;
-  overflow-y: scroll;
 }
 </style>

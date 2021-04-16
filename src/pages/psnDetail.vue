@@ -3,7 +3,7 @@
     <mt-header title="人员详情">
       <mt-button icon="back" slot="left" @click.native="$router.go(-1)">返回</mt-button>
     </mt-header>
-    <div class="person-detail-panel" :style="uneditable ? 'bottom: 50px' : 'bottom: 106px'">
+    <div class="scroll-panel" :style="'top: 40px;' + (uneditable ? 'bottom: 50px' : 'bottom: 106px')">
       <mt-cell title="姓名" :value="person.name"/>
       <mt-cell title="身份证" :value="person.idCard"/>
       <mt-cell v-if="person.gender" title="性别" :value="person.gender"/>
@@ -130,13 +130,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.person-detail-panel {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  right: 0;
-  overflow-y: scroll;
-}
-</style>

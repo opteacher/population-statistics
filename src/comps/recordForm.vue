@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow-y: scroll">
+  <div class="scroll-panel" style="top: 40px; bottom: 106px">
     <mt-cell title="类型" :value="record.typeCn"/>
     <mt-cell v-if="!record.isLeave" title="来此目的" :value="record.purpose === 'work' ? '工作' : '居住'"/>
     <mt-cell title="姓名" :value="record.name"/>

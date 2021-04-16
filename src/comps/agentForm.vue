@@ -13,7 +13,7 @@
         data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
     </div>
     <mt-search class="foothold-search" v-model="schFoothold.schWords" :show="true" @input="onSchWdsChanged('schFoothold', ['label'])">
-      <div style="overflow-y: scroll; position: fixed; left: 0; right: 0; top: 293px; bottom: 61px">
+      <div class="scroll-panel" style="top: 293px; bottom: 61px">
         <mt-radio v-model="selRadio" :options="schFoothold.mchItems"/>
       </div>
     </mt-search>

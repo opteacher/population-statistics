@@ -29,9 +29,7 @@
       <mt-header fixed title="人员信息">
         <mt-button slot="left" icon="back" @click="selRecord = null">返回</mt-button>
       </mt-header>
-      <div style="position: absolute; top: 40px; bottom: 106px; left: 0; right: 0">
-        <record-form style="margin-bottom: 106px" :record="selRecord"/>
-      </div>
+      <record-form :record="selRecord"/>
       <div class="pass-btn-area">
         <mt-button class="bottom-half-btn" type="primary" @click.prevent="onPassPsnClick(selRecord)">通过</mt-button>
         <mt-button class="bottom-half-btn" type="danger" @click="onRejectPsnClick">拒绝</mt-button>
@@ -133,15 +131,6 @@ export default {
 </script>
 
 <style lang="scss">
-.approval-panel {
-  position: fixed;
-  top: 0;
-  bottom: 55px;
-  left: 0;
-  right: 0;
-  overflow-y: scroll
-}
-
 .pass-btn-area {
   position: fixed;
   bottom: 55px;

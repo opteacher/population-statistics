@@ -138,3 +138,13 @@
   position: absolute;
   z-index: 2003;
 }
+
+.scroll-panel {
+  position: fixed;
+  // 需指定top和bottom
+  // top: 49px;
+  // bottom: 55px;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
+}
