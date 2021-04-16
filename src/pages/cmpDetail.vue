@@ -100,6 +100,9 @@ export default {
   beforeRouteLeave(to, from, next) {
     if (to.path !== "/population-statistics/person-detail") {
       cookies.clear("uneditable")
+      if (this.uneditable) {
+        window.history.back()
+      }
     }
     next()
   },
@@ -128,7 +131,7 @@ export default {
       })
     },
     onPersonClick(psn) {
-      this.$router.push({path: `/population-statistics/person-detail?${(new URLSearchParams(psn)).toString()}`})
+      this.$router.push({path: `/population-statistics/person-detail?${this._cmbParams(psn)}`})
     },
     onReportSubmit() {
       this.report.showTopPopup = false
@@ -155,6 +158,12 @@ export default {
     },
     onReportChanged() {
       this.report.form.props = `${arguments[1][0]}.${arguments[1][1]}`
+    },
+    _cmbParams(foothold) {
+      return (new URLSearchParams(Object.assign(foothold, {
+        submit: this.$route.query.submit,
+        sbtPhone: this.$route.query.sbtPhone
+      }))).toString()
     }
   }
 }

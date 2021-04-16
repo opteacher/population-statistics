@@ -33,6 +33,7 @@
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
 import cookies from "../cookies"
+import { reqBackend } from "../utils"
 
 export default {
   components: {

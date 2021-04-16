@@ -1,15 +1,14 @@
 <template>
   <mt-cell is-link @click.native="onReportClick">
-    <div slot="title">
+    <div class="mtb-5" slot="title">
       <span class="mint-cell-text">
-        <mt-badge type="primary">{{report.type}}</mt-badge>{{report.name}}
+        <mt-badge type="primary">{{report.type}}</mt-badge>&nbsp;{{report.name}}
       </span>
       <span class="mint-cell-label">
-        <mt-badge :type="report.etypeClr">{{report.etype}}</mt-badge>{{report.pps}}
+        <mt-badge :type="report.etypeClr">{{report.etype}}</mt-badge>&nbsp;{{report.pps}}
       </span>
     </div>
-    <span>{{report.submit}}</span>
-    <mt-button class="ml-1" type="default" size="small" @click.stop="onCallReqPsnClick">{{report.sbtPhone}}</mt-button>
+    <mt-button class="ml-1" type="default" size="small" @click.stop="onCallReqPsnClick">{{report.submit}}&nbsp;{{report.sbtPhone}}</mt-button>
   </mt-cell>
 </template>
 
