@@ -31,7 +31,7 @@
     <btm-navi-bar v-if="!uneditable" select="company"/>
     <mt-popup class="w-100" v-model="report.showTopPopup" position="top">
       <mt-picker :slots="report.slots" :visible-item-count="3" :show-toolbar="false" @change="onReportChanged"/>
-      <mt-field label="补充说明" placeholder="请输入补充说明（可选）" v-model="report.form.desc"/>
+      <div><mt-field label="补充说明" placeholder="请输入补充说明（可选）" v-model="report.form.desc"/></div>
       <mt-button class="w-100 br-0" type="primary" @click="onReportSubmit">确认</mt-button>
     </mt-popup>
   </div>

@@ -1,8 +1,11 @@
 <template>
   <div>
-    <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
-      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
-    <id-card-field :form="form"/>
+    <mt-header fixed title="登录查看人员信息"/>
+    <div style="margin-top: 40px">
+      <mt-field id="name" label="姓名" placeholder="请输入姓名" v-model="form.name"
+        data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
+      <id-card-field :form="form"/>
+    </div>
     <div class="mt-5">
       <mt-button type="primary w-98 mlr-1pc" @click="onConfirmClick">确认身份</mt-button>
     </div>
@@ -61,7 +64,7 @@ export default {
         return
       }
 
-      let url = `/population-statistics/mdl/v1/persons?${(new URLSearchParams(this.form)).toString()}`
+      let url = `/population-statistics/mdl/v1/persons?name=${this.form.name}&idCard=${this.form.idCard}`
       let data = await utils.reqBackend(axios.get(url))
       if (!data || data.length !== 1) {
         utils.popoverErrTip("#name", "未查询到该人员！")

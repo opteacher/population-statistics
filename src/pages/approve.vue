@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <div v-if="!selRecord">
-      <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
-        :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
+  <div class="h-100">
+    <div v-if="!selRecord" class="h-100">
+      <div v-if="hasPassToApv">
+        <record-cell v-for="record in waitForPass" :key="record.id" :record="record"
+          :onPassPsnClick="onPassPsnClick" :onRecordClick="onRecordClick"/>
+      </div>
+      <div v-else class="center-container">
+        <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">现在暂时没有人员的来去申请上报</p>
+      </div>
     </div>
     <div v-else>
       <mt-header fixed title="人员信息">
@@ -36,7 +41,8 @@ export default {
   data() {
     return {
       selRecord: null,
-      waitForPass: []
+      waitForPass: [],
+      hasPassToApv: false
     }
   },
   created() {
@@ -46,6 +52,7 @@ export default {
     async _refreshRecords() {
       const url = "/population-statistics/mdl/v1/records?passed=0"
       this.waitForPass = await utils.reqBackend(axios.get(url))
+      this.hasPassToApv = Boolean(this.waitForPass.length)
     },
     onPassPsnClick(record) {
       MessageBox({
