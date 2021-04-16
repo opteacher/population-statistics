@@ -32,7 +32,6 @@ import utils from "../utils"
 export default {
   props: {
     "form": Object,
-    "error": Object,
     "purpose": {
       type: String,
       default: ""

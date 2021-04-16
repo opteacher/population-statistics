@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-panel" style="top: 40px; bottom: 106px">
+  <div class="scroll-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
     <mt-cell title="类型" :value="record.typeCn"/>
     <mt-cell v-if="!record.isLeave" title="来此目的" :value="record.purpose === 'work' ? '工作' : '居住'"/>
     <mt-cell title="姓名" :value="record.name"/>
@@ -17,7 +17,15 @@
 <script>
 export default {
   props: {
-    "record": Object
+    "record": Object,
+    "top": {
+      type: Number,
+      default: 0
+    },
+    "bottom": {
+      type: Number,
+      default: 0
+    }
   },
   created() {
     this.record.isLeave = this.record.type === "leave"

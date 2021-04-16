@@ -29,7 +29,7 @@
       <mt-header fixed title="人员信息">
         <mt-button slot="left" icon="back" @click="selRecord = null">返回</mt-button>
       </mt-header>
-      <record-form :record="selRecord"/>
+      <record-form :record="selRecord" :top="40" :bottom="106"/>
       <div class="pass-btn-area">
         <mt-button class="bottom-half-btn" type="primary" @click.prevent="onPassPsnClick(selRecord)">通过</mt-button>
         <mt-button class="bottom-half-btn" type="danger" @click="onRejectPsnClick">拒绝</mt-button>

@@ -1,7 +1,5 @@
 <template>
-  <div class="confirm-form">
-    <record-form :record="form"/>
-  </div>
+  <record-form :record="form" :top="60" :bottom="61"/>
 </template>
 
 <script>
@@ -12,18 +10,7 @@ export default {
     "record-form": recordForm
   },
   props: {
-    "form": Object,
-    "error": Object
+    "form": Object
   }
 }
 </script>
-
-<style lang="scss">
-.confirm-form {
-  position: fixed;
-  top: 60px;
-  bottom: 61px;
-  left: 0;
-  right: 0;
-}
-</style>
