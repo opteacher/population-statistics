@@ -3,7 +3,7 @@
     <div v-if="!selRecord" class="h-100">
       <mt-navbar v-model="selTab">
         <mt-tab-item id="1">来等去销</mt-tab-item>
-        <mt-tab-item id="2">错误/更新</mt-tab-item>
+        <mt-tab-item id="2">上报消息</mt-tab-item>
       </mt-navbar>
       <mt-tab-container class="tab-container-h100" v-model="selTab">
         <mt-tab-container-item id="1">
@@ -17,7 +17,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <div v-if="hasErrUpdToApv">
-            <!-- @_@ -->
+            <report-cell v-for="report in waitForSolve" :key="report.id" :report="report"/>
           </div>
           <div v-else class="center-container">
             <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">没有上报的错误或更新信息</p>
@@ -46,13 +46,15 @@ import _ from "lodash"
 import utils from "../utils"
 import recordCell from "../comps/recordCell"
 import recordForm from "../comps/recordForm"
+import reportCell from "../comps/reportCell"
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
 export default {
   components: {
     "btm-navi-bar": btmNaviBar,
     "record-cell": recordCell,
-    "record-form": recordForm
+    "record-form": recordForm,
+    "report-cell": reportCell
   },
   data() {
     return {
