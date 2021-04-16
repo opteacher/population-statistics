@@ -1,8 +1,8 @@
 <template>
   <div class="h-100">
-    <div v-if="!selRecord" class="h-100">
+    <div v-if="!selRecord && !selReport" class="h-100">
       <mt-navbar v-model="selTab">
-        <mt-tab-item id="1">来等去销</mt-tab-item>
+        <mt-tab-item id="1">来登去销</mt-tab-item>
         <mt-tab-item id="2">上报消息</mt-tab-item>
       </mt-navbar>
       <mt-tab-container class="tab-container-h100" v-model="selTab">
@@ -17,7 +17,8 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <div v-if="hasErrUpdToApv">
-            <report-cell v-for="report in waitForSolve" :key="report.id" :report="report"/>
+            <report-cell v-for="report in waitForSolve" :key="report.id" :report="report"
+              :onReportClick="onReportClick"/>
           </div>
           <div v-else class="center-container">
             <p style="color: rgba(0, 0, 0, .4); font-size: 15pt">没有上报的错误或更新信息</p>
@@ -25,14 +26,23 @@
         </mt-tab-container-item>
       </mt-tab-container>
     </div>
-    <div v-else>
+    <div v-else-if="selRecord">
       <mt-header fixed title="人员信息">
         <mt-button slot="left" icon="back" @click="selRecord = null">返回</mt-button>
       </mt-header>
       <record-form :record="selRecord" :top="40" :bottom="106"/>
-      <div class="pass-btn-area">
+      <div class="btm-btn-area">
         <mt-button class="bottom-half-btn" type="primary" @click.prevent="onPassPsnClick(selRecord)">通过</mt-button>
         <mt-button class="bottom-half-btn" type="danger" @click="onRejectPsnClick">拒绝</mt-button>
+      </div>
+    </div>
+    <div v-else-if="selReport">
+      <mt-header fixed title="上报信息">
+        <mt-button slot="left" icon="back" @click="selReport = null">返回</mt-button>
+      </mt-header>
+      <report-form :report="selReport" :top="40" :bottom="106"/>
+      <div class="btm-btn-area">
+        <mt-button class="w-98 mtb-5 mlr-1pc" type="primary">修正完毕</mt-button>
       </div>
     </div>
     <btm-navi-bar select="approve"/>
@@ -45,6 +55,7 @@ import utils from "../utils"
 import recordCell from "../comps/recordCell"
 import recordForm from "../comps/recordForm"
 import reportCell from "../comps/reportCell"
+import reportForm from "../comps/reportForm"
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
 export default {
@@ -52,14 +63,16 @@ export default {
     "btm-navi-bar": btmNaviBar,
     "record-cell": recordCell,
     "record-form": recordForm,
-    "report-cell": reportCell
+    "report-cell": reportCell,
+    "report-form": reportForm
   },
   data() {
     return {
-      selRecord: null,
       selTab: "1",
+      selRecord: null,
       waitForPass: [],
       hasPassToApv: false,
+      selReport: null,
       waitForSolve: [],
       hasErrUpdToApv: false
     }
@@ -125,13 +138,16 @@ export default {
     },
     onRecordClick(record) {
       this.selRecord = record
+    },
+    onReportClick(report) {
+      this.selReport = report
     }
   }
 }
 </script>
 
 <style lang="scss">
-.pass-btn-area {
+.btm-btn-area {
   position: fixed;
   bottom: 55px;
   left: 0;

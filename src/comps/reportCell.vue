@@ -1,5 +1,5 @@
 <template>
-  <mt-cell is-link @click.native="onReportClick">
+  <mt-cell is-link @click.native="onReportClick(report)">
     <div class="mtb-5" slot="title">
       <span class="mint-cell-text">
         <mt-badge type="primary">{{report.type}}</mt-badge>&nbsp;{{report.name}}
@@ -15,7 +15,8 @@
 <script>
 export default {
   props: {
-    "report":Object
+    "report":Object,
+    "onReportClick": Function
   },
   created() {
     let props = this.report.props.split(".")
@@ -34,9 +35,6 @@ export default {
     }
   },
   methods: {
-    onReportClick() {
-
-    },
     onCallReqPsnClick() {
       window.location.href = `tel:${this.report.sbtPhone}`
     }
