@@ -7,6 +7,10 @@
   margin: 5px !important;
 }
 
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
 .ml-1 {
   margin-left: 1px;
 }
@@ -62,6 +66,10 @@
   margin-bottom: 1vh;
 }
 
+.mb-5 {
+  margin-bottom: 5px !important;
+}
+
 .mb-55 {
   margin-bottom: 55px;
 }
@@ -77,6 +85,16 @@
 .ptb-10 {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.plr-5 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.plr-1pc {
+  padding-left: 1vw;
+  padding-right: 1vw;
 }
 
 .w-98 {

@@ -1,71 +1,50 @@
 <template>
   <div>
-    <div>
-      <mt-field label="用户名" placeholder="请输入用户名" v-model="form.username"/>
-      <mt-field label="密码" placeholder="请输入密码" type="password" v-model="form.password"/>
-      <mt-field label="注册码" placeholder="请输入注册码（注册时需要）" v-model="form.regCode"/>
-    </div>
-    <div class="w-100 fixed-bottom" style="background-color: white">
-      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onLgnBtnClick">登录 / 注册</mt-button>
-      <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw; background-color: #04BE02; color: white" disabled>
-        <img src="/assets/imgs/wechat.png" height="20" width="20" style="color: white" slot="icon">微信登录
-      </mt-button>
-    </div>
+    <mt-navbar v-model="selTab">
+      <mt-tab-item id="company">实有单位</mt-tab-item>
+      <mt-tab-item id="person">实有人口</mt-tab-item>
+      <mt-tab-item id="house">实有房屋</mt-tab-item>
+    </mt-navbar>
+
+    <!-- tab-container -->
+    <mt-tab-container v-model="selTab">
+      <mt-tab-container-item id="company">
+        <companies-bdat ref="company-bdat"/>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="person">
+        <people-bdat ref="person-bdat"/>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="house">
+        <houses-bdat ref="house-bdat"/>
+      </mt-tab-container-item>
+    </mt-tab-container>
+    <btm-navi-bar select="admin"/>
   </div>
 </template>
 
 <script>
-import { Toast, Indicator } from "mint-ui"
-import crypto  from "crypto"
+import btmNaviBar from "../comps/btmNaviBar"
+import peopleBdat from "../comps/peopleBdat"
+import companiesBdat from "../comps/companiesBdat"
+import housesBdat from "../comps/housesBdat"
 export default {
+  components: {
+    "btm-navi-bar": btmNaviBar,
+    "people-bdat": peopleBdat,
+    "companies-bdat": companiesBdat,
+    "houses-bdat": housesBdat
+  },
   data() {
     return {
-      form: {
-        username: "",
-        password: "",
-        regCode: ""
-      }
+      selTab: "company"
     }
   },
-  methods: {
-    async _reqBackend(pms) {
-      Indicator.open({text: "加载中..."})
-      const res = await pms
-      if (res.status === 400) {
-        Toast({
-          message: res.message,
-          iconClass: "iconfont icon-close-bold"
-        })
-        return null
-      } else if (res.status !== 200) {
-        Toast({
-          message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
-        })
-        return null
-      } else {
-        return res.data
-      }
-    },
-    async onLgnBtnClick() {
-      if (this.form.regCode) {
-        if (!await this._reqBackend(axios.post("/population-statistics/api/v1/admin/log/in", {
-          username: "*ADMIN#", password: this.form.regCode
-        }))) {
-          return
-        }
-        if (!await this._reqBackend(axios.post("/population-statistics/api/v1/admin/log/up", this.form))) {
-          return
-        }
-        Indicator.close()
-        Toast({
-          message: "注册成功！",
-          iconClass: "iconfont icon-select-bold"
-        })
-      } else {
-
-      }
+  watch: {
+    "selTab": function(n, o) {
+      const ref = this.$refs[`${n}-bdat`]
+      ref.refresh && ref.refresh()
     }
   }
 }
 </script>
+

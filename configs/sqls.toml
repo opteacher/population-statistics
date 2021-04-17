@@ -3,3 +3,15 @@ SELECT `id`, `name`, `shopName`, `regId`, `address`, `lglName`, `lglId`, `lglPho
   SELECT COUNT(`person`.`id`) FROM `people` AS `person` WHERE `person`.`lvAddress` = `company`.`address`
 ) AS `psnNum` FROM `companies` AS `company` WHERE `company`.`shopName` = ''
 """
+
+selCompaniesNum="""
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company`
+"""
+
+selPeopleNum="""
+SELECT COUNT(`id`) AS `pplNum` FROM `people` AS `person`
+"""
+
+selHousesNum="""
+SELECT COUNT(`id`) AS `hsNum` FROM `companies` AS `house` WHERE `house`.`shopName` = ''
+"""

@@ -1,5 +1,8 @@
 <template>
   <mt-tabbar v-model="selected" style="position: fixed">
+    <mt-tab-item id="admin">
+      <img slot="icon" src="/assets/imgs/lock.png">管理员
+    </mt-tab-item>
     <mt-tab-item id="input">
       <img slot="icon" src="/assets/imgs/import.png">录入
     </mt-tab-item>
@@ -28,6 +31,7 @@ export default {
     return  {
       selected: this.$props.select,
       pagesMap: {
+        "admin": "/population-statistics/admin",
         "input": "/population-statistics/input",
         "house": "/population-statistics/list?type=house",
         "company": "/population-statistics/list?type=company",
