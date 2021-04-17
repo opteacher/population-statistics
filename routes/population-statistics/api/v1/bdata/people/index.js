@@ -8,7 +8,7 @@ const db = tools.getDatabase()
 
 router.get("/number-of-people", async ctx => {
   ctx.body = {
-    data: (await db.exec(sqlCfg.selPeopleNum))[0]
+    data: (await db.exec(sqlCfg.selPersonNum))[0]
   }
 })
 

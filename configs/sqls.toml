@@ -3,15 +3,18 @@ SELECT `id`, `name`, `shopName`, `regId`, `address`, `lglName`, `lglId`, `lglPho
   SELECT COUNT(`person`.`id`) FROM `people` AS `person` WHERE `person`.`lvAddress` = `company`.`address`
 ) AS `psnNum` FROM `companies` AS `company` WHERE `company`.`shopName` = ''
 """
-
-selCompaniesNum="""
+selCompanyNum="""
 SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company`
 """
-
-selPeopleNum="""
+selCompanyNumInOneMonth="""
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE DATEDIFF(CURDATE(), `company`.`createdAt`) < 30
+"""
+selCompanyNumInOneYear="""
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE DATEDIFF(CURDATE(), `company`.`createdAt`) < 365
+"""
+selPersonNum="""
 SELECT COUNT(`id`) AS `pplNum` FROM `people` AS `person`
 """
-
-selHousesNum="""
+selHouseNum="""
 SELECT COUNT(`id`) AS `hsNum` FROM `companies` AS `house` WHERE `house`.`shopName` = ''
 """

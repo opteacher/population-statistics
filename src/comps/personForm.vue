@@ -4,7 +4,7 @@
       <id-card-field :form="form"/>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
       <gender-field :form="form"/>
-      <nation-field :form="form"/>
+      <nation-field :form="form" :bottom="55"/>
       <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="form.phone"/>
       <mt-field label="户籍地址" placeholder="请输入户籍地址" v-model="form.hhAddress"/>
       <mt-field label="居住地址" placeholder="请输入居住地址" v-model="form.lvAddress"/>

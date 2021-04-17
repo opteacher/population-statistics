@@ -14,7 +14,7 @@ router.get("/number-of-people", async ctx => {
 
 router.get("/number-of-houses", async ctx => {
   ctx.body = {
-    data: (await db.exec(sqlCfg.selHousesNum))[0]
+    data: (await db.exec(sqlCfg.selHouseNum))[0]
   }
 })
 
