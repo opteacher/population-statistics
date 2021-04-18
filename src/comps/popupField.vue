@@ -30,13 +30,19 @@ export default {
   },
   created() {
     this.isMultiSel = this.values[0] instanceof Array
+    let selValue = this.form[this.pname]
+    if (this.isMultiSel) {
+      selValue = selValue.split("-")
+    }
     this.slots = !this.isMultiSel ? [{
       flex: 1,
-      values: this.values
+      values: this.values,
+      defaultIndex: this.values.indexOf(selValue)
     }] : this.values.map((value, idx) => {
       let ret = [{
         flex: 1,
-        values: value
+        values: value,
+        defaultIndex: value.indexOf(selValue[idx])
       }]
       if (this.values.length - 1 !== idx) {
         ret.push({

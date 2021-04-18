@@ -9,6 +9,8 @@
       <div>
         <mt-cell v-if="company.name" title="单位注册名称" :value="company.name"/>
         <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"/>
+        <mt-cell v-if="company.type" title="类型" :value="company.type"/>
+        <mt-cell v-if="company.openHours" title="营业时间" :value="company.openHours"/>
         <mt-cell v-if="company.regId" title="注册编号" :value="company.regId"/>
         <mt-cell title="地址" :value="company.address"/>
         <mt-cell v-if="company.lglName" title="法人姓名" :value="company.lglName"/>
@@ -108,7 +110,7 @@ export default {
   },
   methods: {
     onUpdateClick() {
-      this.$router.push({path: `/population-statistics/input?type=company&${(new URLSearchParams(this.company)).toString()}`})
+      this.$router.push({path: `/population-statistics/input?tab=company&${(new URLSearchParams(this.company)).toString()}`})
     },
     onDeleteClick() {
       MessageBox({

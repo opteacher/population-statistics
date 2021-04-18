@@ -84,7 +84,7 @@ export default {
         url = "/population-statistics/mdl/v1/companys?shopName=!=&shopName="
         break
       case "house":
-        url = "/population-statistics/api/v1/bdata/houses/number-of-people"
+        url = "/population-statistics/api/v1/houses/people"
         break
       case "person":
         url = "/population-statistics/mdl/v1/persons"

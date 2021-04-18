@@ -34,10 +34,10 @@ export default {
     }
   },
   async created() {
-    if (this.$route.query.type) {
-      this.selected = this.$route.query.type
+    if (this.$route.query.tab) {
+      this.selected = this.$route.query.tab
       this.edtSubject = Object.assign(this.$route.query)
-      delete this.edtSubject.type
+      delete this.edtSubject.tab
     }
   }
 }

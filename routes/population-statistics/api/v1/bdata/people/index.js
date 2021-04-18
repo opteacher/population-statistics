@@ -6,7 +6,7 @@ const pjPath = tools.projRootPath()
 const sqlCfg = tools.readConfig(Path.join(pjPath, "configs", "sqls"))
 const db = tools.getDatabase()
 
-router.get("/number-of-people", async ctx => {
+router.get("/total_count", async ctx => {
   ctx.body = {
     data: (await db.exec(sqlCfg.selPersonNum))[0]
   }

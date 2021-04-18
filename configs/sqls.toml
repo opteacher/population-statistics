@@ -4,13 +4,20 @@ SELECT `id`, `name`, `shopName`, `regId`, `address`, `lglName`, `lglId`, `lglPho
 ) AS `psnNum` FROM `companies` AS `company` WHERE `company`.`shopName` = ''
 """
 selCompanyNum="""
-SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company`
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != ''
 """
-selCompanyNumInOneMonth="""
-SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE DATEDIFF(CURDATE(), `company`.`createdAt`) < 30
+selClosedCompanyNum="""
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' AND `company`.`isClosed` = TRUE
 """
-selCompanyNumInOneYear="""
-SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE DATEDIFF(CURDATE(), `company`.`createdAt`) < 365
+selCompanyNumGpByType="""
+SELECT `type`, COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' GROUP BY `company`.`type`
+"""
+selFFPoiCompanyNum="""
+SELECT COUNT(`id`) AS `cmpNumHasLiving` FROM `companies` AS `company` WHERE `company`.`hasLiving` = TRUE;
+SELECT COUNT(`id`) AS `cmpNumAlgStreet` FROM `companies` AS `company` WHERE `company`.`isAlgStreet` = TRUE;
+SELECT COUNT(`id`) AS `cmpNumHasStore` FROM `companies` AS `company` WHERE `company`.`hasStore` = TRUE;
+SELECT COUNT(`id`) AS `cmpNumUseFire` FROM `companies` AS `company` WHERE `company`.`useFire` = TRUE;
+SELECT COUNT(`id`) AS `cmpNumTopBtm` FROM `companies` AS `company` WHERE `company`.`isTopBottom` = TRUE
 """
 selPersonNum="""
 SELECT COUNT(`id`) AS `pplNum` FROM `people` AS `person`

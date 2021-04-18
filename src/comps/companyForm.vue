@@ -4,7 +4,7 @@
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
       <popup-field title="类型" :form="form" pname="type" :bottom="55" :values="[
-        '企业公司', '餐饮', '美容美发', '教育培训', '宾旅馆', '中介', '养身保健', '洗浴按摩', '便利超市', '其他'
+        '企业公司', '金融证券', '餐饮', '美容美发', '医疗机构', '健身房', '教育培训', '宾旅馆', '中介', '养身保健', '洗浴按摩', '便利超市', '其他'
       ]"/>
       <mt-field label="注册编号" placeholder="请输入注册编号" v-model="form.regId"/>
       <mt-field label="地址" placeholder="请输入所在地址" v-model="form.address"/>
@@ -28,7 +28,7 @@
         <mt-switch v-model="form.useFire" style="color: grey">{{form.useFire ? "用明火" : "不用明火"}}</mt-switch>
       </mt-cell>
       <mt-cell title="高层/地下情况" class="mint-field">
-        <mt-switch v-model="form.isTopBottom" style="color: grey">{{form.isTopBottom ? "高层/地下室" : "非高层/地下室"}}</mt-switch>
+        <mt-switch v-model="form.isTopBottom" style="color: grey">{{form.isTopBottom ? "高层/地下室" : "非高层/非地下室"}}</mt-switch>
       </mt-cell>
     </div>
     <div class="w-100">
@@ -57,7 +57,13 @@ export default {
         lglName: "",
         lglId: "",
         lglPhone: "",
-        openHours: ""
+        openHours: "",
+        isClosed: false,
+        hasLiving: false,
+        isAlgStreet: false,
+        hasStore: false,
+        useFire: false,
+        isTopBottom: false
       },
       formSubmit: false,
       times: []
@@ -73,11 +79,19 @@ export default {
       this.form.id = parseInt(this.$route.query.id)
       this.form.name = this.$route.query.name || ""
       this.form.shopName = this.$route.query.shopName || ""
+      this.form.type = this.$route.query.type || "",
       this.form.regId = this.$route.query.regId || ""
       this.form.address = this.$route.query.address || ""
       this.form.lglName = this.$route.query.lglName || ""
       this.form.lglId = this.$route.query.lglId || ""
       this.form.lglPhone = this.$route.query.lglPhone || ""
+      this.form.openHours = this.$route.query.openHours || "",
+      this.form.isClosed = JSON.parse(this.$route.query.isClosed) || false,
+      this.form.hasLiving = JSON.parse(this.$route.query.hasLiving) || false,
+      this.form.isAlgStreet = JSON.parse(this.$route.query.isAlgStreet) || false,
+      this.form.hasStore = JSON.parse(this.$route.query.hasStore) || false,
+      this.form.useFire = JSON.parse(this.$route.query.useFire) || false,
+      this.form.isTopBottom = JSON.parse(this.$route.query.isTopBottom) || false
     }
   },
   methods: {

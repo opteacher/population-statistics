@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     onUpdateClick() {
-      this.$router.push({path: `/population-statistics/input?type=person&${(new URLSearchParams(this.person)).toString()}`})
+      this.$router.push({path: `/population-statistics/input?tab=person&${(new URLSearchParams(this.person)).toString()}`})
     },
     onDeleteClick() {
       MessageBox({

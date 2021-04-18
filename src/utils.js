@@ -66,5 +66,76 @@ module.exports = {
       $(".popover-mask").on("click", onHideClick)
     })
     $(fieldId).popover("show")
+  },
+  PieModel: {
+    title: {
+      left: "left"
+    },
+    tooltip: {
+      trigger: "item"
+    },
+    legend: {
+      orient: "vertical",
+      left: "right"
+    },
+    series: [{
+      type: "pie",
+      radius: "50%",
+      label: {
+        normal: {
+          formatter: "{c}",
+          position: "inside"
+        }
+      },
+      data: [],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)"
+        }
+      }
+    }]
+  },
+  BarModel: {
+    title: {},
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {type: "shadow"}
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true
+    },
+    xAxis: {
+      type: "value",
+      boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+      type: "category",
+      data: []
+    },
+    series: [{
+      type: "bar",
+      label: {
+        show: true,
+        position: "inside"
+      },
+      itemStyle: {
+        normal: {
+          color: function(params) {
+            var colorList = [
+              '#dd6b66','#759aa0','#e69d87','#8dc1a9','#ea7e53','#eedd78','#73a373','#73b9bc','#7289ab', '#91ca8c','#f49f42',
+              '#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3',
+              '#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C','#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF',
+            ]
+            return colorList[params.dataIndex]
+          }
+        }
+      },
+      data: []
+    }]
   }
 }

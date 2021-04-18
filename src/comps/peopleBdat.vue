@@ -28,75 +28,16 @@
 </template>
 
 <script>
-import {reqBackend} from "../utils"
+import utils from "../utils"
 export default {
   data() {
     return {
-      numOfPpl: 0,
-      pieModel: {
-        title: {
-          left: "left"
-        },
-        tooltip: {
-          trigger: "item"
-        },
-        legend: {
-          orient: "vertical",
-          left: "right"
-        },
-        series: [{
-          type: "pie",
-          radius: "50%",
-          label: {
-            normal: {
-              formatter: "{c}",
-              position: "inside"
-            }
-          },
-          data: [],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)"
-            }
-          }
-        }]
-      },
-      barModel: {
-        title: {},
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {type: "shadow"}
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        xAxis: {
-          type: "value",
-          boundaryGap: [0, 0.01]
-        },
-        yAxis: {
-          type: "category",
-          data: []
-        },
-        series: [{
-          type: "bar",
-          label: {
-            show: true,
-            position: "inside"
-          },
-          data: []
-        }]
-      }
+      numOfPpl: 0
     }
   },
   mounted() {
-    echarts.init(document.getElementById("purposeClassify")).setOption(Object.assign(this.pieModel, {
-      title: {text: "来此目的"}, series: [Object.assign(this.pieModel.series[0], {
+    echarts.init(document.getElementById("purposeClassify")).setOption(Object.assign(utils.PieModel, {
+      title: {text: "来此目的"}, series: [Object.assign(utils.PieModel.series[0], {
         data: [
           {value: 223, name: "半住半工人口"},
           {value: 650, name: "居住人口"},
@@ -104,39 +45,39 @@ export default {
         ]
       })]
     }))
-    echarts.init(document.getElementById("nationClassify")).setOption(Object.assign(this.barModel, {
+    echarts.init(document.getElementById("nationClassify")).setOption(Object.assign(utils.BarModel, {
       title: {text: "民族分布"},
       yAxis: {
         data: ["境外人员", "维吾尔族", "藏族", "汉族"]
       },
-      series: [Object.assign(this.barModel.series[0], {
+      series: [Object.assign(utils.BarModel.series[0], {
         data: [10, 20, 5, 300]
       })]
     }))
-    echarts.init(document.getElementById("ageClassify")).setOption(Object.assign(this.barModel, {
+    echarts.init(document.getElementById("ageClassify")).setOption(Object.assign(utils.BarModel, {
       title: {text: "年龄分布"},
       yAxis: {
         data: ["1-18", "18-30", "30-50", "50-70", "70+"]
       },
-      series: [Object.assign(this.barModel.series[0], {
+      series: [Object.assign(utils.BarModel.series[0], {
         data: [10, 40, 53, 32, 8]
       })]
     }))
-    echarts.init(document.getElementById("specialClassify")).setOption(Object.assign(this.barModel, {
+    echarts.init(document.getElementById("specialClassify")).setOption(Object.assign(utils.BarModel, {
       title: {text: "特殊人群分布"},
       yAxis: {
         data: ["独居老人", "有孕妇", "有精神/心理疾病", "有残疾", "可疑"]
       },
-      series: [Object.assign(this.barModel.series[0], {
+      series: [Object.assign(utils.BarModel.series[0], {
         data: [3, 2, 2, 0, 5]
       })]
     }))
-    echarts.init(document.getElementById("infoMissClassify")).setOption(Object.assign(this.barModel, {
+    echarts.init(document.getElementById("infoMissClassify")).setOption(Object.assign(utils.BarModel, {
       title: {text: "信息完整性统计"},
       yAxis: {
         data: ["缺联系方式", "缺户籍地址", "缺居住地址", "缺身份证"]
       },
-      series: [Object.assign(this.barModel.series[0], {
+      series: [Object.assign(utils.BarModel.series[0], {
         data: [2, 183, 102, 1]
       })]
     }))
@@ -146,8 +87,8 @@ export default {
   },
   methods: {
     async refresh() {
-      const url = "/population-statistics/api/v1/bdata/people/number-of-people"
-      const data = await reqBackend(axios.get(url))
+      const url = "/population-statistics/api/v1/bdata/people/total_count"
+      const data = await utils.reqBackend(axios.get(url))
       this.numOfPpl = data[0].pplNum
     }
   }
