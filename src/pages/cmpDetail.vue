@@ -90,10 +90,10 @@ export default {
     let url = ""
     if (this.$route.query.shopName) {
       url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
-      this.report.slots[0].values = ["单位注册名称", "店名称", "注册编号", "地址", "法人", "法人手机号"]
+      this.report.slots[0].values = ["人员信息", "单位注册名称", "店名称", "注册编号", "地址", "法人", "法人手机号"]
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
-      this.report.slots[0].values = ["地址"]
+      this.report.slots[0].values = ["人员信息", "地址"]
     }
     this.company = Object.assign(this.$route.query, {
       people: await reqBackend(axios.get(url))
