@@ -95,7 +95,7 @@ export default {
     },
     onCfmSelClick() {
       this.$router.push({
-        path: `/population-statistics/input?type=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
+        path: `/population-statistics/input?tab=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
       })
     },
     onSchWdsChanged: utils.onSchWdsChanged
