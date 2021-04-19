@@ -1,11 +1,12 @@
 <template>
   <div>
-    <mt-header v-if="!uneditable" title="公司详情">
-      <router-link :to="`/population-statistics/list?type=${company.shopName ? 'company' : 'house'}`" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+    <mt-header title="公司详情">
+      <mt-button v-if="!uneditable" icon="back" slot="left" @click.native="$router.push({
+        path: `/population-statistics/list?type=${company.shopName ? 'company' : 'house'}${$route.query.scroll ? '&scroll=' + $route.query.scroll : ''}`
+      })">返回</mt-button>
+      <mt-button slot="right" @click="onPrintClick">导出Excel</mt-button>
     </mt-header>
-    <div class="scroll-panel" :style="uneditable ? 'top: 0; bottom: 50px' : 'top: 40px; bottom: 101px'">
+    <div class="scroll-panel" :style="`top: 40px; bottom: ${uneditable ? '50' : '101'}px`">
       <div>
         <mt-cell v-if="company.name" title="单位注册名称" :value="company.name"/>
         <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"/>
@@ -23,12 +24,12 @@
         <mt-cell v-for="psn in company.people" :key="psn.id" :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"/>
       </div>
     </div>
-    <div v-if="uneditable" class="w-100 fixed-bottom mtb-1pc mlr-1pc" style="background-color: white">
-      <mt-button class="w-98" type="primary" data-toggle="modal" @click="report.showTopPopup = true">信息有误？提醒管理员</mt-button>
+    <div v-if="uneditable" class="w-100 fixed-bottom mtb-5 mlr-1pc white-bg-color">
+      <mt-button class="w-98" type="primary" @click="report.showTopPopup = true">信息有误？提醒管理员</mt-button>
     </div>
-    <div v-else class="w-100 fixed-bottom mb-55" style="background-color: white">
+    <div v-else class="w-100 fixed-bottom mb-55 white-bg-color">
       <mt-button class="bottom-half-btn" type="primary" @click="onUpdateClick">编辑</mt-button>
-      <mt-button class="bottom-half-btn" type="danger" @click="onDeleteClick">删除</mt-button>
+      <mt-button class="bottom-half-btn float-right" type="danger" @click="onDeleteClick">删除</mt-button>
     </div>
     <btm-navi-bar v-if="!uneditable" select="company"/>
     <mt-popup class="w-100" v-model="report.showTopPopup" position="top">
@@ -82,7 +83,8 @@ export default {
           sbtPhone: "",
           solved: false
         }
-      }
+      },
+      printCmpDtl: true
     }
   },
   async created() {
@@ -166,6 +168,15 @@ export default {
         submit: this.$route.query.submit,
         sbtPhone: this.$route.query.sbtPhone
       }))).toString()
+    },
+    async onPrintClick() {
+      const url = `/population-statistics/api/v1/company/${this.company.id}/export/excel`
+      const data = await reqBackend(axios.get(url))
+      Toast({
+        message: "导出Excel成功！",
+        iconClass: "iconfont icon-select-bold"
+      })
+      window.location.href = data
     }
   }
 }

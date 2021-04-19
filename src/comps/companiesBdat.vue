@@ -84,12 +84,11 @@ export default {
           text: "消防重点统计"
         },
         yAxis: {
-          data: ["夜间营业", "沿街商铺", "店住人", "有仓库", "用明火"]
+          data: ["沿街商铺", "店住人", "有仓库", "用明火"]
         },
         series: [
           Object.assign(utils.BarModel.series[0], {
             data: [
-              0,
               data[5].cmpNumAlgStreet,
               data[5].cmpNumHasLiving,
               data[5].cmpNumHasStore,

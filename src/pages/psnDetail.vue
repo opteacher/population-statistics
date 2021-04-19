@@ -1,7 +1,9 @@
 <template>
   <div>
     <mt-header title="人员详情">
-      <mt-button icon="back" slot="left" @click.native="$router.go(-1)">返回</mt-button>
+      <router-link :to="`/population-statistics/list?type=person${$route.query.scroll ? '&scroll=' + $route.query.scroll : ''}`" slot="left">
+        <mt-button icon="back">返回</mt-button>
+      </router-link>
     </mt-header>
     <div class="scroll-panel" :style="'top: 40px;' + (uneditable ? 'bottom: 50px' : 'bottom: 106px')">
       <mt-cell title="姓名" :value="person.name"/>

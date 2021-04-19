@@ -13,10 +13,10 @@
           label: item.shopName,
           value: item.id.toString()
         }))"/>
-      <mt-cell v-else v-for="item in searchItem.mchItems" :key="item.id"
+      <mt-cell v-for="item in searchItem.mchItems" :key="item.id"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
         :label="lsType === 'company' ? item.name : (item.company || item.lvAddress)"
-        is-link :to="`/population-statistics/${lsType === 'house' ? 'company' : lsType}-detail?${(new URLSearchParams(item)).toString()}`">
+        is-link @click.native="onItemClick(item)">
         <mt-badge v-if="lsType === 'house'" type="success" slot="icon">{{`${item.psnNum}人`}}</mt-badge>
         <span>详情</span>
       </mt-cell>
@@ -33,6 +33,7 @@ import btmNaviBar from "../comps/btmNaviBar"
 import utils from "../utils"
 import "url"
 import { MessageBox, Toast } from "mint-ui"
+import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -92,10 +93,28 @@ export default {
       }
       this.searchItem.allItems = await utils.reqBackend(axios.get(url))
       this.searchItem.mchItems = this.searchItem.allItems
+
+      await new Promise((res) => {
+        setTimeout(() => {res()}, 1)
+      })
+
+      if (this.$route.query.scroll) {
+        $(".mint-search-list").scrollTop(44 - parseInt(this.$route.query.scroll))
+      } else {
+        $(".mint-search-list").scrollTop(0)
+      }
     },
     onCfmSelClick() {
       this.$router.push({
         path: `/population-statistics/input?tab=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
+      })
+    },
+    onItemClick(item) {
+      const tab = this.lsType === 'house' ? 'company' : this.lsType
+      const scroll = $(".mint-search-list-warp").offset().top
+      const itmParams = (new this.URLSearchParams(item)).toString()
+      this.$router.push({
+        path: `/population-statistics/${tab}-detail?scroll=${scroll}&${itmParams}`
       })
     },
     onSchWdsChanged: utils.onSchWdsChanged
