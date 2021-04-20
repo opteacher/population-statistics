@@ -1,6 +1,7 @@
 const Path = require("path")
 const fs = require("fs")
-const ExcelJS = require('exceljs')
+const stream = require("stream")
+const ExcelJS = require("exceljs")
 const qiniu = require("qiniu")
 const router = require("koa-router")()
 
@@ -31,26 +32,32 @@ router.get("/:cmpId/export/excel", async ctx => {
   worksheet.getCell("G3").value = company.lglPhone
   worksheet.getCell("H3").value = company.lglId
 
-  worksheet.duplicateRow(5, employees.length - 1, false)
-  for (let i = 0; i < employees.length; ++i) {
-    const employee = employees[i]
-    const colIdx = i + 5
-    worksheet.getCell(`A${colIdx}`).value = i + 1
-    worksheet.getCell(`B${colIdx}`).value = employee.name
-    worksheet.getCell(`C${colIdx}`).value = employee.idCard
-    worksheet.getCell(`D${colIdx}`).value = employee.lvAddress
-    if (i !== 0) {
-      worksheet.mergeCells(`E${colIdx}:F${colIdx}`)
+  if (employees.length > 0) {
+    worksheet.duplicateRow(5, employees.length - 1, false)
+    for (let i = 0; i < employees.length; ++i) {
+      const employee = employees[i]
+      const colIdx = i + 5
+      worksheet.getCell(`A${colIdx}`).value = i + 1
+      worksheet.getCell(`B${colIdx}`).value = employee.name
+      worksheet.getCell(`C${colIdx}`).value = employee.idCard
+      worksheet.getCell(`D${colIdx}`).value = employee.lvAddress
+      if (i !== 0) {
+        worksheet.mergeCells(`E${colIdx}:F${colIdx}`)
+      }
+      worksheet.getCell(`E${colIdx}`).value = employee.hhAddress
+      worksheet.getCell(`G${colIdx}`).value = employee.phone
     }
-    worksheet.getCell(`E${colIdx}`).value = employee.hhAddress
-    worksheet.getCell(`G${colIdx}`).value = employee.phone
   }
 
-  // const distExcPath = `${pjPath}/public/gen/${company.shopName}.xlsx`
-  // await workbook.xlsx.writeFile(distExcPath)
+  const xlsxBuffer = await workbook.xlsx.writeBuffer()
+  const bufferStream = new stream.PassThrough()
+  const readableStream = bufferStream.end(xlsxBuffer)
 
+  const key = `${company.shopName}.xlsx`
   const mac = new qiniu.auth.digest.Mac(qnCfg.accessKey, qnCfg.secretKey)
-  const putPolicy = new qiniu.rs.PutPolicy({scope: qnCfg.bucket})
+  const putPolicy = new qiniu.rs.PutPolicy({
+    scope: `${qnCfg.bucket}:${key}`
+  })
   const uploadToken = putPolicy.uploadToken(mac)
 
   const config = new qiniu.conf.Config()
@@ -59,22 +66,22 @@ router.get("/:cmpId/export/excel", async ctx => {
 
   const formUploader = new qiniu.form_up.FormUploader(config)
   const putExtra = new qiniu.form_up.PutExtra()
-  const readableStream = null
-  await workbook.xlsx.read(readableStream)
-  formUploader.putStream(uploadToken, `${company.shopName}.xlsx`, readableStream, putExtra, function(respErr, respBody, respInfo) {
-    if (respErr) {
-      throw respErr
-    }
-    if (respInfo.statusCode == 200) {
-      console.log(respBody)
-    } else {
-      console.log(respInfo.statusCode)
-      console.log(respBody)
-    }
+  await new Promise((res, rej) => {
+    formUploader.putStream(uploadToken, key, readableStream, putExtra, (respErr, respBody, respInfo) => {
+      if (respErr) {
+        rej(respErr)
+      }
+      if (respInfo.statusCode == 200) {
+        res(respBody)
+      } else {
+        console.log(respInfo.statusCode)
+        rej(respBody)
+      }
+    })
   })
 
   ctx.body = {
-    data: `/gen/${company.shopName}.xlsx`
+    data: `http://qrucjxcko.hn-bkt.clouddn.com/${key}`
   }
 })
 

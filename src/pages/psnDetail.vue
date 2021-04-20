@@ -32,8 +32,8 @@
 <script>
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
-import cookies from "../cookies"
 import utils from "../utils"
+import cookies from "../cookies"
 
 export default {
   components: {
@@ -71,8 +71,29 @@ export default {
     }
   },
   created() {
-    this.uneditable = Boolean(cookies.get("uneditable"))
-    this.person = this.$route.query
+    this.uneditable = Boolean(this.$route.query.uneditable)
+    this.person = Object.assign({}, this.$route.query)
+    delete this.person.uneditable
+  },
+  async mounted() {
+    if (this.uneditable) {
+      // 身份校验
+      const url = "/population-statistics/api/v1/person/sign/stat"
+      const data = await utils.reqBackend(axios.get(url, {
+        headers: {"authorization": cookies.get("personTkn")}
+      }), res => {
+        if (!res.data.data) {
+          Toast({
+            message: res.data.message,
+            iconClass: "iconfont icon-close-bold"
+          })
+          this.$router.push({path: "/population-statistics/valid"})
+        }
+      })
+      if (!data) {
+        return
+      }
+    }
   },
   methods: {
     onUpdateClick() {

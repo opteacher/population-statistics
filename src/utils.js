@@ -16,11 +16,10 @@ module.exports = {
       })
     }
   },
-  async reqBackend(pms) {
+  async reqBackend(pms, callback) {
     Indicator.open({text: "加载中..."})
     if (pms instanceof Array) {
       const ress = await Promise.all(pms)
-      Indicator.close()
       for (let res of ress) {
         if (res.status != 200) {
           Toast({
@@ -30,6 +29,8 @@ module.exports = {
           return Promise.resolve(null)
         }
       }
+      callback && callback(ress)
+      Indicator.close()
       return Promise.resolve(ress.map(res => res.data.data))
     } else {
       const res = await pms
@@ -41,6 +42,8 @@ module.exports = {
         })
         return Promise.resolve(null)
       } else {
+        callback && callback(res)
+        Indicator.close()
         return Promise.resolve(res.data.data)
       }
     }

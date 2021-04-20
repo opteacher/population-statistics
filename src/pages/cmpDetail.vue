@@ -86,7 +86,7 @@ export default {
     }
   },
   async created() {
-    this.uneditable = Boolean(cookies.get("uneditable"))
+    this.uneditable = Boolean(this.$route.query.uneditable)
     let url = ""
     if (this.$route.query.shopName) {
       url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
@@ -98,13 +98,31 @@ export default {
     this.company = Object.assign(this.$route.query, {
       people: await utils.reqBackend(axios.get(url))
     })
+    delete this.company.uneditable
+  },
+  async mounted() {
+    if (this.uneditable) {
+      // 身份校验
+      const url = "/population-statistics/api/v1/person/sign/stat"
+      const data = await utils.reqBackend(axios.get(url, {
+        headers: {"authorization": cookies.get("personTkn")}
+      }), res => {
+        if (!res.data.data) {
+          Toast({
+            message: res.data.message,
+            iconClass: "iconfont icon-close-bold"
+          })
+          this.$router.push({path: "/population-statistics/valid"})
+        }
+      })
+      if (!data) {
+        return
+      }
+    }
   },
   beforeRouteLeave(to, from, next) {
     if (to.path !== "/population-statistics/person-detail") {
-      cookies.clear("uneditable")
-      if (this.uneditable) {
-        window.history.back()
-      }
+      cookies.clear("personTkn")
     }
     next()
   },
@@ -133,7 +151,7 @@ export default {
       })
     },
     onPersonClick(psn) {
-      this.$router.push({path: `/population-statistics/person-detail?${this._cmbParams(psn)}`})
+      this.$router.push({path: `/population-statistics/person-detail?${this._cmbParams(psn)}&uneditable=${this.uneditable}`})
     },
     onReportSubmit() {
       this.report.showTopPopup = false

@@ -44,10 +44,9 @@ export default {
     }
   },
   methods: {
-    onDlgBtnClick(foothold) {
-      cookies.set("uneditable", true)
+    async onDlgBtnClick(foothold) {
       $("#selHouseOrCompany").modal("hide")
-      this.$router.push({path: `/population-statistics/company-detail?${this._cmbParams(foothold)}`})
+      this.$router.push({path: `/population-statistics/company-detail?${this._cmbParams(foothold)}&uneditable=true`})
     },
     async onConfirmClick() {
       if (this.form.name === "") {
@@ -64,13 +63,21 @@ export default {
         return
       }
 
-      let url = `/population-statistics/mdl/v1/persons?name=${this.form.name}&idCard=${this.form.idCard}`
-      let data = await utils.reqBackend(axios.get(url))
-      if (!data || data.length !== 1) {
-        utils.popoverErrTip("#name", "未查询到该人员！")
-        return false
+      let url = "/population-statistics/api/v1/person/sign/in"
+      let data = await utils.reqBackend(axios.post(url, {
+        name: this.form.name,
+        idCard: this.form.idCard
+      }), res => {
+        if (!res.data.data) {
+          utils.popoverErrTip("#name", res.data.message)
+          return
+        }
+        cookies.set("personTkn", res.headers.authorization)
+      })
+      if (!data) {
+        return
       }
-      this.form = data[0]
+      this.form = data
 
       url = "/population-statistics/mdl/v1/companys?shopName===&shopName="
       data = await utils.reqBackend(axios.get(url))
