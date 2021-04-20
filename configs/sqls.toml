@@ -6,21 +6,23 @@ SELECT `id`, `name`, `shopName`, `regId`, `address`, `lglName`, `lglId`, `lglPho
 selCompanyNum="""
 SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != ''
 """
-selClosedCompanyNum="""
-SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' AND `company`.`isClosed` = TRUE
-"""
 selCompanyNumGpByType="""
 SELECT `type`, COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' GROUP BY `company`.`type`
 """
-selFFPoiCompanyNum="""
-SELECT COUNT(`id`) AS `cmpNumHasLiving` FROM `companies` AS `company` WHERE `company`.`hasLiving` = TRUE;
-SELECT COUNT(`id`) AS `cmpNumAlgStreet` FROM `companies` AS `company` WHERE `company`.`isAlgStreet` = TRUE;
-SELECT COUNT(`id`) AS `cmpNumHasStore` FROM `companies` AS `company` WHERE `company`.`hasStore` = TRUE;
-SELECT COUNT(`id`) AS `cmpNumUseFire` FROM `companies` AS `company` WHERE `company`.`useFire` = TRUE;
-SELECT COUNT(`id`) AS `cmpNumTopBtm` FROM `companies` AS `company` WHERE `company`.`isTopBottom` = TRUE
-"""
 selPersonNum="""
 SELECT COUNT(`id`) AS `pplNum` FROM `people` AS `person`
+"""
+selPersonNumGpByCompany="""
+SELECT COUNT(`person`.`id`) AS `pplNum`, `company`.`shopName` FROM `people` AS `person`, `companies` AS `company` WHERE `company`.`shopName` != '' AND `person`.`cmpId` = `company`.`id` GROUP BY `company`.`shopName`
+"""
+selPersonNumGpByHouse="""
+SELECT COUNT(`person`.`id`) AS `pplNum`, `house`.`address` FROM `people` AS `person`, `companies` AS `house` WHERE `house`.`shopName` = '' AND `person`.`lvAddress` = `house`.`address` GROUP BY `house`.`address`
+"""
+selPersonNumLvAndWk="""
+SELECT COUNT(`person`.`id`) AS `pplNum` FROM `people` AS `person` WHERE `person`.`cmpId` IS NOT NULL AND `person`.`lvAddress` IN (SELECT `house`.`address` FROM `companies` AS `house`)
+"""
+selPersonNumGpByNation="""
+SELECT COUNT(`person`.`id`) AS `pplNum`, `person`.`nation` FROM `people` AS `person` GROUP BY `person`.`nation`
 """
 selHouseNum="""
 SELECT COUNT(`id`) AS `hsNum` FROM `companies` AS `house` WHERE `house`.`shopName` = ''

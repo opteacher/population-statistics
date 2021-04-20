@@ -81,7 +81,7 @@ router.get("/:cmpId/export/excel", async ctx => {
   })
 
   ctx.body = {
-    data: `http://qrucjxcko.hn-bkt.clouddn.com/${key}`
+    data: `http://cdn.opteacher.top/${key}`
   }
 })
 

@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const { Toast, Indicator } = require("mint-ui")
 
 module.exports = {
@@ -100,11 +101,6 @@ module.exports = {
       }
     }]
   },
-  BarColors: [
-    "#dd6b66","#759aa0","#e69d87","#8dc1a9","#ea7e53","#eedd78","#73a373","#73b9bc","#7289ab", "#91ca8c","#f49f42","#c23531",
-    "#2f4554", "#61a0a8", "#d48265", "#91c7ae","#749f83",  "#ca8622", "#bda29a","#6e7074", "#546570", "#c4ccd3", "#37A2DA", 
-    "#32C5E9", "#67E0E3", "#9FE6B8", "#FFDB5C","#ff9f7f", "#fb7293", "#E062AE", "#E690D1", "#e7bcf3", "#9d96f5", "#8378EA", "#96BFFF",
-  ],
   BarModel: {
     title: {},
     tooltip: {
@@ -131,12 +127,14 @@ module.exports = {
         show: true,
         position: "inside"
       },
+      color: [],
       itemStyle: {
         normal: {
-          colors: [],
           color: function(params) {
-            console.log(this)
-            return this.colors[params.dataIndex]
+            var colorList = [
+              "#5570c7","#91cb74","#fac859","#ee6666","#72c0de","#3ba372","#fc8452","#9a60b4","#e97ccb",
+            ]
+            return colorList[params.dataIndex]
           }
         }
       },
@@ -163,5 +161,51 @@ module.exports = {
         }
       }, 100)
     })
+  },
+  assignToCloneObj(temp, src) {
+    return Object.assign(_.cloneDeep(temp), src)
+  },
+  copyCompany(query) {
+    return {
+      id: parseInt(query.id),
+      name: query.name || "",
+      shopName: query.shopName || "",
+      type: query.type || "",
+      regId: query.regId || "",
+      address: query.address || "",
+      lglName: query.lglName || "",
+      lglId: query.lglId || "",
+      lglPhone: query.lglPhone || "",
+      openHours: query.openHours || "",
+      isClosed: query.isClosed ? JSON.parse(query.isClosed) : false,
+      hasLiving: query.hasLiving ? JSON.parse(query.hasLiving) : false,
+      isAlgStreet: query.isAlgStreet ? JSON.parse(query.isAlgStreet) : false,
+      hasStore: query.hasStore ? JSON.parse(query.hasStore) : false,
+      useFire: query.useFire ? JSON.parse(query.useFire) : false,
+      isTopBottom: query.isTopBottom ? JSON.parse(query.isTopBottom) : false,
+      sellAlcohol: query.sellAlcohol ? JSON.parse(query.sellAlcohol) : false,
+      isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
+      suspiciousRmks: query.suspiciousRmks || "",
+    }
+  },
+  copyPerson(query) {
+    return {
+      id: parseInt(query.id),
+      name: query.name || "",
+      idCard: query.idCard || "",
+      gender: query.gender || "",
+      nation: query.nation || "",
+      phone: query.phone || "",
+      hhAddress: query.hhAddress || "",
+      lvAddress: query.lvAddress || "",
+      cmpId: query.cmpId ? parseInt(query.cmpId) : -1,
+      company: query.company || "",
+      isLvAlnOld: query.isLvAlnOld ? JSON.parse(query.isLvAlnOld) : false,
+      isPregWman: query.isPregWman ? JSON.parse(query.isPregWman) : false,
+      hasMentalIllness: query.hasMentalIllness ? JSON.parse(query.hasMentalIllness) : false,
+      isDisability: query.isDisability ? JSON.parse(query.isDisability) : false,
+      isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
+      suspiciousRmks: query.suspiciousRmks || "",
+    }
   }
 }

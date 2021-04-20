@@ -17,6 +17,9 @@ module.exports = db.defineModel({
   hasStore:     db.Types.Boolean,
   useFire:      db.Types.Boolean,
   isTopBottom:  db.Types.Boolean,// 是否室高层或地下室
+  sellAlcohol:  db.Types.Boolean,
+  isSuspicious: db.Types.Boolean,
+  suspiciousRmks: db.Types.String,
 }, {
   router: {
     methods: [

@@ -12,6 +12,26 @@
         is-link :to="`/population-statistics/list?type=company&mode=select&${(new URLSearchParams(form)).toString()}`">
         <span style="color: gray">{{form.company || "请选择所在单位"}}</span>
       </mt-cell>
+      <mt-cell title="特殊" :value="!showSpecial ? '展开' : '收起'" is-link @click.native="showSpecial = !showSpecial"
+        data-target="#specialList" data-toggle="collapse" aria-expanded="false" aria-controls="specialList"/>
+    </div>
+    <div class="collapse mt-3" id="specialList">
+      <mt-cell title="独居老人" class="mint-field">
+        <mt-switch v-model="form.isLvAlnOld" style="color: grey">{{form.isLvAlnOld ? "是" : "否"}}</mt-switch>
+      </mt-cell>
+      <mt-cell title="孕妇" class="mint-field">
+        <mt-switch v-model="form.isPregWman" style="color: grey">{{form.isPregWman ? "是" : "否"}}</mt-switch>
+      </mt-cell>
+      <mt-cell title="心理精神疾病患者" class="mint-field">
+        <mt-switch v-model="form.hasMentalIllness" style="color: grey">{{form.hasMentalIllness ? "有" : "无"}}</mt-switch>
+      </mt-cell>
+      <mt-cell title="残疾" class="mint-field">
+        <mt-switch v-model="form.isDisability" style="color: grey">{{form.isDisability ? "是" : "否"}}</mt-switch>
+      </mt-cell>
+      <mt-cell title="可疑" class="mint-field">
+        <mt-switch v-model="form.isSuspicious" style="color: grey">{{form.isSuspicious ? "是" : "否"}}</mt-switch>
+      </mt-cell>
+      <mt-field label="可疑行为描述" placeholder="请输入描述" v-model="form.suspiciousRmks"/>
     </div>
     <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
@@ -23,7 +43,7 @@
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
-import { reqBackend } from "../utils"
+import utils from "../utils"
 import { Toast } from "mint-ui"
 import "url"
 
@@ -44,30 +64,28 @@ export default {
         hhAddress: "",
         lvAddress: "",
         cmpId: -1,
-        company: ""
+        company: "",
+        isLvAlnOld: false,
+        isPregWman: false,
+        hasMentalIllness: false,
+        isDisability: false,
+        isSuspicious: false,
+        suspiciousRmks: "",
       },
       URLSearchParams,
-      formSubmit: false
+      formSubmit: false,
+      showSpecial: false,
     }
   },
   created() {
     if (this.$route.query.id) {
-      this.form.id = parseInt(this.$route.query.id)
+      this.form = utils.copyPerson(this.$route.query)
     }
-    this.form.name = this.$route.query.name || ""
-    this.form.idCard = this.$route.query.idCard || ""
-    this.form.gender = this.$route.query.gender || ""
-    this.form.nation = this.$route.query.nation || ""
-    this.form.phone = this.$route.query.phone || ""
-    this.form.hhAddress = this.$route.query.hhAddress || ""
-    this.form.lvAddress = this.$route.query.lvAddress || ""
-    this.form.cmpId = parseInt(this.$route.query.cmpId) || -1
-    this.form.company = this.$route.query.company || ""
   },
   methods: {
     async onSubmitClick() {
       this.formSubmit = true
-      await reqBackend(this.form.id ?
+      await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/person/${this.form.id}`, this.form) :
         axios.post("/population-statistics/mdl/v1/person", this.form))
       Toast({

@@ -13,7 +13,13 @@
       <div id="industryClassify" style="width: 95vw; height: 50vh"/>
     </div>
     <div class="card ptb-10 plr-1pc mb-5 text-center">
-      <div id="firfightingPoint" style="width: 95vw; height: 50vh"/>
+      <div id="firefightingPoint" style="width: 95vw; height: 50vh"/>
+    </div>
+    <div class="card ptb-10 plr-1pc mb-5 text-center">
+      <div id="securityPoint" style="width: 95vw; height: 50vh"/>
+    </div>
+    <div class="card ptb-10 plr-1pc mb-5 text-center">
+      <div id="missCompanyInfo" style="width: 95vw; height: 50vh"/>
     </div>
   </div>
 </template>
@@ -31,79 +37,123 @@ export default {
     }
   },
   async created() {
-    await this.refresh()
-  },
-  methods: {
-    async refresh() {
-      const url = "/population-statistics/api/v1/bdata/companies/total_count"
-      const pmss = [
-        axios.get(url),
-        axios.get(url + "?scope=month"),
-        axios.get(url + "?scope=year"),
-        axios.get(url + "/is/closed"),
-        axios.get(url + "/orderby/type"),
-        axios.get(url + "/orderby/firfighting"),
-      ]
-      const data = await utils.reqBackend(pmss)
-      this.totalNumber = data[0][0].cmpNum
-      this.numInMonth = data[1][0].cmpNum
-      this.numInYear = data[2][0].cmpNum
-      this.numClosed = data[3][0].cmpNum
-      this.numClsfyType = []
-      data[4].map(tpItem => {
-        if (!tpItem.type) {
-          return
-        }
-        this.numClsfyType.push({
-          value: tpItem.cmpNum,
-          name: tpItem.type
-        })
+    const url = "/population-statistics/api/v1/bdata/companies/total_count"
+    const pmss = [
+      axios.get(url),
+      axios.get(url + "?scope=month"),
+      axios.get(url + "?scope=year"),
+      axios.get(url + "?isClosed=true"),
+      axios.get(url + "/groupby/type"),
+      axios.get(url + "?hasLiving=true"),
+      axios.get(url + "?isAlgStreet=true"),
+      axios.get(url + "?hasStore=true"),
+      axios.get(url + "?useFire=true"),
+      axios.get(url + "?isTopBottom=true"),
+      axios.get(url + "?name="),
+      axios.get(url + "?type="),
+      axios.get(url + "?openHours="),
+      axios.get(url + "?openHours=-"),
+      axios.get(url + "?address="),
+      axios.get(url + "?lglName="),
+      axios.get(url + "?lglId="),
+      axios.get(url + "?lglPhone="),
+      axios.get("/population-statistics/api/v1/bdata/people/total_count/groupby/company"),
+    ]
+    const data = await utils.reqBackend(pmss)
+    this.totalNumber = data[0][0].cmpNum
+    this.numInMonth = data[1][0].cmpNum
+    this.numInYear = data[2][0].cmpNum
+    this.numClosed = data[3][0].cmpNum
+    this.numClsfyType = []
+    data[4].map(tpItem => {
+      if (!tpItem.type) {
+        return
+      }
+      this.numClsfyType.push({
+        value: tpItem.cmpNum,
+        name: tpItem.type
       })
-      echarts.init(document.getElementById("industryClassify")).setOption(Object.assign(utils.PieModel, {
-        title: {
-          text: "行业类别",
-          left: "right"
-        },
-        legend: Object.assign(utils.PieModel.legend, {
-          left: "left"
-        }),
-        series: [
-          Object.assign(utils.PieModel.series[0], {
-            radius: "80%",
-            data: this.numClsfyType,
-            left: "30%",
-            right: 0,
-            bottom: "-20%"
-          })
-        ]
-      }))
+    })
+    echarts.init((await utils.$wait("#industryClassify"))[0]).setOption(utils.assignToCloneObj(utils.PieModel, {
+      title: {
+        text: "行业类别",
+        left: "right"
+      },
+      legend: utils.assignToCloneObj(utils.PieModel.legend, {
+        left: "left"
+      }),
+      series: [
+        utils.assignToCloneObj(utils.PieModel.series[0], {
+          radius: "80%",
+          data: this.numClsfyType,
+          left: "30%",
+          right: 0,
+          bottom: "-20%"
+        })
+      ]
+    }))
 
-      // data[5]
-      const begIdx = parseInt(Math.random() * (utils.BarColors.length - 4))
-      echarts.init(document.getElementById("firfightingPoint")).setOption(Object.assign(utils.BarModel, {
-        title: {
-          text: "消防重点统计"
-        },
-        yAxis: {
-          data: ["沿街商铺", "店住人", "有仓库", "用明火"]
-        },
-        series: [
-          Object.assign(utils.BarModel.series[0], {
-            itemStyle: {
-              normal: Object.assign(utils.BarModel.series[0].itemStyle.normal, {
-                colors: utils.BarColors.slice(begIdx, begIdx + 4)
-              })
-            },
-            data: [
-              data[5].cmpNumAlgStreet,
-              data[5].cmpNumHasLiving,
-              data[5].cmpNumHasStore,
-              data[5].cmpNumUseFire,
-            ],
-          })
-        ]
-      }))
-    }
+    // data[5]
+    echarts.init((await utils.$wait("#firefightingPoint"))[0]).setOption(utils.assignToCloneObj(utils.BarModel, {
+      title: {
+        text: "消防重点统计"
+      },
+      yAxis: {
+        data: ["店住人", "沿街商铺", "有仓库", "用明火", "高层/地下室"]
+      },
+      series: [
+        utils.assignToCloneObj(utils.BarModel.series[0], {
+          data: [
+            data[5][0].cmpNum,
+            data[6][0].cmpNum,
+            data[7][0].cmpNum,
+            data[8][0].cmpNum,
+            data[9][0].cmpNum,
+          ],
+        })
+      ]
+    }))
+
+    echarts.init((await utils.$wait("#securityPoint"))[0]).setOption(utils.assignToCloneObj(utils.BarModel, {
+      title: {
+        text: "治安重点统计"
+      },
+      yAxis: {
+        data: ["夜间经营", "兜售酒精饮品", "有可疑行为"]
+      },
+      series: [
+        utils.assignToCloneObj(utils.BarModel.series[0], {
+          data: [
+            999999,
+            999999,
+            999999,
+          ],
+        })
+      ]
+    }))
+
+    echarts.init((await utils.$wait("#missCompanyInfo"))[0]).setOption(utils.assignToCloneObj(utils.BarModel, {
+      title: {
+        text: "完整性报告"
+      },
+      yAxis: {
+        data: ["缺失单位注册名称", "缺失类型", "缺失营业时间", "缺失地址", "缺失法人姓名", "缺失法人身份证", "缺失法人手机号", "无员工"]
+      },
+      series: [
+        utils.assignToCloneObj(utils.BarModel.series[0], {
+          data: [
+            data[10][0].cmpNum,
+            data[11][0].cmpNum,
+            data[12][0].cmpNum + data[13][0].cmpNum,
+            data[14][0].cmpNum,
+            data[15][0].cmpNum,
+            data[16][0].cmpNum,
+            data[17][0].cmpNum,
+            data[18].filter(cmp => cmp.pplNum === 0).length
+          ],
+        })
+      ]
+    }))
   }
 }
 </script>

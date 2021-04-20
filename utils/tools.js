@@ -104,6 +104,37 @@ const exp = {
     return require(`../databases/${
       this.readConfig("./configs/model").type
     }`)
+  },
+  fmtQuerySQL(sql, query, symbol, options) {
+    if (!options) {
+      options = {addWhere: true}
+    }
+    let conds = []
+    switch (query.scope) {
+      case "week":
+        conds.push(`DATEDIFF(CURDATE(), \`${symbol}\`.\`createdAt\`) < 7`)
+        break
+      case "month":
+        conds.push(`DATEDIFF(CURDATE(), \`${symbol}\`.\`createdAt\`) < 30`)
+        break
+      case "year":
+        conds.push(`DATEDIFF(CURDATE(), \`${symbol}\`.\`createdAt\`) < 365`)
+        break
+    }
+    delete query.scope
+    for (let key in query) {
+      let value = query[key]
+      let valLowCs = value.toUpperCase()
+      if (isNaN(parseFloat(value)) && valLowCs !== "TRUE" && valLowCs !== "FALSE" && valLowCs !== "NULL") {
+        value = `'${value}'`
+      }
+      conds.push(`\`${symbol}\`.\`${key}\` ${valLowCs === 'NULL' ? 'IS' : '='} ${value}`)
+    }
+    if (conds.length) {
+      return sql.trim() + (options.addWhere ? " WHERE " : " AND ") + conds.join(" AND ")
+    } else {
+      return sql
+    }
   }
 }
 

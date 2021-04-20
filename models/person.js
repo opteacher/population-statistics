@@ -10,7 +10,13 @@ module.exports = db.defineModel({
   hhAddress:  db.Types.String,
   lvAddress:  db.Types.String,
   cmpId:      db.Types.Number,
-  company:    db.Types.String
+  company:    db.Types.String,
+  isLvAlnOld: db.Types.Boolean,
+  isPregWman: db.Types.Boolean,
+  hasMentalIllness: db.Types.Boolean,
+  isDisability:     db.Types.Boolean,
+  isSuspicious:     db.Types.Boolean,
+  suspiciousRmks:   db.Types.String,
 }, {
   router: {
     methods: [

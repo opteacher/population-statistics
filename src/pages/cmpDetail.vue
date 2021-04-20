@@ -15,6 +15,17 @@
         <mt-cell v-if="company.lglName" title="法人姓名" :value="company.lglName"/>
         <mt-cell v-if="company.lglId" title="法人身份证" :value="company.lglId"/>
         <mt-cell v-if="company.lglPhone" title="法人手机号" :value="company.lglPhone"/>
+        <mt-cell title="消防标签">
+          <mt-badge v-if="company.hasLiving" size="small" type="error">有住人</mt-badge>
+          <mt-badge v-if="company.isAlgStreet" size="small" type="success">沿街</mt-badge>
+          <mt-badge v-if="company.hasStore" size="small" type="warning">有仓库</mt-badge>
+          <mt-badge v-if="company.useFire" size="small" type="error">用明火</mt-badge>
+          <mt-badge v-if="company.isTopBottom" size="small" type="success">高层/地下室</mt-badge>
+        </mt-cell>
+        <mt-cell title="治安标签">
+          <mt-badge v-if="company.sellAlcohol" size="small" type="success">销售酒类</mt-badge>
+          <mt-badge v-if="company.isSuspicious" size="small" type="error">存在可疑行径</mt-badge>
+        </mt-cell>
         <mt-cell :title="company.shopName ? '员工' : '居民'" :value="!showPeople ? '展开' : '收起'" is-link @click.native="showPeople = !showPeople"
           data-target="#peopleList" data-toggle="collapse" aria-expanded="false" aria-controls="peopleList"/>
       </div>
@@ -95,10 +106,9 @@ export default {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
       this.report.slots[0].values = ["人员信息", "地址"]
     }
-    this.company = Object.assign(this.$route.query, {
+    this.company = Object.assign(utils.copyCompany(this.$route.query), {
       people: await utils.reqBackend(axios.get(url))
     })
-    delete this.company.uneditable
   },
   async mounted() {
     if (this.uneditable) {

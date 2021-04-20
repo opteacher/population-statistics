@@ -69,10 +69,7 @@ export default {
     this.lsMode = this.$route.query.mode || "display"
     this.onSelTabChanged(this.$route.query.type)
     if (this.lsMode === "select") {
-      this.edtEmployee = Object.assign(this.$route.query)
-      delete this.edtEmployee.type
-      delete this.edtEmployee.mode
-      this.edtEmployee.cmpId = this.edtEmployee.cmpId === -1 ? "" : this.edtEmployee.cmpId.toString()
+      this.edtEmployee = utils.copyPerson(this.$route.query)
     }
   },
   methods: {

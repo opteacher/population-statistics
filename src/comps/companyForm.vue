@@ -15,6 +15,12 @@
       <mt-cell title="状态" class="mint-field">
         <mt-switch v-model="form.isClosed" style="color: grey">{{!form.isClosed ? "已停业" : "营业中"}}</mt-switch>
       </mt-cell>
+      <mt-cell title="消防安全" :value="!showFirefight ? '展开' : '收起'" is-link @click.native="showFirefight = !showFirefight"
+          data-target="#fireFightList" data-toggle="collapse" aria-expanded="false" aria-controls="fireFightList"/>
+      <mt-cell title="治安安全" :value="!showSecurity ? '展开' : '收起'" is-link @click.native="showSecurity = !showSecurity"
+        data-target="#securityList" data-toggle="collapse" aria-expanded="false" aria-controls="securityList"/>
+    </div>
+    <div class="collapse mt-3" id="fireFightList">
       <mt-cell title="居住情况" class="mint-field">
         <mt-switch v-model="form.hasLiving" style="color: grey">{{form.hasLiving ? "有人居住" : "无人居住"}}</mt-switch>
       </mt-cell>
@@ -31,6 +37,15 @@
         <mt-switch v-model="form.isTopBottom" style="color: grey">{{form.isTopBottom ? "高层/地下室" : "非高层/非地下室"}}</mt-switch>
       </mt-cell>
     </div>
+    <div class="collapse mt-3" id="securityList">
+      <mt-cell title="销售酒类" class="mint-field">
+        <mt-switch v-model="form.sellAlcohol" style="color: grey">{{form.sellAlcohol ? "销售" : "不销售"}}</mt-switch>
+      </mt-cell>
+      <mt-cell title="存在可疑行径" class="mint-field">
+        <mt-switch v-model="form.isSuspicious" style="color: grey">{{form.isSuspicious ? "可疑" : "不可疑"}}</mt-switch>
+      </mt-cell>
+      <mt-field label="可疑行径描述" placeholder="请输入描述" v-model="form.suspiciousRmks"/>
+    </div>
     <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" style="width: 98vw" type="primary" @click.prevent="onSubmitClick">提交</mt-button>
     </div>
@@ -38,7 +53,7 @@
 </template>
 
 <script>
-import { reqBackend } from "../utils"
+import utils from "../utils"
 import { Toast } from "mint-ui"
 import popupField from "./popupField"
 
@@ -63,10 +78,15 @@ export default {
         isAlgStreet: false,
         hasStore: false,
         useFire: false,
-        isTopBottom: false
+        isTopBottom: false,
+        sellAlcohol: false,
+        isSuspicious: false,
+        suspiciousRmks: ""
       },
       formSubmit: false,
-      times: []
+      times: [],
+      showFirefight: false,
+      showSecurity: false
     }
   },
   created() {
@@ -76,28 +96,13 @@ export default {
       this.times.push(`${hour}:30`)
     }
     if (this.$route.query.id) {
-      this.form.id = parseInt(this.$route.query.id)
-      this.form.name = this.$route.query.name || ""
-      this.form.shopName = this.$route.query.shopName || ""
-      this.form.type = this.$route.query.type || "",
-      this.form.regId = this.$route.query.regId || ""
-      this.form.address = this.$route.query.address || ""
-      this.form.lglName = this.$route.query.lglName || ""
-      this.form.lglId = this.$route.query.lglId || ""
-      this.form.lglPhone = this.$route.query.lglPhone || ""
-      this.form.openHours = this.$route.query.openHours || "",
-      this.form.isClosed = JSON.parse(this.$route.query.isClosed) || false,
-      this.form.hasLiving = JSON.parse(this.$route.query.hasLiving) || false,
-      this.form.isAlgStreet = JSON.parse(this.$route.query.isAlgStreet) || false,
-      this.form.hasStore = JSON.parse(this.$route.query.hasStore) || false,
-      this.form.useFire = JSON.parse(this.$route.query.useFire) || false,
-      this.form.isTopBottom = JSON.parse(this.$route.query.isTopBottom) || false
+      this.form = utils.copyCompany(this.$route.query)
     }
   },
   methods: {
     async onSubmitClick() {
       this.formSubmit = true
-      await reqBackend(this.form.id ?
+      await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
         axios.post("/population-statistics/mdl/v1/company", this.form))
       Toast({

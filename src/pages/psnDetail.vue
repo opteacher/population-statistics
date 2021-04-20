@@ -12,6 +12,13 @@
       <mt-cell title="户籍地址" :value="person.hhAddress"/>
       <mt-cell title="居住地址" :value="person.lvAddress"/>
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
+      <mt-cell title="特殊标签">
+          <mt-badge v-if="person.isLvAlnOld" size="small" type="warning">独居老人</mt-badge>
+          <mt-badge v-if="person.isPregWman" size="small" type="success">孕妇</mt-badge>
+          <mt-badge v-if="person.hasMentalIllness" size="small" type="warning">患有心理/精神疾病</mt-badge>
+          <mt-badge v-if="person.isDisability" size="small" type="success">残疾</mt-badge>
+          <mt-badge v-if="person.isSuspicious" size="small" type="error">可疑</mt-badge>
+        </mt-cell>
     </div>
     <div v-if="uneditable" class="w-100 fixed-bottom mtb-1pc mlr-1pc" style="background-color: white">
       <mt-button class="w-98" type="primary" @click="report.showTopPopup = true">信息有误？提醒管理员</mt-button>
@@ -72,8 +79,7 @@ export default {
   },
   created() {
     this.uneditable = Boolean(this.$route.query.uneditable)
-    this.person = Object.assign({}, this.$route.query)
-    delete this.person.uneditable
+    this.person = utils.copyPerson(this.$route.query)
   },
   async mounted() {
     if (this.uneditable) {

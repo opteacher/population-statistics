@@ -8,7 +8,7 @@ const db = tools.getDatabase()
 
 router.get("/total_count", async ctx => {
   ctx.body = {
-    data: (await db.exec(sqlCfg.selHouseNum))[0]
+    data: (await db.exec(tools.fmtQuerySQL(sqlCfg.selHouseNum, ctx.query, "house", {addWhere: false})))[0]
   }
 })
 
