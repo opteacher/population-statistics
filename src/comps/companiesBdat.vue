@@ -79,6 +79,7 @@ export default {
       }))
 
       // data[5]
+      const begIdx = parseInt(Math.random() * (utils.BarColors.length - 4))
       echarts.init(document.getElementById("firfightingPoint")).setOption(Object.assign(utils.BarModel, {
         title: {
           text: "消防重点统计"
@@ -88,6 +89,11 @@ export default {
         },
         series: [
           Object.assign(utils.BarModel.series[0], {
+            itemStyle: {
+              normal: Object.assign(utils.BarModel.series[0].itemStyle.normal, {
+                colors: utils.BarColors.slice(begIdx, begIdx + 4)
+              })
+            },
             data: [
               data[5].cmpNumAlgStreet,
               data[5].cmpNumHasLiving,
