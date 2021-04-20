@@ -1,9 +1,12 @@
+const Path = require("path")
 const fs = require("fs")
 const ExcelJS = require('exceljs')
+const qiniu = require("qiniu")
 const router = require("koa-router")()
 
 const tools = require("../../../../../utils/tools")
 const pjPath = tools.projRootPath()
+const qnCfg = tools.readConfig(Path.join(pjPath, "configs", "qiniu"))
 const { Company, Person } = require(`${pjPath}/models/index`)
 const db = tools.getDatabase()
 const excTmpPath = `${pjPath}/resources/company_temp.xlsx`
@@ -43,8 +46,32 @@ router.get("/:cmpId/export/excel", async ctx => {
     worksheet.getCell(`G${colIdx}`).value = employee.phone
   }
 
-  const distExcPath = `${pjPath}/public/gen/${company.shopName}.xlsx`
-  await workbook.xlsx.write(fs.createWriteStream(distExcPath))
+  // const distExcPath = `${pjPath}/public/gen/${company.shopName}.xlsx`
+  // await workbook.xlsx.writeFile(distExcPath)
+
+  const mac = new qiniu.auth.digest.Mac(qnCfg.accessKey, qnCfg.secretKey)
+  const putPolicy = new qiniu.rs.PutPolicy({scope: qnCfg.bucket})
+  const uploadToken = putPolicy.uploadToken(mac)
+
+  const config = new qiniu.conf.Config()
+  // 空间对应的机房
+  config.zone = qiniu.zone.Zone_z2
+
+  const formUploader = new qiniu.form_up.FormUploader(config)
+  const putExtra = new qiniu.form_up.PutExtra()
+  const readableStream = null
+  await workbook.xlsx.read(readableStream)
+  formUploader.putStream(uploadToken, `${company.shopName}.xlsx`, readableStream, putExtra, function(respErr, respBody, respInfo) {
+    if (respErr) {
+      throw respErr
+    }
+    if (respInfo.statusCode == 200) {
+      console.log(respBody)
+    } else {
+      console.log(respInfo.statusCode)
+      console.log(respBody)
+    }
+  })
 
   ctx.body = {
     data: `/gen/${company.shopName}.xlsx`

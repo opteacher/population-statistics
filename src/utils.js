@@ -137,5 +137,26 @@ module.exports = {
       },
       data: []
     }]
+  },
+  eventBus: new Vue({}),
+  async $wait(iden, cond) {
+    return new Promise((res, rej) => {
+      if (!cond) {
+        cond = () => true
+      }
+      let count = 0
+      const h = setInterval(() => {
+        const ret = $(iden)
+        if (ret.length && cond()) {
+          clearInterval(h)
+          return res(ret)
+        } else if (count < 120) {
+          count++
+        } else {
+          clearInterval(h)
+          return rej()
+        }
+      }, 100)
+    })
   }
 }

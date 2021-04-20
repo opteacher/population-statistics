@@ -1,9 +1,7 @@
 <template>
   <div>
     <mt-header title="公司详情">
-      <mt-button v-if="!uneditable" icon="back" slot="left" @click.native="$router.push({
-        path: `/population-statistics/list?type=${company.shopName ? 'company' : 'house'}${$route.query.scroll ? '&scroll=' + $route.query.scroll : ''}`
-      })">返回</mt-button>
+      <mt-button v-if="!uneditable" icon="back" slot="left" @click="onBackClick">返回</mt-button>
       <mt-button slot="right" @click="onPrintClick">导出Excel</mt-button>
     </mt-header>
     <div class="scroll-panel" :style="`top: 40px; bottom: ${uneditable ? '50' : '101'}px`">
@@ -43,7 +41,7 @@
 <script>
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
-import { reqBackend } from "../utils"
+import utils from "../utils"
 import "url"
 import cookies from "../cookies"
 
@@ -98,7 +96,7 @@ export default {
       this.report.slots[0].values = ["人员信息", "地址"]
     }
     this.company = Object.assign(this.$route.query, {
-      people: await reqBackend(axios.get(url))
+      people: await utils.reqBackend(axios.get(url))
     })
   },
   beforeRouteLeave(to, from, next) {
@@ -124,7 +122,7 @@ export default {
           return
         }
         const url = `/population-statistics/mdl/v1/company/${this.company.id}`
-        const data = await reqBackend(axios.delete(url))
+        const data = await utils.reqBackend(axios.delete(url))
         if (data) {
           Toast({
             message: "删除成功！",
@@ -152,7 +150,7 @@ export default {
         this.report.form.name = this.company.shopName || this.company.address
         this.report.form.submit = this.$route.query.submit
         this.report.form.sbtPhone = this.$route.query.sbtPhone
-        if (await reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
+        if (await utils.reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
           Toast({
             message: "提交成功！感谢您提交的信息更新，稍后管理员会对您提交的信息进行确认",
             iconClass: "iconfont icon-select-bold"
@@ -171,12 +169,18 @@ export default {
     },
     async onPrintClick() {
       const url = `/population-statistics/api/v1/company/${this.company.id}/export/excel`
-      const data = await reqBackend(axios.get(url))
+      const data = await utils.reqBackend(axios.get(url))
       Toast({
         message: "导出Excel成功！",
         iconClass: "iconfont icon-select-bold"
       })
       window.location.href = data
+    },
+    onBackClick() {
+      if (this.$route.query.scroll) {
+        utils.eventBus.$emit("scroll", this.$route.query.scroll)
+      }
+      this.$router.go(-1)
     }
   }
 }

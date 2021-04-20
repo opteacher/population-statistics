@@ -33,9 +33,9 @@
     "qiniu": "^7.2.1",
     "redis": "^2.8.0",
     "sequelize": "^4.38.0",
+    "toml": "^3.0.0",
     "uuid": "^3.3.2",
-    "wx-xml": "0.0.2",
-    "toml": "^3.0.0"
+    "wx-xml": "0.0.2"
   },
   "devDependencies": {
     "@websanova/vue-auth": "^2.21.14-beta",

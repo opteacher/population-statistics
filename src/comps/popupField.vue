@@ -61,6 +61,7 @@ export default {
         }
       }
       this.form[this.pname] = values.join("-")
+      this.showPopup = false
     }
   }
 }

@@ -94,15 +94,16 @@ export default {
       this.searchItem.allItems = await utils.reqBackend(axios.get(url))
       this.searchItem.mchItems = this.searchItem.allItems
 
-      await new Promise((res) => {
-        setTimeout(() => {res()}, 1)
+      utils.eventBus.$on("scroll", async data => {
+        const list = await utils.$wait(".mint-search-list", () => {
+          return $(".mint-search-list-warp").height() > 0
+        })
+        if (data) {
+          list.scrollTop(44 - parseInt(data))
+        } else {
+          list.scrollTop(0)
+        }
       })
-
-      if (this.$route.query.scroll) {
-        $(".mint-search-list").scrollTop(44 - parseInt(this.$route.query.scroll))
-      } else {
-        $(".mint-search-list").scrollTop(0)
-      }
     },
     onCfmSelClick() {
       this.$router.push({

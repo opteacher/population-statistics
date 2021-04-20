@@ -1,9 +1,7 @@
 <template>
   <div>
     <mt-header title="人员详情">
-      <router-link :to="`/population-statistics/list?type=person${$route.query.scroll ? '&scroll=' + $route.query.scroll : ''}`" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+      <mt-button icon="back" slot="left" @click="onBackClick">返回</mt-button>
     </mt-header>
     <div class="scroll-panel" :style="'top: 40px;' + (uneditable ? 'bottom: 50px' : 'bottom: 106px')">
       <mt-cell title="姓名" :value="person.name"/>
@@ -35,7 +33,7 @@
 import btmNaviBar from "../comps/btmNaviBar"
 import { MessageBox, Toast } from "mint-ui"
 import cookies from "../cookies"
-import { reqBackend } from "../utils"
+import utils from "../utils"
 
 export default {
   components: {
@@ -119,7 +117,7 @@ export default {
         this.report.form.name = this.person.name
         this.report.form.submit = this.$route.query.submit
         this.report.form.sbtPhone = this.$route.query.sbtPhone
-        if (await reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
+        if (await utils.reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
           Toast({
             message: "提交成功！感谢您上报的信息更新，稍后管理员会对您提交的信息进行确认",
             iconClass: "iconfont icon-select-bold"
@@ -129,6 +127,12 @@ export default {
     },
     onReportChanged() {
       this.report.form.props = `${arguments[1][0]}.${arguments[1][1]}`
+    },
+    onBackClick() {
+      if (this.$route.query.scroll) {
+        utils.eventBus.$emit("scroll", this.$route.query.scroll)
+      }
+      this.$router.go(-1)
     }
   }
 }
