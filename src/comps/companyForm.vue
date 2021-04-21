@@ -13,7 +13,7 @@
       <mt-field label="法人手机号" placeholder="请输入法人手机号" type="tel" v-model="form.lglPhone"/>
       <popup-field title="营业时间" :form="form" pname="openHours" :bottom="55" :values="[times, times]"/>
       <mt-cell title="状态" class="mint-field">
-        <mt-switch v-model="form.isClosed" style="color: grey">{{!form.isClosed ? "已停业" : "营业中"}}</mt-switch>
+        <mt-switch v-model="form.isClosed" style="color: grey">{{form.isClosed ? "已停业" : "营业中"}}</mt-switch>
       </mt-cell>
       <mt-cell title="消防安全" :value="!showFirefight ? '展开' : '收起'" is-link @click.native="showFirefight = !showFirefight"
           data-target="#fireFightList" data-toggle="collapse" aria-expanded="false" aria-controls="fireFightList"/>

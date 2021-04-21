@@ -13,7 +13,7 @@
           label: item.shopName,
           value: item.id.toString()
         }))"/>
-      <mt-cell v-for="item in searchItem.mchItems" :key="item.id"
+      <mt-cell v-else v-for="item in searchItem.mchItems" :key="item.id"
         :title="lsType === 'company' ? item.shopName : (lsType === 'house' ? item.address : item.name)"
         :label="lsType === 'company' ? item.name : (item.company || item.lvAddress)"
         is-link @click.native="onItemClick(item)">

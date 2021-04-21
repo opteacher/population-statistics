@@ -78,7 +78,9 @@ export default {
     }
   },
   created() {
-    this.uneditable = Boolean(this.$route.query.uneditable)
+    if (this.$route.query.uneditable) {
+      this.uneditable = JSON.parse(this.$route.query.uneditable)
+    }
     this.person = utils.copyPerson(this.$route.query)
   },
   async mounted() {

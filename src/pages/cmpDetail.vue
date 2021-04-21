@@ -97,7 +97,9 @@ export default {
     }
   },
   async created() {
-    this.uneditable = Boolean(this.$route.query.uneditable)
+    if (this.$route.query.uneditable) {
+      this.uneditable = JSON.parse(this.$route.query.uneditable)
+    }
     let url = ""
     if (this.$route.query.shopName) {
       url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
@@ -109,6 +111,7 @@ export default {
     this.company = Object.assign(utils.copyCompany(this.$route.query), {
       people: await utils.reqBackend(axios.get(url))
     })
+
   },
   async mounted() {
     if (this.uneditable) {
