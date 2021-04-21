@@ -1,5 +1,5 @@
 <template>
-  <mt-field id="idCard" :label="label" placeholder="请输入身份证" v-model="form.idCard" :attr="{ maxlength: 18 }"
+  <mt-field id="idCard" :label="label" placeholder="请输入身份证（X大写）" v-model="form.idCard" :attr="{ maxlength: 18 }"
     data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
 
     <mt-button size="small" @click="onCameraClick">
