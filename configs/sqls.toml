@@ -9,6 +9,9 @@ SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`sh
 selCompanyNumGpByType="""
 SELECT `type`, COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' GROUP BY `company`.`type`
 """
+selCompanyNumOpnNgt="""
+SELECT COUNT(`id`) AS `cmpNum` FROM `companies` AS `company` WHERE `company`.`shopName` != '' AND CONVERT(SUBSTRING(`company`.`openHours`, -5, 2), UNSIGNED) > 21
+"""
 selPersonNum="""
 SELECT COUNT(`id`) AS `pplNum` FROM `people` AS `person`
 """

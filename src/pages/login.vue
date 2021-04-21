@@ -34,13 +34,13 @@ export default {
       if (res.status === 400) {
         Toast({
           message: res.message,
-          iconClass: "iconfont icon-close-bold"
+          iconClass: "iconfont icon-close-bold fs-50"
         })
         return null
       } else if (res.status !== 200) {
         Toast({
           message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
+          iconClass: "iconfont icon-close-bold fs-50"
         })
         return null
       } else {
@@ -60,7 +60,7 @@ export default {
         Indicator.close()
         Toast({
           message: "注册成功！",
-          iconClass: "iconfont icon-select-bold"
+          iconClass: "iconfont icon-select-bold fs-50"
         })
       } else {
 

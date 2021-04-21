@@ -4,7 +4,7 @@ module.exports = db.defineModel({
   __modelName: "company",
   name:         db.Types.String,
   shopName:     db.Types.String,
-  type:         db.Types.String,// 企业公司/金融证券/餐饮/美容美发/医疗机构/健身房/教育培训/宾旅馆/中介/养身保健/洗浴按摩/便利超市/其他
+  type:         db.Types.String,// 企业公司/金融证券/餐饮/美容美发/医疗机构/健身房/教育培训/宾旅馆/中介/养身按摩/便利超市/其他
   regId:        db.Types.String,
   address:      db.Types.String,
   lglName:      db.Types.String,

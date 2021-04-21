@@ -141,7 +141,7 @@ export default {
         await utils.reqBackend(axios.post(url, this.form))
         Toast({
           message: "来登成功！请等待协管核实",
-          iconClass: "iconfont icon-select-bold"
+          iconClass: "iconfont icon-select-bold fs-50"
         })
         this.$router.push({path: "/"})
       })

@@ -3,7 +3,11 @@
     <div>
       <mt-field id="name" label="代办人姓名" placeholder="请输入姓名" v-model="form.name"
         data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
-        <mt-button size="small" @click="onInforBtnClick"><i class="iconfont icon-tishi"/></mt-button>
+        <mt-button size="small" @click="onInforBtnClick">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-tishi"></use>
+          </svg>
+        </mt-button>
       </mt-field>
       <id-card-field label="代办人身份证" :form="form"/>
       <mt-cell title="代办人与离此人员关系" :value="form.relation"

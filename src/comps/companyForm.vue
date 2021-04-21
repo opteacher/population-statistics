@@ -4,7 +4,7 @@
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
       <popup-field title="类型" :form="form" pname="type" :bottom="55" :values="[
-        '企业公司', '金融证券', '餐饮', '美容美发', '医疗机构', '健身房', '教育培训', '宾旅馆', '中介', '养身保健', '洗浴按摩', '便利超市', '其他'
+        '企业公司', '金融证券', '餐饮', '美容美发', '医疗机构', '健身房', '教育培训', '宾旅馆', '中介', '养身按摩', '便利超市', '其他'
       ]"/>
       <mt-field label="注册编号" placeholder="请输入注册编号" v-model="form.regId"/>
       <mt-field label="地址" placeholder="请输入所在地址" v-model="form.address"/>
@@ -107,7 +107,7 @@ export default {
         axios.post("/population-statistics/mdl/v1/company", this.form))
       Toast({
         message: "提交成功！",
-        iconClass: "iconfont icon-select-bold"
+        iconClass: "iconfont icon-select-bold fs-50"
       })
       this.$router.push({path: `/population-statistics/list?type=${this.form.shopName ? 'company' : 'house'}`})
     }

@@ -58,6 +58,9 @@ export default {
       axios.get(url + "?lglId="),
       axios.get(url + "?lglPhone="),
       axios.get("/population-statistics/api/v1/bdata/people/total_count/groupby/company"),
+      axios.get(url + "/open/night"),
+      axios.get(url + "?sellAlcohol=true"),
+      axios.get(url + "?isSuspicious=true"),
     ]
     const data = await utils.reqBackend(pmss)
     this.totalNumber = data[0][0].cmpNum
@@ -124,9 +127,9 @@ export default {
       series: [
         utils.assignToCloneObj(utils.BarModel.series[0], {
           data: [
-            999999,
-            999999,
-            999999,
+            data[19][0].cmpNum,
+            data[20][0].cmpNum,
+            data[21][0].cmpNum,
           ],
         })
       ]

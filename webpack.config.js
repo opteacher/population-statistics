@@ -8,6 +8,7 @@ module.exports = {
     "vue-router": "VueRouter",
     "mint-ui": "MINT", //注意element-ui的引用时纯大写
     "axios": "axios",
+    "lodash": "_",
   },
   output: {
     path: resolve(__dirname, "public/dist"),

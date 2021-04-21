@@ -109,6 +109,14 @@
   border-radius: 0% !important;
 }
 
+.fs-24 {
+  font-size: 24px !important;
+}
+
+.fs-50 {
+  font-size: 50px !important;
+}
+
 .center-container {
   height: 100%;
   display: flex;
@@ -192,4 +200,11 @@
 
 .white-bg-color {
   background-color: white
+}
+
+.icon {
+  width: 24px; height: 24px;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }

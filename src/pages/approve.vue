@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import _ from "lodash"
 import utils from "../utils"
 import recordCell from "../comps/recordCell"
 import recordForm from "../comps/recordForm"
@@ -112,7 +111,7 @@ export default {
         await utils.reqBackend(pmss)
         Toast({
           message: "审批通过！人员已更新到实有人口",
-          iconClass: "iconfont icon-select-bold"
+          iconClass: "iconfont icon-select-bold fs-50"
         })
         this.$router.push({path: "/population-statistics/list?type=person"})
       })
@@ -130,7 +129,7 @@ export default {
         await utils.reqBackend(axios.delete(url))
         Toast({
           message: "审批拒绝！",
-          iconClass: "iconfont icon-select-bold"
+          iconClass: "iconfont icon-select-bold fs-50"
         })
         this.selRecord = null
         this._refreshRecords()

@@ -1,4 +1,3 @@
-const _ = require("lodash")
 const { Toast, Indicator } = require("mint-ui")
 
 module.exports = {
@@ -25,7 +24,7 @@ module.exports = {
         if (res.status != 200) {
           Toast({
             message: `系统错误！${res.statusText}`,
-            iconClass: "iconfont icon-close-bold"
+            iconClass: "iconfont icon-close-bold fs-50"
           })
           return Promise.resolve(null)
         }
@@ -39,7 +38,7 @@ module.exports = {
       if (res.status != 200) {
         Toast({
           message: `系统错误！${res.statusText}`,
-          iconClass: "iconfont icon-close-bold"
+          iconClass: "iconfont icon-close-bold fs-50"
         })
         return Promise.resolve(null)
       } else {
@@ -75,13 +74,34 @@ module.exports = {
     title: {
       left: "left"
     },
-    tooltip: {
-      trigger: "item"
-    },
     legend: {
       orient: "vertical",
       left: "right"
     },
+    // tooltip : {
+    //   axisPointer: {
+    //     type: 'cross'
+    //   },
+    //   triggerOn: 'click',   //触发方式
+    //   // alwaysShowContent:true,   //鼠标离开区域不消失
+    //   trigger:'axis',
+    //   formatter:function(params){
+    //     var html = '';
+    //     if(params.length>0){
+    //       Xindex = params[0].dataIndex;
+    //       html+= date + ' ' +params[0].name+'<br>';
+    //       for ( var int = 0; int < params.length; int++) {
+    //         if(int == 0){
+    //           html+=params[int].marker + params[int].seriesName+': '+params[int].data+'&nbsp;&nbsp;&nbsp;<button class="fr btn closeHandle" id="specialLook"  οnclick="lookVideoGo(\''+ date + ' ' +params[0].name +'\')">查 看</button><br>';      
+    //           //lookVideoGo按钮触发函数 ，注意传递参数引号规则
+    //         }else{
+    //           html+=params[int].marker + params[int].seriesName+': '+params[int].data+'<br>';
+    //         }
+    //       }
+    //     }
+    //     return html;
+    //   },
+    // },
     series: [{
       type: "pie",
       radius: "50%",

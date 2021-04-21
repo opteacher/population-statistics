@@ -1,5 +1,4 @@
 const Path = require("path")
-const sequelize = require("sequelize")
 const router = require("koa-router")()
 
 const tools = require("../../../../../../utils/tools")
@@ -16,6 +15,12 @@ router.get("/total_count", async ctx => {
 router.get("/total_count/groupby/type", async ctx => {
   ctx.body = {
     data: (await db.exec(sqlCfg.selCompanyNumGpByType))[0]
+  }
+})
+
+router.get("/total_count/open/night", async ctx => {
+  ctx.body = {
+    data: (await db.exec(sqlCfg.selCompanyNumOpnNgt))[0]
   }
 })
 

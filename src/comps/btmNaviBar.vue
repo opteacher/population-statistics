@@ -1,22 +1,34 @@
 <template>
   <mt-tabbar v-model="selected" style="position: fixed">
     <mt-tab-item id="admin">
-      <img slot="icon" src="/assets/imgs/lock.png">管理员
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-lock"></use>
+      </svg>管理员
     </mt-tab-item>
     <mt-tab-item id="input">
-      <img slot="icon" src="/assets/imgs/import.png">录入
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-import"></use>
+      </svg>录入
     </mt-tab-item>
     <mt-tab-item id="house">
-      <img slot="icon" src="/assets/imgs/home.png">实有房屋
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-home"></use>
+      </svg>实有房屋
     </mt-tab-item>
     <mt-tab-item id="company">
-      <img slot="icon" src="/assets/imgs/work.png">实有单位
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-work"></use>
+      </svg>实有单位
     </mt-tab-item>
     <mt-tab-item id="person">
-      <img slot="icon" src="/assets/imgs/user.png">实有人员
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-user"></use>
+      </svg>实有人员
     </mt-tab-item>
     <mt-tab-item id="approve">
-      <img slot="icon" src="/assets/imgs/approve.png">审批
+      <svg slot="icon" class="icon" aria-hidden="true">
+        <use xlink:href="#icon-shenpi"></use>
+      </svg>审批
     </mt-tab-item>
   </mt-tabbar>
 </template>
@@ -48,3 +60,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.wh-24::before {
+  width: 24px;
+  height: 24px;
+}
+</style>

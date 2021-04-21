@@ -93,7 +93,7 @@ export default {
         if (!res.data.data) {
           Toast({
             message: res.data.message,
-            iconClass: "iconfont icon-close-bold"
+            iconClass: "iconfont icon-close-bold fs-50"
           })
           this.$router.push({path: "/population-statistics/valid"})
         }
@@ -120,12 +120,12 @@ export default {
         if (res.status != 200) {
           Toast({
             message: `系统错误！${res.statusText}`,
-            iconClass: "iconfont icon-close-bold"
+            iconClass: "iconfont icon-close-bold fs-50"
           })
         } else {
           Toast({
             message: "删除成功！",
-            iconClass: "iconfont icon-select-bold"
+            iconClass: "iconfont icon-select-bold fs-50"
           })
           this.$router.go(-1)
         }
@@ -149,7 +149,7 @@ export default {
         if (await utils.reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
           Toast({
             message: "提交成功！感谢您上报的信息更新，稍后管理员会对您提交的信息进行确认",
-            iconClass: "iconfont icon-select-bold"
+            iconClass: "iconfont icon-select-bold fs-50"
           })
         }
       })

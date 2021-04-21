@@ -15,14 +15,14 @@
         <mt-cell v-if="company.lglName" title="法人姓名" :value="company.lglName"/>
         <mt-cell v-if="company.lglId" title="法人身份证" :value="company.lglId"/>
         <mt-cell v-if="company.lglPhone" title="法人手机号" :value="company.lglPhone"/>
-        <mt-cell title="消防标签">
+        <mt-cell v-if="company.hasLiving || company.isAlgStreet || company.hasStore || company.useFire || company.isTopBottom" title="消防标签">
           <mt-badge v-if="company.hasLiving" size="small" type="error">有住人</mt-badge>
           <mt-badge v-if="company.isAlgStreet" size="small" type="success">沿街</mt-badge>
           <mt-badge v-if="company.hasStore" size="small" type="warning">有仓库</mt-badge>
           <mt-badge v-if="company.useFire" size="small" type="error">用明火</mt-badge>
           <mt-badge v-if="company.isTopBottom" size="small" type="success">高层/地下室</mt-badge>
         </mt-cell>
-        <mt-cell title="治安标签">
+        <mt-cell v-if="company.sellAlcohol || company.isSuspicious" title="治安标签">
           <mt-badge v-if="company.sellAlcohol" size="small" type="success">销售酒类</mt-badge>
           <mt-badge v-if="company.isSuspicious" size="small" type="error">存在可疑行径</mt-badge>
         </mt-cell>
@@ -123,7 +123,7 @@ export default {
         if (!res.data.data) {
           Toast({
             message: res.data.message,
-            iconClass: "iconfont icon-close-bold"
+            iconClass: "iconfont icon-close-bold fs-50"
           })
           this.$router.push({path: "/population-statistics/valid"})
         }
@@ -157,7 +157,7 @@ export default {
         if (data) {
           Toast({
             message: "删除成功！",
-            iconClass: "iconfont icon-select-bold"
+            iconClass: "iconfont icon-select-bold fs-50"
           })
           this.$router.go(-1)
         }
@@ -184,7 +184,7 @@ export default {
         if (await utils.reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
           Toast({
             message: "提交成功！感谢您提交的信息更新，稍后管理员会对您提交的信息进行确认",
-            iconClass: "iconfont icon-select-bold"
+            iconClass: "iconfont icon-select-bold fs-50"
           })
         }
       })
@@ -203,7 +203,7 @@ export default {
       const data = await utils.reqBackend(axios.get(url))
       Toast({
         message: "导出Excel成功！",
-        iconClass: "iconfont icon-select-bold"
+        iconClass: "iconfont icon-select-bold fs-50"
       })
       window.location.href = data
     },

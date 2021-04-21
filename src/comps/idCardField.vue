@@ -3,7 +3,9 @@
     data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom">
 
     <mt-button size="small" @click="onCameraClick">
-      <i class="iconfont icon-camera"/>
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-camera"></use>
+    </svg>
     </mt-button>
   </mt-field>
 </template>
@@ -23,7 +25,7 @@ export default {
     onCameraClick() {
       Toast({
         message: "拍摄身份证录入功能还在开发中",
-        iconClass: "iconfont icon-warning"
+        iconClass: "iconfont icon-warning fs-50"
       })
     }
   }

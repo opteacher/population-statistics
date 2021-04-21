@@ -90,7 +90,7 @@ export default {
         axios.post("/population-statistics/mdl/v1/person", this.form))
       Toast({
         message: "提交成功！",
-        iconClass: "iconfont icon-select-bold"
+        iconClass: "iconfont icon-select-bold fs-50"
       })
       this.$router.push({path: "/population-statistics/list?type=person"})
     }
