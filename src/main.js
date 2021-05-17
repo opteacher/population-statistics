@@ -1,7 +1,11 @@
 import routes from "./routes"
 import "./styles/common.scss"
 
-Vue.router = new VueRouter({ routes })
+Vue.router = new VueRouter({
+  base: "/population-statistics/",
+  mode: "history",
+  routes
+})
 
 new Vue({
   template: "<router-view/>",

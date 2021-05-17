@@ -12,38 +12,38 @@ import approve from "./pages/approve"
 
 export default [{
     path: "/",
-    redirect: "/population-statistics/home"
+    redirect: "/home"
 }, {
-    path: "/population-statistics/home",
+    path: "/home",
     component: home
 }, {
-    path: "/population-statistics/come",
+    path: "/come",
     component: come
 }, {
-    path: "/population-statistics/leave",
+    path: "/leave",
     component: leave
 }, {
-    path: "/population-statistics/valid",
+    path: "/valid",
     component: valid
 }, {
-    path: "/population-statistics/input",
+    path: "/input",
     component: input
 }, {
-    path: "/population-statistics/list",
+    path: "/list",
     component: list
 }, {
-    path: "/population-statistics/company-detail",
+    path: "/company-detail",
     component: cmpDetail
 }, {
-    path: "/population-statistics/person-detail",
+    path: "/person-detail",
     component: psnDetail
 }, {
-    path: "/population-statistics/approve",
+    path: "/approve",
     component: approve
 }, {
-    path: "/population-statistics/login",
+    path: "/login",
     component: login
 }, {
-    path: "/population-statistics/admin",
+    path: "/admin",
     component: admin
 }]

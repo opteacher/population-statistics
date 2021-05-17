@@ -11,7 +11,7 @@ module.exports = {
     "lodash": "_",
   },
   output: {
-    path: resolve(__dirname, "public/dist"),
+    path: resolve(__dirname, "public/population-statistics/dist"),
     filename: "build.js"
   },
   module: {

@@ -15,9 +15,6 @@
           data-container="body" data-toggle="popover" data-trigger="manual" data-placement="bottom"/>
         <gender-field :form="form"/>
         <nation-field :form="form"/>
-        <div v-if="form.purpose === 'work'" class="scroll-panel" style="width: 100%; top: 349px; bottom: 61px">
-          <sch-addr-field :form="form" pname="lvAddress" params="?shopName===&shopName=" :top="397" :bottom="61"/>
-        </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="old">
         <mt-search v-model="searchOldPsn.schWords" :show="true" @input="onSchWdsChanged('searchOldPsn', ['name', 'idCard'])">
@@ -38,15 +35,13 @@
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
-import schAddrField from "./schAddrField"
 import utils from "../utils"
 
 export default {
   components: {
     "id-card-field": idCardField,
     "nation-field": nationField,
-    "gender-field": genderField,
-    "sch-addr-field": schAddrField
+    "gender-field": genderField
   },
   props: {
     "form": Object

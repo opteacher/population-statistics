@@ -4,7 +4,7 @@ const Path = require("path")
 const toml = require("toml")
 
 const exp = {
-  _serverParam: {},
+  _serverConfigs: {},
   // @block{scanPath}:扫描指定目录和子目录
   // @type:function
   // @includes:lodash
@@ -82,17 +82,20 @@ const exp = {
     return Path.resolve(__dirname, "..")
   },
   readConfig(cfgFile, withEnv = false) {
-    if (withEnv && !this._serverParam.env) {
-      this._serverParam = this.readConfig("./configs/server")
-      return toml.parse(fs.readFileSync(`${cfgFile}.${this._serverParam.env}.toml`, {encoding: "utf8"}))
+    if (withEnv && !this._serverConfigs.env) {
+      this._serverConfigs = this.readConfig("./configs/server")
+      return toml.parse(fs.readFileSync(`${cfgFile}.${this._serverConfigs.env}.toml`, {encoding: "utf8"}))
     }
     return toml.parse(fs.readFileSync(`${cfgFile}.toml`, {encoding: "utf8"}))
   },
   env() {
-    if (!this._serverParam.env) {
-      this._serverParam = this.readConfig("./configs/server")
+    if (!this._serverConfigs.env) {
+      this._serverConfigs = this.readConfig("./configs/server")
+      if (process.env.ENV) {
+        this._serverConfigs.env = process.env.ENV
+      }
     }
-    return this._serverParam.env
+    return this._serverConfigs.env
   },
   getClientIp(req) {
     return req.headers['x-forwarded-for']

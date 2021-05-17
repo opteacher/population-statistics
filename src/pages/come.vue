@@ -3,7 +3,7 @@
     <steps-header-bar :stepArr="steps" :active="curStep"/>
     <div style="position: absolute; top: 60px; bottom: 61px; left: 0; right: 0">
       <purpose-form v-if="curStep === 0" :form="form"/>
-      <house-form v-if="curStep === 1" :form="form" :top="152"/>
+      <house-form v-if="curStep === 1" :form="form"/>
       <cm-psn-form v-if="curStep === 2" :form="form"/>
       <connect-form v-if="curStep === 3" :form="form"/>
       <confirm-form v-if="curStep === 4" :form="form"/>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      steps: ["目的", "单位", "人员", "联系", "确认"],
+      steps: ["目的", "住宅", "人员", "联系", "确认"],
       curStep: 0,
       form: {
         type: "come",
@@ -60,11 +60,6 @@ export default {
       formSubmit: false
     }
   },
-  watch: {
-    "form.purpose": function(n, o) {
-      this.steps[1] = (n === "work" ? "单位" : "房屋")
-    }
-  },
   methods: {
     _validFormData() {
       switch (this.curStep) {
@@ -72,14 +67,14 @@ export default {
           if (this.form.purpose === "") {
             utils.popoverErrTip("#purpose", "必须选择来此目的！")
             return false
+          } else if (this.form.cmpId === "") {
+            utils.popoverErrTip("#cmpId", "必须选择工作单位！")
+            return false
           }
           break
         case 1:
-          if (this.form.purpose === "work" && this.form.cmpId === "") {
-            utils.popoverErrTip("#cmpId_lvAddr", "必须选择工作单位！")
-            return false
-          } else if (this.form.purpose === "live" && this.form.lvAddress === "") {
-            utils.popoverErrTip("#cmpId_lvAddr", "必须选择现在居住地址！")
+          if (this.form.lvAddress === "") {
+            utils.popoverErrTip("#lvAddress", "必须选择现在居住地址！")
             return false
           }
           break
@@ -95,9 +90,6 @@ export default {
             return false
           } else if (!utils.IdCardRegexp.test(this.form.idCard)) {
             utils.popoverErrTip("#idCard", "必须填写正确的身份证号码！")
-            return false
-          } else if (this.form.purpose === "work" && this.form.lvAddress === "") {
-            utils.popoverErrTip("#lvAddress", "必须填写现在居住地址！")
             return false
           }
           break

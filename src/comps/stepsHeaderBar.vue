@@ -1,5 +1,5 @@
 <template>
-  <ul class="triangle_step list-unstyled">
+  <ul class="triangle_step list-unstyled" style="overflow-y: hidden">
     <li :class="{cur:active>=index}" v-for="(item,index) in stepArr" :key="index" :style="{width:width}">
       <span>{{item}}</span>
       <div v-if="index<stepArr.length-1" :class="active>=index?'jiaoActive':'jiao'"></div>
