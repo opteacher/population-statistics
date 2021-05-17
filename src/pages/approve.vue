@@ -113,7 +113,7 @@ export default {
           message: "审批通过！人员已更新到实有人口",
           iconClass: "iconfont icon-select-bold fs-50"
         })
-        this.$router.push({path: "/population-statistics/list?type=person"})
+        this.$router.push({path: "/list?type=person"})
       })
     },
     onRejectPsnClick() {

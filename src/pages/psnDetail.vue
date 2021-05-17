@@ -95,7 +95,7 @@ export default {
             message: res.data.message,
             iconClass: "iconfont icon-close-bold fs-50"
           })
-          this.$router.push({path: "/population-statistics/valid"})
+          this.$router.push({path: "/valid"})
         }
       })
       if (!data) {
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     onUpdateClick() {
-      this.$router.push({path: `/population-statistics/input?tab=person&${(new URLSearchParams(this.person)).toString()}`})
+      this.$router.push({path: `/input?tab=person&${(new URLSearchParams(this.person)).toString()}`})
     },
     onDeleteClick() {
       MessageBox({

@@ -43,12 +43,12 @@ export default {
     return  {
       selected: this.$props.select,
       pagesMap: {
-        "admin": "/population-statistics/admin",
-        "input": "/population-statistics/input",
-        "house": "/population-statistics/list?type=house",
-        "company": "/population-statistics/list?type=company",
-        "person": "/population-statistics/list?type=person",
-        "approve": "/population-statistics/approve"
+        "admin": "/admin",
+        "input": "/input",
+        "house": "/list?type=house",
+        "company": "/list?type=company",
+        "person": "/list?type=person",
+        "approve": "/approve"
       }
     }
   },

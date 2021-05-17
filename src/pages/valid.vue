@@ -46,7 +46,7 @@ export default {
   methods: {
     async onDlgBtnClick(foothold) {
       $("#selHouseOrCompany").modal("hide")
-      this.$router.push({path: `/population-statistics/company-detail?${this._cmbParams(foothold)}&uneditable=true`})
+      this.$router.push({path: `/company-detail?${this._cmbParams(foothold)}&uneditable=true`})
     },
     async onConfirmClick() {
       if (this.form.name === "") {

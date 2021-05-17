@@ -104,7 +104,7 @@ export default {
     },
     onCfmSelClick() {
       this.$router.push({
-        path: `/population-statistics/input?tab=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
+        path: `/input?tab=person&${(new URLSearchParams(this.edtEmployee)).toString()}`
       })
     },
     onItemClick(item) {
@@ -112,7 +112,7 @@ export default {
       const scroll = $(".mint-search-list-warp").offset().top
       const itmParams = (new this.URLSearchParams(item)).toString()
       this.$router.push({
-        path: `/population-statistics/${tab}-detail?scroll=${scroll}&${itmParams}`
+        path: `/${tab}-detail?scroll=${scroll}&${itmParams}`
       })
     },
     onSchWdsChanged: utils.onSchWdsChanged

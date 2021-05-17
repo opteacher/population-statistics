@@ -13,5 +13,5 @@ EXPOSE 3000
 
 CMD [ "npm", "run", "start" ]
 
-# sudo docker build -t=population-statistics .
-# sudo docker run --rm -p 80:3000 -d population-statistics
+# docker build -t population-statistics .
+# docker run --rm -p 127.0.0.1:3000:3000 --network server-package_databases -d population-statistics

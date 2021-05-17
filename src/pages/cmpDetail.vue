@@ -125,7 +125,7 @@ export default {
             message: res.data.message,
             iconClass: "iconfont icon-close-bold fs-50"
           })
-          this.$router.push({path: "/population-statistics/valid"})
+          this.$router.push({path: "/valid"})
         }
       })
       if (!data) {
@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     onUpdateClick() {
-      this.$router.push({path: `/population-statistics/input?tab=company&${(new URLSearchParams(this.company)).toString()}`})
+      this.$router.push({path: `/input?tab=company&${(new URLSearchParams(this.company)).toString()}`})
     },
     onDeleteClick() {
       MessageBox({
@@ -164,7 +164,7 @@ export default {
       })
     },
     onPersonClick(psn) {
-      this.$router.push({path: `/population-statistics/person-detail?${this._cmbParams(psn)}&uneditable=${this.uneditable}`})
+      this.$router.push({path: `/person-detail?${this._cmbParams(psn)}&uneditable=${this.uneditable}`})
     },
     onReportSubmit() {
       this.report.showTopPopup = false
