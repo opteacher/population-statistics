@@ -35,6 +35,7 @@
     </div>
     <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" :disabled="batchLoad" style="width: 98vw" type="default" @click.prevent="onBatchLoad">批量导入</mt-button>
     </div>
   </div>
 </template>
@@ -59,6 +60,7 @@ export default {
       URLSearchParams,
       formSubmit: false,
       showSpecial: false,
+      batchLoad: false,
     }
   },
   created() {
@@ -98,6 +100,17 @@ export default {
         isSuspicious: false,
         suspiciousRmks: "",
       }
+    },
+    async onBatchLoad () {
+      this.batchLoad = true
+      const url = "/population-statistics/api/v1/people/batch_load"
+      const resp = await utils.reqBackend(axios.post(url))
+      console.log(resp)
+      Toast({
+        message: "提交成功！",
+        iconClass: "iconfont icon-select-bold fs-50"
+      })
+      this.batchLoad = false
     }
   }
 }

@@ -2,3 +2,4 @@ node_modules
 public/population-statistics/dist
 package-lock.json
 .vscode/
+.DS_Store

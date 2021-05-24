@@ -8,6 +8,7 @@
       ]"/>
       <mt-field label="注册编号" placeholder="请输入注册编号" v-model="form.regId"/>
       <mt-field label="地址" placeholder="请输入所在地址" v-model="form.address"/>
+      <mt-field label="占地面积" placeholder="请输入占地面积" v-model="form.area" type="number"/>
       <mt-field label="法人姓名" placeholder="请输入法人姓名" v-model="form.lglName"/>
       <mt-field label="法人身份证" placeholder="请输入法人身份证" v-model="form.lglId"/>
       <mt-field label="法人手机号" placeholder="请输入法人手机号" type="tel" v-model="form.lglPhone"/>
@@ -69,6 +70,7 @@ export default {
         type: "",
         regId: "",
         address: "",
+        area: 0,
         lglName: "",
         lglId: "",
         lglPhone: "",
