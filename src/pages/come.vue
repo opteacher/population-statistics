@@ -50,6 +50,7 @@ export default {
         nation: "汉族",
         lvAddress: "",
         hhAddress: "",
+        hasLvCard: false,
         purpose: "",
         purposeCn: "",
         cmpId: "",
@@ -67,7 +68,7 @@ export default {
           if (this.form.purpose === "") {
             utils.popoverErrTip("#purpose", "必须选择来此目的！")
             return false
-          } else if (this.form.cmpId === "") {
+          } else if (this.form.purpose === "work" && this.form.cmpId === "") {
             utils.popoverErrTip("#cmpId", "必须选择工作单位！")
             return false
           }

@@ -12,6 +12,7 @@ module.exports = db.defineModel({
   phone:      db.Types.String,
   lvAddress:  db.Types.String,
   hhAddress:  db.Types.String,
+  hasLvCard:  db.Types.Boolean,
   toAddress:  db.Types.String,
   cmpId:      db.Types.Number,
   company:    db.Types.String,

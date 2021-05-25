@@ -11,6 +11,7 @@
       <mt-cell title="手机号" :value="person.phone"/>
       <mt-cell title="户籍地址" :value="person.hhAddress"/>
       <mt-cell title="居住地址" :value="person.lvAddress"/>
+      <mt-cell title="有无居住证" :value="person.hasLvCard ? '有' : '无'"/>
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
       <mt-cell title="特殊标签">
           <mt-badge v-if="person.isLvAlnOld" size="small" type="warning">独居老人</mt-badge>

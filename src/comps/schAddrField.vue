@@ -2,10 +2,14 @@
   <div>
     <mt-field id="lvAddress" label="居住地址" placeholder="居住地址（可关键字检索）"
       v-model="searchAddr.schWords" @input="onSchWdsChanged('searchAddr', ['address'])"
-      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="top"/>
-    <div class="sch-list-panel" :style="`top: ${top}px; bottom: ${bottom}px`">
+      data-container="body" data-toggle="popover" data-trigger="manual" data-placement="top"
+    />
+    <div class="sch-list-panel"
+      :style="`top: ${top}px; bottom: ${bottom}px; ${hasBtmMgn ? 'margin-bottom: 1vh' : ''}`"
+    >
       <mt-cell v-for="house in searchAddr.mchItems" :title="house.address" :key="house.id"
-        is-link @click.native="searchAddr.schWords = house.address"/>
+        is-link @click.native="searchAddr.schWords = house.address"
+      />
     </div>
   </div>
 </template>
@@ -28,6 +32,10 @@ export default {
     "bottom": {
       type: Number,
       default: 0
+    },
+    hasBtmMgn: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

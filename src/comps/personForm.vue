@@ -8,6 +8,9 @@
       <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="form.phone"/>
       <mt-field label="户籍地址" placeholder="请输入户籍地址" v-model="form.hhAddress"/>
       <mt-field label="居住地址" placeholder="请输入居住地址" v-model="form.lvAddress"/>
+      <mt-cell class="mint-field" title="有无居住证">
+        <mt-switch v-model="form.hasLvCard" style="color: grey">{{form.hasLvCard ? "有" : "无"}}</mt-switch>
+      </mt-cell>
       <mt-cell class="mint-field" title="所在单位"
         is-link :to="`/population-statistics/list?type=company&mode=select&${(new URLSearchParams(form)).toString()}`">
         <span style="color: gray">{{form.company || "请选择所在单位"}}</span>
@@ -35,7 +38,7 @@
     </div>
     <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
-      <mt-button class="mlr-1pc mtb-1pc" :disabled="batchLoad" style="width: 98vw" type="default" @click.prevent="onBatchLoad">批量导入</mt-button>
+      <mt-button class="mlr-1pc mtb-1pc" :disabled="batchLoad" style="width: 98vw; display: none" type="default" @click.prevent="onBatchLoad">批量导入</mt-button>
     </div>
   </div>
 </template>
@@ -103,7 +106,10 @@ export default {
     },
     async onBatchLoad () {
       this.batchLoad = true
-      const url = "/population-statistics/api/v1/people/batch_load"
+      const url = "/population-statistics/api/v1/people/batch_load?" + [
+        "name=姓名", "idCard=公民身份号码", "gender=性别", "nation=民族",
+        "hhAddress=户籍地址", "lvAddress=居住地址"
+      ].join("&")
       const resp = await utils.reqBackend(axios.post(url))
       console.log(resp)
       Toast({

@@ -10,6 +10,7 @@
       <mt-button size="small" type="default" @click="onCallReqPsnClick(record.phone)">{{record.phone}}</mt-button>
     </mt-cell>
     <mt-cell title="居住地" :value="record.lvAddress"/>
+    <mt-cell title="有无居住证" :value="record.hasLvCard ? '有' : '无'"/>
     <mt-cell v-if="record.isLeave" title="目的地" :value="record.toAddress"/>
     <mt-cell v-if="record.cmpId" title="单位" :value="record.company"/>
     <mt-cell v-if="record.createdAt" title="申请时间" :value="(new Date(record.createdAt)).toLocaleString()"/>
