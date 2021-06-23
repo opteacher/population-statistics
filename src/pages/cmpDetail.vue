@@ -26,10 +26,10 @@
           <mt-badge v-if="company.sellAlcohol" size="small" type="success">销售酒类</mt-badge>
           <mt-badge v-if="company.isSuspicious" size="small" type="error">存在可疑行径</mt-badge>
         </mt-cell>
-        <mt-cell :title="company.shopName ? '员工' : '居民'" :value="!showPeople ? '展开' : '收起'" is-link @click.native="showPeople = !showPeople"
-          data-target="#peopleList" data-toggle="collapse" aria-expanded="false" aria-controls="peopleList"/>
+        <mt-cell v-if="company.people.length" :title="company.shopName ? '员工' : '居民'" :value="!showPeople ? '展开' : '收起'" is-link @click.native="showPeople = !showPeople"
+          data-target="#peopleList" data-toggle="collapse" aria-expanded="true" aria-controls="peopleList"/>
       </div>
-      <div class="collapse mt-3" id="peopleList">
+      <div v-if="company.people.length" class="collapse show mt-3" id="peopleList">
         <mt-cell v-for="psn in company.people" :key="psn.id" :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"/>
       </div>
     </div>
@@ -65,7 +65,7 @@ export default {
       company: {
         people: []
       },
-      showPeople: false,
+      showPeople: true,
       uneditable: false,
       URLSearchParams,
       report: {
