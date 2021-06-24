@@ -12,9 +12,9 @@
         <mt-cell v-if="company.openHours" title="营业时间" :value="company.openHours"/>
         <mt-cell v-if="company.regId" title="注册编号" :value="company.regId"/>
         <mt-cell title="地址" :value="company.address"/>
-        <mt-cell v-if="company.lglName" title="法人姓名" :value="company.lglName"/>
-        <mt-cell v-if="company.lglId" title="法人身份证" :value="company.lglId"/>
-        <mt-cell v-if="company.lglPhone" title="法人手机号" :value="company.lglPhone"/>
+        <mt-cell v-if="company.lglName" :title="company.shopName ? '法人姓名' : '房东姓名'" :value="company.lglName"/>
+        <mt-cell v-if="company.lglId" :title="company.shopName ? '法人身份证' : '房东身份证'" :value="company.lglId"/>
+        <mt-cell v-if="company.lglPhone" :title="company.shopName ? '法人手机号' : '房东手机号'" :value="company.lglPhone"/>
         <mt-cell v-if="company.hasLiving || company.isAlgStreet || company.hasStore || company.useFire || company.isTopBottom" title="消防标签">
           <mt-badge v-if="company.hasLiving" size="small" type="error">有住人</mt-badge>
           <mt-badge v-if="company.isAlgStreet" size="small" type="success">沿街</mt-badge>
@@ -26,10 +26,9 @@
           <mt-badge v-if="company.sellAlcohol" size="small" type="success">销售酒类</mt-badge>
           <mt-badge v-if="company.isSuspicious" size="small" type="error">存在可疑行径</mt-badge>
         </mt-cell>
-        <mt-cell v-if="company.people.length" :title="company.shopName ? '员工' : '居民'" :value="!showPeople ? '展开' : '收起'" is-link @click.native="showPeople = !showPeople"
-          data-target="#peopleList" data-toggle="collapse" aria-expanded="true" aria-controls="peopleList"/>
+        <mt-cell :title="company.shopName ? '员工' : '居民'" value="添加" is-link @click.native="onAddPerson"/>
       </div>
-      <div v-if="company.people.length" class="collapse show mt-3" id="peopleList">
+      <div v-if="company.people.length" class="mt-3" id="peopleList">
         <mt-cell v-for="psn in company.people" :key="psn.id" :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"/>
       </div>
     </div>
@@ -212,6 +211,11 @@ export default {
         utils.eventBus.$emit("scroll", this.$route.query.scroll)
       }
       this.$router.go(-1)
+    },
+    onAddPerson() {
+      this.$router.push({
+        path: `/input?tab=person&cmpId=${this.company.id}&company=${this.company.shopName}`
+      })
     }
   }
 }

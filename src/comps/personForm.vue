@@ -68,7 +68,7 @@ export default {
   },
   created() {
     this._clearForm()
-    if (this.$route.query.id) {
+    if (this.$route.query.id || this.$route.query.cmpId) {
       this.form = utils.copyPerson(this.$route.query)
     }
   },
