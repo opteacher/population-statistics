@@ -213,9 +213,15 @@ export default {
       this.$router.go(-1)
     },
     onAddPerson() {
-      this.$router.push({
-        path: `/input?tab=person&cmpId=${this.company.id}&company=${this.company.shopName}`
-      })
+      if (this.company.shopName) {
+        this.$router.push({
+          path: `/input?tab=person&cmpId=${this.company.id}&company=${this.company.shopName}`
+        })
+      } else {
+        this.$router.push({
+          path: `/input?tab=person&lvAddress=${this.company.address}`
+        })
+      }
     }
   }
 }

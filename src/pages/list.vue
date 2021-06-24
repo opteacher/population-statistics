@@ -12,14 +12,20 @@
         :options="searchItem.mchItems.map(item => ({
           label: item.shopName,
           value: item.id.toString()
-        }))"/>
-      <mt-cell v-else v-for="item in searchItem.mchItems" :key="item.id"
-        :title="item[toolBox.titles[toolBox.mainIdx].value]"
-        :label="item[toolBox.titles[toolBox.subIdx].value]"
-        is-link @click.native="onItemClick(item)"
-      >
-        <span>详情</span>
-      </mt-cell>
+        }))"
+      />
+      <div v-else>
+        <p class="mb-0 text-center" style="color: #888">
+          {{searchItem.mchItems.length}}条记录
+        </p>
+        <mt-cell v-for="item in searchItem.mchItems" :key="item.id"
+          :title="item[toolBox.titles[toolBox.mainIdx].value]"
+          :label="item[toolBox.titles[toolBox.subIdx].value]"
+          is-link @click.native="onItemClick(item)"
+        >
+          <span>详情</span>
+        </mt-cell>
+      </div>
     </mt-search>
     <div v-if="lsMode === 'select'" class="w-100 fixed-bottom mb-55" style="background-color: white">
       <mt-button class="mlr-1pc mtb-1pc" style="width: 98vw" type="primary" @click="onCfmSelClick">确定</mt-button>
@@ -27,7 +33,7 @@
     <div v-else style="position: absolute; width: 100%; bottom: 55px; padding: 5px 3px; background-color: white">
       <mt-button type="default" style="width: 100%" size="small" @click="toolBox.visible = true">工具箱</mt-button>
       <mt-popup v-model="toolBox.visible" position="left" style="height: 100%; width: 80vw">
-        <div style="position: fixed; width: 100%; top: 0; bottom: 51px">
+        <div style="position: fixed; width: 100%; top: 0; bottom: 97px">
           <mt-cell title="主标题" is-link :value="toolBox.titles[toolBox.mainIdx].title" @click.native="onTitleChanged('main')"/>
           <mt-cell title="副标题" is-link :value="toolBox.titles[toolBox.subIdx].title" @click.native="onTitleChanged('sub')"/>
           <mt-cell v-if="lsType === 'house'" title="只显示有住人房屋">
@@ -38,6 +44,7 @@
           />
         </div>
         <div style="position: fixed; width: 100%; bottom: 0; padding: 5px 3px">
+          <mt-button class="mb-5" type="default" style="width: 100%" @click="onToolBoxExport">导出</mt-button>
           <mt-button type="primary" style="width: 100%" @click="onToolsConfirmed">确定</mt-button>
         </div>
       </mt-popup>
@@ -212,6 +219,9 @@ export default {
           break
       }
       this.toolBox.visible = false
+    },
+    onToolBoxExport() {
+
     }
   }
 }

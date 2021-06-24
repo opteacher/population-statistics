@@ -68,7 +68,7 @@ export default {
   },
   created() {
     this._clearForm()
-    if (this.$route.query.id || this.$route.query.cmpId) {
+    if (this.$route.query.id || this.$route.query.cmpId || this.$route.query.lvAddress) {
       this.form = utils.copyPerson(this.$route.query)
     }
   },
