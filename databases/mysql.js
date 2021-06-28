@@ -140,7 +140,7 @@ class Mysql {
 
     let conds = {}
     if(_.keys(condition).length !== 0) {
-      if (condition.id) {
+      if (condition.id && typeof condition.id === "string") {
         condition.id = parseInt(condition.id)
       }
       conds["where"] = condition
@@ -176,12 +176,18 @@ class Mysql {
             case "!=":
               conds.where[key] = { [Op.ne]: val[1] }
               break
+            case "in":
+              conds.where[key] = { [Op.in]: val[1] }
+              break
           }
         }
       }
     }
     if(options.selCols) {
       conds["attributes"] = options.selCols
+    }
+    if(options.rawQuery) {
+      conds.raw = options.rawQuery
     }
     return model.findAll(conds).catch(err => getErrContent(err))
   }

@@ -2,6 +2,7 @@ const _ = require("lodash")
 const fs = require("fs")
 const Path = require("path")
 const toml = require("toml")
+const qiniu = require("qiniu")
 
 const exp = {
   _serverConfigs: {},
@@ -138,6 +139,35 @@ const exp = {
     } else {
       return sql
     }
+  },
+  async uploadToQiniu(key, readableStream) {
+    const qnCfg = this.readConfig("./configs/qiniu")
+    const mac = new qiniu.auth.digest.Mac(qnCfg.accessKey, qnCfg.secretKey)
+    const putPolicy = new qiniu.rs.PutPolicy({
+      scope: `${qnCfg.bucket}:${key}`
+    })
+    const uploadToken = putPolicy.uploadToken(mac)
+
+    const config = new qiniu.conf.Config()
+    // 空间对应的机房
+    config.zone = qiniu.zone.Zone_z2
+
+    const formUploader = new qiniu.form_up.FormUploader(config)
+    const putExtra = new qiniu.form_up.PutExtra()
+    await new Promise((res, rej) => {
+      formUploader.putStream(uploadToken, key, readableStream, putExtra, (respErr, respBody, respInfo) => {
+        if (respErr) {
+          rej(respErr)
+        }
+        if (respInfo.statusCode == 200) {
+          res(respBody)
+        } else {
+          console.log(respInfo.statusCode)
+          rej(respBody)
+        }
+      })
+    })
+    return `http://cdn.opteacher.top/${key}`
   }
 }
 

@@ -186,8 +186,7 @@ module.exports = {
     return Object.assign(_.cloneDeep(temp), src)
   },
   copyCompany(query) {
-    return {
-      id: parseInt(query.id),
+    let ret =  {
       name: query.name || "",
       shopName: query.shopName || "",
       type: query.type || "",
@@ -208,9 +207,13 @@ module.exports = {
       isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
       suspiciousRmks: query.suspiciousRmks || "",
     }
+    if (query.id) {
+      ret.id = parseInt(query.id)
+    }
+    return ret
   },
   copyPerson(query) {
-    return {
+    let ret =  {
       id: parseInt(query.id),
       name: query.name || "",
       idCard: query.idCard || "",
@@ -229,5 +232,9 @@ module.exports = {
       isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
       suspiciousRmks: query.suspiciousRmks || "",
     }
+    if (query.id) {
+      ret.id = parseInt(query.id)
+    }
+    return ret
   }
 }

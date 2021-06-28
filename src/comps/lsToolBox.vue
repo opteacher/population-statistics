@@ -1,0 +1,237 @@
+<template>
+  <div>
+    <div style="position: fixed; width: 100%; top: 0; bottom: 97px">
+      <div>
+        <mt-cell title="主标题" :value="title.array[title.mainIdx].title"
+          is-link @click.native="onToolBoxSelChanged('title.array', 'title.mainIdx')"
+        />
+        <mt-cell title="副标题" :value="title.array[title.subIdx].title"
+          is-link @click.native="onToolBoxSelChanged('title.array', 'title.subIdx')"
+        />
+        <mt-cell v-if="lsType === 'house'" title="只显示有住人房屋">
+          <mt-switch v-model="house.hasLv"/>
+        </mt-cell>
+        <mt-cell v-if="lsType === 'company'" title="类别" is-link
+          :value="company.type.array[company.type.index]"
+          @click.native="onToolBoxSelChanged('company.type.array', 'company.type.index')"
+        />
+        <mt-cell v-if="lsType === 'person'" title="民族" is-link
+          :value="person.nation.array[person.nation.index]"
+          @click.native="onToolBoxSelChanged('person.nation.array', 'person.nation.index')"
+        />
+        <div v-if="lsType === 'house'">
+          <mt-cell title="批量生成房屋"
+            is-link :value="house.bthGenHss.show ? '收起' : '展开'"
+            @click.native="house.bthGenHss.show = !house.bthGenHss.show"
+            data-toggle="collapse" data-target="#bthGenHss"
+            aria-expanded="false" aria-controls="bthGenHss"
+          />
+          <div class="collapse" id="bthGenHss">
+            <mt-field label="地址前缀" placeholder="请输入地址前缀" v-model="house.bthGenHss.pre"/>
+            <mt-field label="开始室号" placeholder="请输入数字" type="number" v-model="house.bthGenHss.begRoom"/>
+            <mt-field label="结束室号" placeholder="请输入数字" type="number" v-model="house.bthGenHss.endRoom"/>
+            <mt-button type="primary" size="small" class="w-98 mlr-1pc" @click="onBthGenHssClicked">生成</mt-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="position: fixed; width: 100%; bottom: 0; padding: 5px 3px">
+      <mt-button class="mb-5 w-100" type="default" :disabled="lsType !== 'company'" @click="onToolBoxExport">导出</mt-button>
+      <mt-button type="primary" style="width: 100%" @click="onToolsConfirmed">确定</mt-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import utils from "../utils"
+import { Toast } from "mint-ui"
+export default {
+  props: {
+    "lsType": String,
+    "searchItem": Object,
+    "confirmed": Function
+  },
+  data() {
+    return {
+      title: {
+        array: [""],
+        mainIdx: 0,
+        subIdx: 0
+      },
+      house: {
+        hasLv: false,
+        bthGenHss: {
+          show: false,
+          pre: "",
+          begRoom: "",
+          endRoom: ""
+        }
+      },
+      person: {
+        nation: {
+          array: [""],
+          index: 0
+        }
+      },
+      company: {
+        type: {
+          array: [""],
+          index: 0
+        }
+      }
+    }
+  },
+  methods: {
+    refresh() {
+      switch(this.lsType) {
+      case "company":
+        this.title.array = [{
+          title: "执照名", value: "name"
+        }, {
+          title: "招牌名", value: "shopName"
+        }, {
+          title: "类别", value: "type"
+        }, {
+          title: "地址", value: "address"
+        }]
+        this.title.mainIdx = 1
+        this.title.subIdx = 0
+
+        let types = new Set()
+        for (const item of this.searchItem.allItems) {
+          types.add(item.type)
+        }
+        this.company.type.array = ["无"].concat(Array.from(types))
+        this.company.type.index = 0
+        break
+      case "house":
+        this.title.array = [{
+          title: "地址", value: "address"
+        }, {
+          title: "房东", value: "lglName"
+        }, {
+          title: "人数", value: "psnNum"
+        }]
+        this.title.mainIdx = 0
+        this.title.subIdx = 1
+        break
+      case "person":
+        this.title.array = [{
+          title: "姓名", value: "name"
+        }, {
+          title: "身份证", value: "idCard"
+        }, {
+          title: "手机号", value: "phone"
+        }, {
+          title: "居住地址", value: "lvAddress"
+        }, {
+          title: "工作单位", value: "company"
+        }, {
+          title: "居住地址/工作单位", value: "addCmp"
+        }]
+        this.title.mainIdx = 0
+        this.title.subIdx = 5
+
+        let nations = new Set()
+        for (const item of this.searchItem.allItems) {
+          nations.add(item.nation)
+        }
+        this.person.nation.array = ["无"].concat(Array.from(nations))
+        this.person.nation.index = 0
+        break
+      }
+      this.confirmed({
+        mainTitle: this.title.array[this.title.mainIdx].value,
+        subTitle: this.title.array[this.title.subIdx].value
+      })
+    },
+    onToolBoxSelChanged(aryProp, idxProp) {
+      const addOnce = _.get(this, idxProp) + 1
+      if (addOnce >= _.get(this, aryProp).length) {
+        _.set(this, idxProp, 0)
+      } else {
+        _.set(this, idxProp, addOnce)
+      }
+    },
+    onToolsConfirmed() {
+      switch (this.lsType) {
+        case "house":
+          if (this.house.hasLv) {
+            this.searchItem.mchItems = _.filter(
+              this.searchItem.allItems, o => o.psnNum !== 0
+            )
+          } else {
+            this.searchItem.mchItems = this.searchItem.allItems
+          }
+          break
+        case "person":
+          if (this.person.nation.index) {
+            this.searchItem.mchItems = _.filter(
+              this.searchItem.allItems, o => o.nation === this.person.nation.array[this.person.nation.index]
+            )
+          } else {
+            this.searchItem.mchItems = this.searchItem.allItems
+          }
+          break
+        case "company":
+          if (this.company.type.index) {
+            this.searchItem.mchItems = _.filter(
+              this.searchItem.allItems, o => o.type === this.company.type.array[this.company.type.index]
+            )
+          } else {
+            this.searchItem.mchItems = this.searchItem.allItems
+          }
+          break
+      }
+      this.confirmed({
+        mainTitle: this.title.array[this.title.mainIdx].value,
+        subTitle: this.title.array[this.title.subIdx].value
+      })
+    },
+    async onToolBoxExport() {
+      const params = this.searchItem.mchItems.map(item => `cmpIds=${item.id}`).join("&")
+      const url = `/population-statistics/api/v1/companies/export/excel?${params}`
+      const data = await utils.reqBackend(axios.get(url))
+      Toast({
+        message: "导出Excel成功！",
+        iconClass: "iconfont icon-select-bold fs-50"
+      })
+      window.location.href = data
+      this.confirmed()
+    },
+    onBthGenHssClicked() {
+      if (!this.house.bthGenHss.pre.length
+      || !this.house.bthGenHss.begRoom.length
+      || !this.house.bthGenHss.endRoom.length) {
+        MessageBox("错误", "地址前缀、开始室号或结束室号不能为空！")
+        return
+      }
+      const nBegRm = parseInt(this.house.bthGenHss.begRoom)
+      const nEndRm = parseInt(this.house.bthGenHss.endRoom)
+      if (nBegRm > nEndRm) {
+        MessageBox("错误", "开始室号不能大于结束室号！")
+        return
+      }
+      MessageBox.confirm(`确定批量生成：${
+        this.house.bthGenHss.pre
+      }${
+        this.house.bthGenHss.begRoom
+      }~${
+        this.house.bthGenHss.endRoom
+      }室`).then(async action => {
+        if (action !== "confirm") {
+          return
+        }
+        Indicator.open("加载中...")
+        for (let room = nBegRm; room <= nEndRm; ++room) {
+          await axios.post("/population-statistics/mdl/v1/company", utils.copyCompany({
+            address: `${this.house.bthGenHss.pre}${room}室`
+          }))
+        }
+        Indicator.close()
+        this.confirmed()
+      }).catch(e => {})
+    }
+  }
+}
+</script>
