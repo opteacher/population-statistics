@@ -84,6 +84,7 @@ export default {
       })
       this._clearForm()
       this.formSubmit = false
+      this.$router.go(-1)
     },
     _clearForm() {
       this.form = {

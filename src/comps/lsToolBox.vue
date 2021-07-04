@@ -44,7 +44,7 @@
 
 <script>
 import utils from "../utils"
-import { Toast } from "mint-ui"
+import { Toast, MessageBox, Indicator } from "mint-ui"
 export default {
   props: {
     "lsType": String,
@@ -229,6 +229,10 @@ export default {
           }))
         }
         Indicator.close()
+        Toast({
+          message: "批量生成房屋成功！",
+          iconClass: "iconfont icon-select-bold fs-50"
+        })
         this.confirmed()
       }).catch(e => {})
     }
