@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="position: fixed; width: 100%; top: 0; bottom: 97px">
+    <div style="position: fixed; width: 100%; top: 0; bottom: 51px; overflow-y: scroll">
       <div>
         <mt-cell title="主标题" :value="title.array[title.mainIdx].title"
           is-link @click.native="onToolBoxSelChanged('title.array', 'title.mainIdx')"
@@ -33,10 +33,78 @@
             <mt-button type="primary" size="small" class="w-98 mlr-1pc" @click="onBthGenHssClicked">生成</mt-button>
           </div>
         </div>
+        <div v-if="lsType === 'company'">
+          <mt-cell title="导出单位数据"
+            is-link :value="company.exports.show ? '收起' : '展开'"
+            @click.native="company.exports.show = !company.exports.show"
+            data-toggle="collapse" data-target="#cmpExps"
+            aria-expanded="false" aria-controls="cmpExps"
+          />
+          <div class="collapse plr-1pc" id="cmpExps">
+            <mt-button class="mt-5 w-100" type="primary" @click="onToolBoxExport">导出</mt-button>
+          </div>
+        </div>
+        <div v-if="lsType === 'person'">
+          <mt-cell title="导出人员数据"
+            is-link :value="person.exports.show ? '收起' : '展开'"
+            @click.native="person.exports.show = !person.exports.show"
+            data-toggle="collapse" data-target="#psnExps"
+            aria-expanded="false" aria-controls="psnExps"
+          />
+          <div class="collapse plr-1pc" id="psnExps">
+            <p class="mb-0 pl-10" style="color: #888; background-color: #ddd">导出列</p>
+            <mt-cell title="姓名">
+              <mt-switch v-model="person.exports.columns.name">
+                {{person.exports.columns.name ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="身份证">
+              <mt-switch v-model="person.exports.columns.idCard">
+                {{person.exports.columns.idCard ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="性别">
+              <mt-switch v-model="person.exports.columns.gender">
+                {{person.exports.columns.gender ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="民族">
+              <mt-switch v-model="person.exports.columns.nation">
+                {{person.exports.columns.nation ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="手机号">
+              <mt-switch v-model="person.exports.columns.phone">
+                {{person.exports.columns.phone ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="户籍地址">
+              <mt-switch v-model="person.exports.columns.hhAddress">
+                {{person.exports.columns.hhAddress ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="居住地址">
+              <mt-switch v-model="person.exports.columns.lvAddress">
+                {{person.exports.columns.lvAddress ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-cell title="工作单位">
+              <mt-switch v-model="person.exports.columns.company">
+                {{person.exports.columns.company ? "导出" : "不导出"}}
+              </mt-switch>
+            </mt-cell>
+            <p class="mb-0 pl-10" style="color: #888; background-color: #ddd">导出配置</p>
+            <mt-cell title="工作单位覆盖居住地址">
+              <mt-switch v-model="person.exports.cmpCovAdd">
+                {{person.exports.cmpCovAdd ? "是" : "否"}}
+              </mt-switch>
+            </mt-cell>
+            <mt-button class="mt-5 w-100" type="primary" @click="onToolBoxExport">导出</mt-button>
+          </div>
+        </div>
       </div>
     </div>
     <div style="position: fixed; width: 100%; bottom: 0; padding: 5px 3px">
-      <mt-button class="mb-5 w-100" type="default" :disabled="lsType !== 'company'" @click="onToolBoxExport">导出</mt-button>
       <mt-button type="primary" style="width: 100%" @click="onToolsConfirmed">确定</mt-button>
     </div>
   </div>
@@ -71,12 +139,29 @@ export default {
         nation: {
           array: [""],
           index: 0
+        },
+        exports: {
+          show: false,
+          columns: {
+            name: true,
+            idCard: true,
+            gender: true,
+            nation: true,
+            phone: true,
+            hhAddress: true,
+            lvAddress: true,
+            company: true
+          },
+          cmpCovAdd: false
         }
       },
       company: {
         type: {
           array: [""],
           index: 0
+        },
+        exports: {
+          show: false
         }
       }
     }
