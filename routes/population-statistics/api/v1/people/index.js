@@ -1,4 +1,5 @@
 const fs = require("fs")
+const stream = require("stream")
 const ExcelJS = require("exceljs")
 const router = require("koa-router")()
 
@@ -113,6 +114,68 @@ router.post("/batch_load", async ctx => {
 
   ctx.body = {
     data: count
+  }
+})
+
+const colMapper = {
+  name:       "姓名",
+  idCard:     "身份证",
+  gender:     "性别",
+  nation:     "民族",
+  phone:      "手机号",
+  hhAddress:  "户籍地址",
+  lvAddress:  "居住地址",
+  company:    "工作单位"
+}
+
+router.post("/export/excel", async ctx => {
+  const people = await db.select(Person, {
+    id: ["in", ctx.request.body.psnIds.map(sid => parseInt(sid))]
+  }, {
+    selCols: ctx.request.body.columns
+  })
+
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet()
+  worksheet.horizontalCentered = true
+
+  const columns = ctx.request.body.columns.concat(ctx.request.body.addCols)
+  worksheet.columns = columns.map(column => ({
+    key: column,
+    header: colMapper[column] || column
+  }))
+  const header = worksheet.getRow(1)
+  header.height = 20
+
+  for (let i = 0; i < people.length; ++i) {
+    const person = people[i]
+    worksheet.addRow(person, "i")
+    if (i === 0) {
+      const firstRow = worksheet.getRow(2)
+      firstRow.height = 15
+    }
+  }
+  for (let i = 0; i < worksheet.columnCount; ++i) {
+    let maxWidth = 0
+    const column = worksheet.columns[i]
+    for (let j = 0; j < column.values.length; ++j) {
+      if (!column.values[j]) {
+        continue
+      }
+      const colWidth = column.values[j].length
+      if (colWidth > maxWidth) {
+        maxWidth = colWidth
+      }
+    }
+    column.width = maxWidth >= 10 ? maxWidth : 10
+  }
+
+  const xlsxBuffer = await workbook.xlsx.writeBuffer()
+  const bufferStream = new stream.PassThrough()
+  const readableStream = bufferStream.end(xlsxBuffer)
+
+  ctx.body = {
+    data: await tools.uploadToQiniu(`导出人员${Date.now()}.xlsx`, readableStream)
   }
 })
 

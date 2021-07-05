@@ -8,6 +8,7 @@
         <mt-cell title="副标题" :value="title.array[title.subIdx].title"
           is-link @click.native="onToolBoxSelChanged('title.array', 'title.subIdx')"
         />
+        <mt-cell title="排序" is-link :value="sort.array[sort.index].title" @click.native="onSortClicked"/>
         <mt-cell v-if="lsType === 'house'" title="只显示有住人房屋">
           <mt-switch v-model="house.hasLv"/>
         </mt-cell>
@@ -41,7 +42,8 @@
             aria-expanded="false" aria-controls="cmpExps"
           />
           <div class="collapse plr-1pc" id="cmpExps">
-            <mt-button class="mt-5 w-100" type="primary" @click="onToolBoxExport">导出</mt-button>
+            <mt-field label="导出文件名" placeholder="导出单位 + 日期" v-model="company.exports.fileName"/>
+            <mt-button class="mt-5 w-100" type="primary" @click="onCompaniesExport">导出</mt-button>
           </div>
         </div>
         <div v-if="lsType === 'person'">
@@ -93,13 +95,21 @@
                 {{person.exports.columns.company ? "导出" : "不导出"}}
               </mt-switch>
             </mt-cell>
+            <mt-cell v-for="column in person.exports.addCols" :key="column" :title="column">
+              <mt-button size="small" type="danger" @click="onDelColClicked(column)">删除</mt-button>
+            </mt-cell>
+            <mt-field label="自定义列" placeholder="请输入列名" v-model="person.exports.addCol"/>
+            <mt-button class="mb-5 w-100" size="small" type="primary" plain @click="onAddNewColClicked">
+              添加新列
+            </mt-button>
             <p class="mb-0 pl-10" style="color: #888; background-color: #ddd">导出配置</p>
+            <mt-field label="导出文件名" placeholder="导出单位 + 日期" v-model="person.exports.fileName"/>
             <mt-cell title="工作单位覆盖居住地址">
               <mt-switch v-model="person.exports.cmpCovAdd">
                 {{person.exports.cmpCovAdd ? "是" : "否"}}
               </mt-switch>
             </mt-cell>
-            <mt-button class="mt-5 w-100" type="primary" @click="onToolBoxExport">导出</mt-button>
+            <mt-button class="mt-5 w-100" type="primary" plain @click="onPeopleExport">导出</mt-button>
           </div>
         </div>
       </div>
@@ -126,6 +136,12 @@ export default {
         mainIdx: 0,
         subIdx: 0
       },
+      sort: {
+        array: [{
+          title: "无", value: "none"
+        }],
+        index: 0,
+      },
       house: {
         hasLv: false,
         bthGenHss: {
@@ -142,6 +158,7 @@ export default {
         },
         exports: {
           show: false,
+          fileName: "",
           columns: {
             name: true,
             idCard: true,
@@ -152,6 +169,8 @@ export default {
             lvAddress: true,
             company: true
           },
+          addCol: "",
+          addCols: [],
           cmpCovAdd: false
         }
       },
@@ -161,7 +180,8 @@ export default {
           index: 0
         },
         exports: {
-          show: false
+          show: false,
+          fileName: ""
         }
       }
     }
@@ -225,6 +245,11 @@ export default {
         this.person.nation.index = 0
         break
       }
+      this.sort.array = [{
+        title: "无", value: "none"
+      }].concat(this.title.array)
+      this.sort.index = 0
+
       this.confirmed({
         mainTitle: this.title.array[this.title.mainIdx].value,
         subTitle: this.title.array[this.title.subIdx].value
@@ -268,15 +293,26 @@ export default {
           }
           break
       }
+      const sortKey = this.sort.array[this.sort.index].value
+      this.searchItem.mchItems.sort((a, b) => {
+        if (a[sortKey] < b[sortKey]) {
+          return -1
+        } else if (a[sortKey] > b[sortKey]) {
+          return 1
+        }
+        return 0
+      })
       this.confirmed({
         mainTitle: this.title.array[this.title.mainIdx].value,
         subTitle: this.title.array[this.title.subIdx].value
       })
     },
-    async onToolBoxExport() {
-      const params = this.searchItem.mchItems.map(item => `cmpIds=${item.id}`).join("&")
-      const url = `/population-statistics/api/v1/companies/export/excel?${params}`
-      const data = await utils.reqBackend(axios.get(url))
+    async onCompaniesExport() {
+      const url = "/population-statistics/api/v1/companies/export/excel"
+      const data = await utils.reqBackend(axios.post(url, {
+        fileName: this.company.exports.fileName,
+        cmpIds: this.searchItem.mchItems.map(item => item.id)
+      }))
       Toast({
         message: "导出Excel成功！",
         iconClass: "iconfont icon-select-bold fs-50"
@@ -320,6 +356,39 @@ export default {
         })
         this.confirmed()
       }).catch(e => {})
+    },
+    async onPeopleExport() {
+      let columns = []
+      for (const [key, value] of Object.entries(this.person.exports.columns)) {
+        if (value) {
+          columns.push(key)
+        }
+      }
+      const url = "/population-statistics/api/v1/people/export/excel"
+      const data = await utils.reqBackend(axios.post(url, {
+        fileName: this.person.exports.fileName,
+        psnIds: this.searchItem.mchItems.map(item => item.id),
+        columns, addCols: this.person.exports.addCols
+      }))
+      Toast({
+        message: "导出Excel成功！",
+        iconClass: "iconfont icon-select-bold fs-50"
+      })
+      window.location.href = data
+      this.confirmed()
+    },
+    onSortClicked() {
+      this.sort.index = this.sort.index < this.sort.array.length - 1 ? this.sort.index + 1 : 0
+    },
+    onAddNewColClicked() {
+      this.person.exports.addCols.push(this.person.exports.addCol)
+      this.person.exports.addCol = ""
+    },
+    onDelColClicked(column) {
+      // _.pull(this.person.exports.addCols, column)
+      const colIdx = this.person.exports.addCols.indexOf(column)
+      this.person.exports.addCols = this.person.exports.addCols
+        .slice(0, colIdx).concat(this.person.exports.addCols.slice(colIdx + 1))
     }
   }
 }

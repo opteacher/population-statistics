@@ -9,11 +9,11 @@ const { Company, Person } = require(`${pjPath}/models/index`)
 const db = tools.getDatabase()
 const excTmpPath = `${pjPath}/resources/companies_temp.xlsx`
 
-router.get("/export/excel", async ctx => {
-  const cmpIds = ctx.query.cmpIds instanceof Array ?
-    ctx.query.cmpIds.map(cmpId => parseInt(cmpId)) :
-    [parseInt(ctx.query.cmpIds)]
-  const conds = ctx.query.cmpIds ? {id: ["in", cmpIds]} : {shopName: ["!=", ""]}
+router.post("/export/excel", async ctx => {
+  const cmpIds = ctx.request.body.cmpIds instanceof Array ?
+    ctx.request.body.cmpIds.map(cmpId => parseInt(cmpId)) :
+    [parseInt(ctx.request.body.cmpIds)]
+  const conds = ctx.request.body.cmpIds ? {id: ["in", cmpIds]} : {shopName: ["!=", ""]}
   let companies = await db.select(Company, conds, {rawQuery: true})
   for (let i = 0; i < companies.length; ++i) {
     const people = await db.select(Person, {
