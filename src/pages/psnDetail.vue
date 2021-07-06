@@ -13,13 +13,12 @@
       <mt-cell title="居住地址" :value="person.lvAddress"/>
       <mt-cell title="有无居住证" :value="person.hasLvCard ? '有' : '无'"/>
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
-      <mt-cell title="特殊标签">
-          <mt-badge v-if="person.isLvAlnOld" size="small" type="warning">独居老人</mt-badge>
-          <mt-badge v-if="person.isPregWman" size="small" type="success">孕妇</mt-badge>
-          <mt-badge v-if="person.hasMentalIllness" size="small" type="warning">患有心理/精神疾病</mt-badge>
-          <mt-badge v-if="person.isDisability" size="small" type="success">残疾</mt-badge>
-          <mt-badge v-if="person.isSuspicious" size="small" type="error">可疑</mt-badge>
-        </mt-cell>
+      <mt-cell v-if="person.remarks" title="备注" :value="person.remarks"/>
+      <mt-cell title="特殊标签" v-if="person.specTags">
+        <mt-badge v-for="spec in person.specTags.split(',')" :key="spec"
+          size="small" :type="specColrMap[spec]"
+        >{{spec}}</mt-badge>
+      </mt-cell>
     </div>
     <div v-if="uneditable" class="w-100 fixed-bottom mtb-1pc mlr-1pc" style="background-color: white">
       <mt-button class="w-98" type="primary" @click="report.showTopPopup = true">信息有误？提醒管理员</mt-button>
@@ -51,6 +50,7 @@ export default {
     return {
       person: {},
       uneditable: false,
+      specColrMap: utils.specColrMap,
       report: {
         showTopPopup: false,
         slots: [{

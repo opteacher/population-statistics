@@ -12,12 +12,8 @@ module.exports = db.defineModel({
   hasLvCard:  db.Types.Boolean,
   cmpId:      db.Types.Number,
   company:    db.Types.String,
-  isLvAlnOld: db.Types.Boolean,
-  isPregWman: db.Types.Boolean,
-  hasMentalIllness: db.Types.Boolean,
-  isDisability:     db.Types.Boolean,
-  isSuspicious:     db.Types.Boolean,
-  suspiciousRmks:   db.Types.String,
+  specTags:   db.Types.String,
+  remarks:    db.Types.String
 }, {
   router: {
     methods: [

@@ -13,14 +13,9 @@ module.exports = db.defineModel({
   lglPhone:     db.Types.String,
   openHours:    db.Types.String,// 00:00-24:59
   isClosed:     db.Types.Boolean,
-  hasLiving:    db.Types.Boolean,
-  isAlgStreet:  db.Types.Boolean,
-  hasStore:     db.Types.Boolean,
-  useFire:      db.Types.Boolean,
-  isTopBottom:  db.Types.Boolean,// 是否室高层或地下室
-  sellAlcohol:  db.Types.Boolean,
-  isSuspicious: db.Types.Boolean,
-  suspiciousRmks: db.Types.String,
+  fireFgtTags:  db.Types.String,
+  pbcSecuTags:  db.Types.String,
+  remarks:      db.Types.String
 }, {
   router: {
     methods: [

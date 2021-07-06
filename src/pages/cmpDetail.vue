@@ -15,16 +15,16 @@
         <mt-cell v-if="company.lglName" :title="company.shopName ? '法人姓名' : '房东姓名'" :value="company.lglName"/>
         <mt-cell v-if="company.lglId" :title="company.shopName ? '法人身份证' : '房东身份证'" :value="company.lglId"/>
         <mt-cell v-if="company.lglPhone" :title="company.shopName ? '法人手机号' : '房东手机号'" :value="company.lglPhone"/>
-        <mt-cell v-if="company.hasLiving || company.isAlgStreet || company.hasStore || company.useFire || company.isTopBottom" title="消防标签">
-          <mt-badge v-if="company.hasLiving" size="small" type="error">有住人</mt-badge>
-          <mt-badge v-if="company.isAlgStreet" size="small" type="success">沿街</mt-badge>
-          <mt-badge v-if="company.hasStore" size="small" type="warning">有仓库</mt-badge>
-          <mt-badge v-if="company.useFire" size="small" type="error">用明火</mt-badge>
-          <mt-badge v-if="company.isTopBottom" size="small" type="success">高层/地下室</mt-badge>
+        <mt-cell v-if="company.remarks" title="备注" :value="company.remarks"/>
+        <mt-cell title="消防标签" v-if="company.fireFgtTags">
+          <mt-badge v-for="fireFgt in company.fireFgtTags.split(',')" :key="fireFgt"
+            size="small" :type="fireFgtColrMap[fireFgt]"
+          >{{fireFgt}}</mt-badge>
         </mt-cell>
-        <mt-cell v-if="company.sellAlcohol || company.isSuspicious" title="治安标签">
-          <mt-badge v-if="company.sellAlcohol" size="small" type="success">销售酒类</mt-badge>
-          <mt-badge v-if="company.isSuspicious" size="small" type="error">存在可疑行径</mt-badge>
+        <mt-cell title="治安标签" v-if="company.pbcSecuTags">
+          <mt-badge v-for="pbcSec in company.pbcSecuTags.split(',')" :key="pbcSec"
+            size="small" :type="pbcSecuColrMap[pbcSec]"
+          >{{pbcSec}}</mt-badge>
         </mt-cell>
         <mt-cell :title="company.shopName ? '员工' : '居民'" value="添加" is-link @click.native="onAddPerson"/>
       </div>
@@ -61,6 +61,8 @@ export default {
   },
   data() {
     return {
+      fireFgtColrMap: utils.fireFgtColrMap,
+      pbcSecuColrMap: utils.pbcSecuColrMap,
       company: {
         people: []
       },

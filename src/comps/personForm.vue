@@ -15,26 +15,36 @@
         is-link :to="`/population-statistics/list?type=company&mode=select&${(new URLSearchParams(form)).toString()}`">
         <span style="color: gray">{{form.company || "请选择所在单位"}}</span>
       </mt-cell>
+      <mt-field label="备注" placeholder="请输入备注" type="textarea" rows="4" v-model="form.remarks"/>
       <mt-cell title="特殊" :value="!showSpecial ? '展开' : '收起'" is-link @click.native="showSpecial = !showSpecial"
         data-target="#specialList" data-toggle="collapse" aria-expanded="false" aria-controls="specialList"/>
     </div>
     <div class="collapse mt-3" id="specialList">
       <mt-cell title="独居老人" class="mint-field">
-        <mt-switch v-model="form.isLvAlnOld" style="color: grey">{{form.isLvAlnOld ? "是" : "否"}}</mt-switch>
+        <mt-switch style="color: grey" v-model="form.specTagsMap['独居老人']">
+          {{form.specTagsMap['独居老人'] ? "是" : "否"}}
+        </mt-switch>
       </mt-cell>
       <mt-cell title="孕妇" class="mint-field">
-        <mt-switch v-model="form.isPregWman" style="color: grey">{{form.isPregWman ? "是" : "否"}}</mt-switch>
+        <mt-switch style="color: grey" v-model="form.specTagsMap['孕妇']">
+          {{form.specTagsMap['孕妇'] ? "是" : "否"}}
+        </mt-switch>
       </mt-cell>
-      <mt-cell title="心理精神疾病患者" class="mint-field">
-        <mt-switch v-model="form.hasMentalIllness" style="color: grey">{{form.hasMentalIllness ? "有" : "无"}}</mt-switch>
+      <mt-cell title="患精神疾病" class="mint-field">
+        <mt-switch style="color: grey" v-model="form.specTagsMap['患精神疾病']">
+          {{form.specTagsMap['患精神疾病'] ? "是" : "否"}}
+        </mt-switch>
       </mt-cell>
-      <mt-cell title="残疾" class="mint-field">
-        <mt-switch v-model="form.isDisability" style="color: grey">{{form.isDisability ? "是" : "否"}}</mt-switch>
+      <mt-cell title="生理残疾" class="mint-field">
+        <mt-switch style="color: grey" v-model="form.specTagsMap['生理残疾人']">
+          {{form.specTagsMap['生理残疾人'] ? "是" : "否"}}
+        </mt-switch>
       </mt-cell>
       <mt-cell title="可疑" class="mint-field">
-        <mt-switch v-model="form.isSuspicious" style="color: grey">{{form.isSuspicious ? "是" : "否"}}</mt-switch>
+        <mt-switch style="color: grey" v-model="form.specTagsMap['行径可疑']">
+          {{form.specTagsMap['行径可疑'] ? "是" : "否"}}
+        </mt-switch>
       </mt-cell>
-      <mt-field label="可疑行为描述" placeholder="请输入描述" v-model="form.suspiciousRmks"/>
     </div>
     <div class="w-100">
       <mt-button class="mlr-1pc mtb-1pc" :disabled="formSubmit" type="primary" style="width: 98vw" @click.prevent="onSubmitClick">提交</mt-button>
@@ -60,6 +70,7 @@ export default {
   data() {
     return {
       form: {},
+      specTags: {},
       URLSearchParams,
       formSubmit: false,
       showSpecial: false,
@@ -67,14 +78,18 @@ export default {
     }
   },
   created() {
-    this._clearForm()
-    if (this.$route.query.id || this.$route.query.cmpId || this.$route.query.lvAddress) {
-      this.form = utils.copyPerson(this.$route.query)
-    }
+    this.form = utils.copyPerson(this.$route.query || {})
   },
   methods: {
     async onSubmitClick() {
       this.formSubmit = true
+      let specTagsSet = []
+      for (const [key, value] of Object.entries(this.form.specTagsMap)) {
+        if (value) {
+          specTagsSet.push(key)
+        }
+      }
+      this.form.specTags = specTagsSet.join(",")
       await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/person/${this.form.id}`, this.form) :
         axios.post("/population-statistics/mdl/v1/person", this.form))
@@ -85,25 +100,6 @@ export default {
       this._clearForm()
       this.formSubmit = false
       this.$router.go(-1)
-    },
-    _clearForm() {
-      this.form = {
-        name: "",
-        idCard: "",
-        gender: "男",
-        nation: "汉族",
-        phone: "",
-        hhAddress: "",
-        lvAddress: "",
-        cmpId: -1,
-        company: "",
-        isLvAlnOld: false,
-        isPregWman: false,
-        hasMentalIllness: false,
-        isDisability: false,
-        isSuspicious: false,
-        suspiciousRmks: "",
-      }
     },
     async onBatchLoad () {
       this.batchLoad = true

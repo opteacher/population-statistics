@@ -198,23 +198,30 @@ module.exports = {
       lglPhone: query.lglPhone || "",
       openHours: query.openHours || "",
       isClosed: query.isClosed ? JSON.parse(query.isClosed) : false,
-      hasLiving: query.hasLiving ? JSON.parse(query.hasLiving) : false,
-      isAlgStreet: query.isAlgStreet ? JSON.parse(query.isAlgStreet) : false,
-      hasStore: query.hasStore ? JSON.parse(query.hasStore) : false,
-      useFire: query.useFire ? JSON.parse(query.useFire) : false,
-      isTopBottom: query.isTopBottom ? JSON.parse(query.isTopBottom) : false,
-      sellAlcohol: query.sellAlcohol ? JSON.parse(query.sellAlcohol) : false,
-      isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
-      suspiciousRmks: query.suspiciousRmks || "",
+      fireFgtTags: query.fireFgtTags || "",
+      pbcSecuTags: query.pbcSecuTags || "",
+      remarks: query.remarks || ""
     }
     if (query.id) {
       ret.id = parseInt(query.id)
+    }
+    const fireFgtTagsSet = ret.fireFgtTags.split(",")
+    ret.fireFgtTagsMap = {
+      "店住人": fireFgtTagsSet.includes("店住人"),
+      "沿街": fireFgtTagsSet.includes("沿街"),
+      "有仓库": fireFgtTagsSet.includes("有仓库"),
+      "用明火": fireFgtTagsSet.includes("用明火"),
+      "高层/地下室": fireFgtTagsSet.includes("高层/地下室"),
+    }
+    const pbcSecuTagsSet = ret.pbcSecuTags.split(",")
+    ret.pbcSecuTagsMap = {
+      "销售酒类": pbcSecuTagsSet.includes("销售酒类"),
+      "可疑行径": pbcSecuTagsSet.includes("可疑行径"),
     }
     return ret
   },
   copyPerson(query) {
     let ret =  {
-      id: parseInt(query.id),
       name: query.name || "",
       idCard: query.idCard || "",
       gender: query.gender || "",
@@ -225,16 +232,38 @@ module.exports = {
       hasLvCard:  query.hasLvCard ? JSON.parse(query.hasLvCard) : false,
       cmpId: query.cmpId ? parseInt(query.cmpId) : -1,
       company: query.company || "",
-      isLvAlnOld: query.isLvAlnOld ? JSON.parse(query.isLvAlnOld) : false,
-      isPregWman: query.isPregWman ? JSON.parse(query.isPregWman) : false,
-      hasMentalIllness: query.hasMentalIllness ? JSON.parse(query.hasMentalIllness) : false,
-      isDisability: query.isDisability ? JSON.parse(query.isDisability) : false,
-      isSuspicious: query.isSuspicious ? JSON.parse(query.isSuspicious) : false,
-      suspiciousRmks: query.suspiciousRmks || "",
+      specTags: query.specTags || "",
+      remarks: query.remarks || ""
     }
     if (query.id) {
       ret.id = parseInt(query.id)
     }
+    const specTagsSet = ret.specTags.split(",")
+    ret.specTagsMap = {
+      "独居老人": specTagsSet.includes("独居老人"),
+      "孕妇": specTagsSet.includes("孕妇"),
+      "患精神疾病": specTagsSet.includes("患精神疾病"),
+      "生理残疾人": specTagsSet.includes("生理残疾人"),
+      "行径可疑": specTagsSet.includes("行径可疑"),
+    }
     return ret
+  },
+  fireFgtColrMap: {
+    "店住人": "error",
+    "沿街": "success",
+    "有仓库": "warning",
+    "用明火": "error",
+    "高层/地下室": "success",
+  },
+  pbcSecuColrMap: {
+    "销售酒类": "warning",
+    "存在可疑行径": "error",
+  },
+  specColrMap: {
+    "独居老人": "warning",
+    "孕妇": "success",
+    "患精神疾病": "warning",
+    "生理残疾人": "success",
+    "行径可疑": "error",
   }
 }

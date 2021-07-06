@@ -20,6 +20,9 @@
           :value="person.nation.array[person.nation.index]"
           @click.native="onToolBoxSelChanged('person.nation.array', 'person.nation.index')"
         />
+        <mt-cell v-if="lsType === 'person'" title="有居住证">
+          <mt-switch v-model="person.hasLvCard">{{person.hasLvCard ? "有" : "不筛选"}}</mt-switch>
+        </mt-cell>
         <div v-if="lsType === 'house'">
           <mt-cell title="批量生成房屋"
             is-link :value="house.bthGenHss.show ? '收起' : '展开'"
@@ -156,6 +159,7 @@ export default {
           array: [""],
           index: 0
         },
+        hasLvCard: false,
         exports: {
           show: false,
           fileName: "",
@@ -302,6 +306,9 @@ export default {
         }
         return 0
       })
+      if (this.person.hasLvCard) {
+        this.searchItem.mchItems = this.searchItem.mchItems.filter(item => item.hasLvCard)
+      }
       this.confirmed({
         mainTitle: this.title.array[this.title.mainIdx].value,
         subTitle: this.title.array[this.title.subIdx].value
