@@ -106,9 +106,7 @@ export default {
       this.times.push(`${hour}:00`)
       this.times.push(`${hour}:30`)
     }
-    if (this.$route.query.id) {
-      this.form = utils.copyCompany(this.$route.query)
-    }
+    this.form = utils.copyCompany(this.$route.query || {})
   },
   methods: {
     async onSubmitClick() {

@@ -107,6 +107,7 @@ export default {
     _cmbParams(foothold) {
       return (new URLSearchParams(Object.assign(foothold, {
         submit: this.form.name,
+        sbtIdCard: this.form.idCard,
         sbtPhone: this.form.phone
       }))).toString()
     }

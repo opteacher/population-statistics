@@ -15,21 +15,27 @@
         <mt-cell v-if="company.lglName" :title="company.shopName ? '法人姓名' : '房东姓名'" :value="company.lglName"/>
         <mt-cell v-if="company.lglId" :title="company.shopName ? '法人身份证' : '房东身份证'" :value="company.lglId"/>
         <mt-cell v-if="company.lglPhone" :title="company.shopName ? '法人手机号' : '房东手机号'" :value="company.lglPhone"/>
-        <mt-cell v-if="company.remarks" title="备注" :value="company.remarks"/>
+        <mt-field v-if="company.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="4" v-model="company.remarks"/>
         <mt-cell title="消防标签" v-if="company.fireFgtTags">
           <mt-badge v-for="fireFgt in company.fireFgtTags.split(',')" :key="fireFgt"
-            size="small" :type="fireFgtColrMap[fireFgt]"
+            class="mr-1pc" size="small" :type="fireFgtColrMap[fireFgt]"
           >{{fireFgt}}</mt-badge>
         </mt-cell>
         <mt-cell title="治安标签" v-if="company.pbcSecuTags">
           <mt-badge v-for="pbcSec in company.pbcSecuTags.split(',')" :key="pbcSec"
-            size="small" :type="pbcSecuColrMap[pbcSec]"
+            class="mr-1pc" size="small" :type="pbcSecuColrMap[pbcSec]"
           >{{pbcSec}}</mt-badge>
         </mt-cell>
-        <mt-cell :title="company.shopName ? '员工' : '居民'" value="添加" is-link @click.native="onAddPerson"/>
+        <mt-cell v-if="!uneditable" :title="company.shopName ? '员工' : '居民'" value="添加" is-link @click.native="onAddPerson"/>
+        <mt-cell v-else :title="company.shopName ? '员工' : '居民'"/>
       </div>
-      <div v-if="company.people.length" class="mt-3" id="peopleList">
-        <mt-cell v-for="psn in company.people" :key="psn.id" :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"/>
+      <div v-if="company.people.length" class="mt-3">
+        <template v-for="psn in company.people">
+          <mt-cell :key="psn.id" v-if="psn.idCard === $route.query.sbtIdCard"
+            :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"
+          />
+          <mt-cell :key="psn.id" v-else :title="psn.name"/>
+        </template>
       </div>
     </div>
     <div v-if="uneditable" class="w-100 fixed-bottom mtb-5 mlr-1pc white-bg-color">
@@ -104,10 +110,10 @@ export default {
     let url = ""
     if (this.$route.query.shopName) {
       url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
-      this.report.slots[0].values = ["人员信息", "单位注册名称", "店名称", "注册编号", "地址", "法人", "法人手机号"]
+      this.report.slots[0].values = ["人员", "单位注册名称", "店名称", "注册编号", "地址", "法人", "法人手机号"]
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
-      this.report.slots[0].values = ["人员信息", "地址"]
+      this.report.slots[0].values = ["人员", "地址"]
     }
     this.company = Object.assign(utils.copyCompany(this.$route.query), {
       people: await utils.reqBackend(axios.get(url))
@@ -135,7 +141,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (to.path !== "/population-statistics/person-detail") {
+    if (to.path !== "/person-detail") {
       cookies.clear("personTkn")
     }
     next()
