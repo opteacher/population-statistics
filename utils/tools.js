@@ -111,7 +111,16 @@ const exp = {
   },
   fmtQuerySQL(sql, query, symbol, options) {
     if (!options) {
-      options = {addWhere: true}
+      options = {
+        addWhere: true,
+        tags: []
+      }
+    }
+    if (options.addWhere == undefined) {
+      options.addWhere = true
+    }
+    if (!options.tags) {
+      options.tags = []
     }
     let conds = []
     switch (query.scope) {
@@ -126,8 +135,20 @@ const exp = {
         break
     }
     delete query.scope
-    for (let key in query) {
-      let value = query[key]
+    for (const tag of options.tags) {
+      if (!query[tag]) {
+        continue
+      }
+      let tagsSet = query[tag]
+      if (typeof tagsSet === "string") {
+        tagsSet = [tagsSet]
+      }
+      for (const tagVal of tagsSet) {
+        conds.push(`\`${symbol}\`.\`${tag}\` LIKE '%${tagVal}%'`)
+      }
+      delete query[tag]
+    }
+    for (let [key, value] of Object.entries(query)) {
       let valLowCs = value.toUpperCase()
       if (isNaN(parseFloat(value)) && valLowCs !== "TRUE" && valLowCs !== "FALSE" && valLowCs !== "NULL") {
         value = `'${value}'`

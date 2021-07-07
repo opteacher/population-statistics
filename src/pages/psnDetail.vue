@@ -13,7 +13,7 @@
       <mt-cell title="居住地址" :value="person.lvAddress"/>
       <mt-cell title="有无居住证" :value="person.hasLvCard ? '有' : '无'"/>
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
-      <mt-cell v-if="person.remarks && !uneditable" title="备注" :value="person.remarks"/>
+      <mt-field v-if="person.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="1" v-model="person.remarks"/>
       <mt-cell title="特殊标签" v-if="person.specTags">
         <mt-badge v-for="spec in person.specTags.split(',')" :key="spec"
           class="mr-1pc" size="small" :type="specColrMap[spec]"

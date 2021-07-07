@@ -9,7 +9,9 @@ const db = tools.getDatabase()
 
 router.get("/total_count", async ctx => {
   ctx.body = {
-    data: (await db.exec(tools.fmtQuerySQL(sqlCfg.selPersonNum, ctx.query, "person")))[0]
+    data: (await db.exec(tools.fmtQuerySQL(sqlCfg.selPersonNum, ctx.query, "person", {
+      tags: ["specTags"]
+    })))[0]
   }
 })
 

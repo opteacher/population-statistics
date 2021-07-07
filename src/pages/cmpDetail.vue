@@ -15,7 +15,7 @@
         <mt-cell v-if="company.lglName" :title="company.shopName ? '法人姓名' : '房东姓名'" :value="company.lglName"/>
         <mt-cell v-if="company.lglId" :title="company.shopName ? '法人身份证' : '房东身份证'" :value="company.lglId"/>
         <mt-cell v-if="company.lglPhone" :title="company.shopName ? '法人手机号' : '房东手机号'" :value="company.lglPhone"/>
-        <mt-field v-if="company.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="4" v-model="company.remarks"/>
+        <mt-field v-if="company.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="1" v-model="company.remarks"/>
         <mt-cell title="消防标签" v-if="company.fireFgtTags">
           <mt-badge v-for="fireFgt in company.fireFgtTags.split(',')" :key="fireFgt"
             class="mr-1pc" size="small" :type="fireFgtColrMap[fireFgt]"
@@ -29,13 +29,19 @@
         <mt-cell v-if="!uneditable" :title="company.shopName ? '员工' : '居民'" value="添加" is-link @click.native="onAddPerson"/>
         <mt-cell v-else :title="company.shopName ? '员工' : '居民'"/>
       </div>
-      <div v-if="company.people.length" class="mt-3">
+      <div v-if="uneditable && company.people.length" class="mt-3">
         <template v-for="psn in company.people">
           <mt-cell :key="psn.id" v-if="psn.idCard === $route.query.sbtIdCard"
             :title="psn.name" value="详情" is-link @click.native="onPersonClick(psn)"
           />
           <mt-cell :key="psn.id" v-else :title="psn.name"/>
         </template>
+      </div>
+      <div v-else-if="company.people.length" class="mt-3">
+        <mt-cell v-for="psn in company.people" :key="psn.id"
+          :title="psn.name" value="详情"
+          is-link @click.native="onPersonClick(psn)"
+        />
       </div>
     </div>
     <div v-if="uneditable" class="w-100 fixed-bottom mtb-5 mlr-1pc white-bg-color">

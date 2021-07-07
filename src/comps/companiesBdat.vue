@@ -44,11 +44,11 @@ export default {
       axios.get(url + "?scope=year"),
       axios.get(url + "?isClosed=true"),
       axios.get(url + "/groupby/type"),
-      axios.get(url + "?hasLiving=true"),
-      axios.get(url + "?isAlgStreet=true"),
-      axios.get(url + "?hasStore=true"),
-      axios.get(url + "?useFire=true"),
-      axios.get(url + "?isTopBottom=true"),
+      axios.get(url + "?fireFgtTags=店住人"),
+      axios.get(url + "?fireFgtTags=沿街"),
+      axios.get(url + "?fireFgtTags=有仓库"),
+      axios.get(url + "?fireFgtTags=用明火"),
+      axios.get(url + "?fireFgtTags=高层/地下室"),
       axios.get(url + "?name="),
       axios.get(url + "?type="),
       axios.get(url + "?openHours="),
@@ -59,8 +59,8 @@ export default {
       axios.get(url + "?lglPhone="),
       axios.get("/population-statistics/api/v1/bdata/people/total_count/groupby/company"),
       axios.get(url + "/open/night"),
-      axios.get(url + "?sellAlcohol=true"),
-      axios.get(url + "?isSuspicious=true"),
+      axios.get(url + "?pbcSecuTags=销售酒类"),
+      axios.get(url + "?pbcSecuTags=可疑行径"),
     ]
     const data = await utils.reqBackend(pmss)
     this.totalNumber = data[0][0].cmpNum
