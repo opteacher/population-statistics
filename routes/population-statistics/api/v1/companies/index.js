@@ -1,4 +1,5 @@
 const fs = require("fs")
+const _ = require("lodash")
 const stream = require("stream")
 const ExcelJS = require("exceljs")
 const router = require("koa-router")()
@@ -10,16 +11,28 @@ const db = tools.getDatabase()
 const excTmpPath = `${pjPath}/resources/companies_temp.xlsx`
 
 router.post("/export/excel", async ctx => {
-  const cmpIds = ctx.request.body.cmpIds instanceof Array ?
-    ctx.request.body.cmpIds.map(cmpId => parseInt(cmpId)) :
-    [parseInt(ctx.request.body.cmpIds)]
-  const conds = ctx.request.body.cmpIds ? {id: ["in", cmpIds]} : {shopName: ["!=", ""]}
+  const reqBody = ctx.request.body
+  const cmpIds = reqBody.cmpIds instanceof Array ?
+  reqBody.cmpIds.map(cmpId => parseInt(cmpId)) : [parseInt(reqBody.cmpIds)]
+  let conds = {}
+  if (reqBody.cmpIds) {
+    conds.id = ["in", cmpIds]
+  } else if (!reqBody.ctnHouses) {
+    conds.shopName = ["!=", ""]
+  }
   let companies = await db.select(Company, conds, {rawQuery: true})
+  let houses = {}
   for (let i = 0; i < companies.length; ++i) {
-    const people = await db.select(Person, {
-      cmpId: companies[i].id
-    })
-    companies[i].people = people
+    if (companies[i].shopName === "") {
+      houses[i] = companies[i].address
+    } else {
+      companies[i].people = await db.select(Person, {
+        cmpId: companies[i].id
+      })
+    }
+  }
+  for (const [hid, lvAddress] of Object.entries(houses)) {
+    companies[hid].people = await db.select(Person, {lvAddress})
   }
 
   const workbook = new ExcelJS.Workbook()

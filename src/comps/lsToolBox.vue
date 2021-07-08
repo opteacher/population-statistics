@@ -46,6 +46,9 @@
           />
           <div class="collapse plr-1pc" id="cmpExps">
             <mt-field label="导出文件名" placeholder="导出单位 + 日期" v-model="company.exports.fileName"/>
+            <mt-cell title="包含房屋">
+              <mt-switch v-model="company.exports.ctnHouses">{{company.exports.ctnHouses ? "包含" : "不包含"}}</mt-switch>
+            </mt-cell>
             <mt-button class="mt-5 w-100" type="primary" @click="onCompaniesExport">导出</mt-button>
           </div>
         </div>
@@ -185,7 +188,8 @@ export default {
         },
         exports: {
           show: false,
-          fileName: ""
+          fileName: "",
+          ctnHouses: false
         }
       }
     }
@@ -316,10 +320,14 @@ export default {
     },
     async onCompaniesExport() {
       const url = "/population-statistics/api/v1/companies/export/excel"
-      const data = await utils.reqBackend(axios.post(url, {
+      let reqBody = {
         fileName: this.company.exports.fileName,
-        cmpIds: this.searchItem.mchItems.map(item => item.id)
-      }))
+        ctnHouses: this.company.exports.ctnHouses,
+      }
+      if (this.searchItem.mchItems.length !== this.searchItem.allItems.length) {
+        reqBody.cmpIds = this.searchItem.mchItems.map(item => item.id)
+      }
+      const data = await utils.reqBackend(axios.post(url, reqBody))
       Toast({
         message: "导出Excel成功！",
         iconClass: "iconfont icon-select-bold fs-50"
