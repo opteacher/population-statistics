@@ -30,14 +30,22 @@
       :src="images[viewIdx].url"
       style="width: 100%; height: auto"
     />
-    <div style="position: fixed; bottom: 10px; left: 10px; right: 10px">
-      <mt-button class="w-100" type="danger" @click="onDelImgClicked">
+    <div style="position: fixed; bottom: 10px; left: 0px; right: 0px">
+      <mt-button class="bottom-half-btn" type="primary" @click="onDnldClicked">
+        <svg
+          slot="icon" class="icon"
+          aria-hidden="true"
+        >
+          <use xlink:href="#icon-download"/>
+        </svg>下载
+      </mt-button>
+      <mt-button class="bottom-half-btn" type="danger" @click="onDelImgClicked">
         <svg
           slot="icon" class="icon"
           aria-hidden="true"
         >
           <use xlink:href="#icon-ashbin"/>
-        </svg>
+        </svg>删除
       </mt-button>
     </div>
   </mt-popup>
@@ -133,6 +141,9 @@ export default {
           this.viewIdx = -1
         }
       }).catch(() => {})
+    },
+    onDnldClicked () {
+      window.location.href = this.images[this.viewIdx].url
     }
   }
 }

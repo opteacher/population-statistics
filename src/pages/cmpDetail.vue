@@ -150,7 +150,6 @@ export default {
     this.company = Object.assign(company, {
       people: await utils.reqBackend(axios.get(url))
     })
-    console.log(this.company)
   },
   async mounted() {
     if (this.uneditable) {

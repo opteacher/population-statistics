@@ -30,7 +30,6 @@ Vue.router.beforeEach(async (to, _from, next) => {
         path: '/login',
         query: {
           redirect: to.fullPath,
-          error,
           mode: 'admin'
         }
       })

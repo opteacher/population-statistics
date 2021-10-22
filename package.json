@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "build": "webpack -p",
+    "build": "webpack --mode production",
     "watch": "webpack --no-devtool --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

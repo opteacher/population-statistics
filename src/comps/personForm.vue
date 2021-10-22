@@ -118,7 +118,6 @@ export default {
         "hhAddress=户籍地址", "lvAddress=居住地址"
       ].join("&")
       const resp = await utils.reqBackend(axios.post(url))
-      console.log(resp)
       Toast({
         message: "提交成功！",
         iconClass: "iconfont icon-select-bold fs-50"
