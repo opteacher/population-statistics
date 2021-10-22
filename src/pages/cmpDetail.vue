@@ -6,8 +6,20 @@
     </mt-header>
     <div class="scroll-panel" :style="`top: 40px; bottom: ${uneditable ? '50' : '101'}px`">
       <div>
+        <mt-swipe v-if="company.picURLs" :auto="0" style="height: 200px">
+          <mt-swipe-item v-for="picURL in company.picURLs" :key="picURL">
+            <img :src="picURL" style="width: 100%; height: 200px"/>
+          </mt-swipe-item>
+        </mt-swipe>
+        <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"
+          :is-link="company.lcnsURL"
+          data-target="#cmpLicense" data-toggle="collapse"
+          aria-expanded="false" aria-controls="cmpLicense"
+        />
+        <div v-if="company.lcnsURL" class="collapse" id="cmpLicense">
+          <img :src="company.lcnsURL" style="width: 100%; height: auto"/>
+        </div>
         <mt-cell v-if="company.name" title="单位注册名称" :value="company.name"/>
-        <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"/>
         <mt-cell v-if="company.type" title="类型" :value="company.type"/>
         <mt-cell v-if="company.openHours" title="营业时间" :value="company.openHours"/>
         <mt-cell v-if="company.regId" title="注册编号" :value="company.regId"/>
@@ -61,21 +73,23 @@
 </template>
 
 <script>
-import btmNaviBar from "../comps/btmNaviBar"
-import { MessageBox, Toast } from "mint-ui"
-import utils from "../utils"
-import "url"
-import cookies from "../cookies"
+import btmNaviBar from '../comps/btmNaviBar'
+import { MessageBox, Toast } from 'mint-ui'
+import utils from '../utils'
+import 'url'
+import cookies from '../cookies'
 
 export default {
   components: {
-    "btm-navi-bar": btmNaviBar
+    'btm-navi-bar': btmNaviBar
   },
   data() {
     return {
       fireFgtColrMap: utils.fireFgtColrMap,
       pbcSecuColrMap: utils.pbcSecuColrMap,
       company: {
+        lcnsURL: '',
+        picURLs: [],
         people: []
       },
       showPeople: true,
@@ -86,23 +100,23 @@ export default {
         slots: [{
           flex: 1,
           values: [],
-          textAlign: "right"
+          textAlign: 'right'
         }, {
           divider: true,
-          content: "-"
+          content: '-'
         }, {
           flex: 1,
-          values: ["变更", "错误", "缺失"],
-          textAlign: "left"
+          values: ['变更', '错误', '缺失'],
+          textAlign: 'left'
         }],
         form: {
-          type: "",
+          type: '',
           relId: -1,
-          name: "",
-          props: "",
-          desc: "",
-          submit: "",
-          sbtPhone: "",
+          name: '',
+          props: '',
+          desc: '',
+          submit: '',
+          sbtPhone: '',
           solved: false
         }
       },
@@ -113,32 +127,44 @@ export default {
     if (this.$route.query.uneditable) {
       this.uneditable = JSON.parse(this.$route.query.uneditable)
     }
-    let url = ""
+    let url = ''
     if (this.$route.query.shopName) {
       url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
-      this.report.slots[0].values = ["人员", "单位注册名称", "店名称", "注册编号", "地址", "法人", "法人手机号"]
+      this.report.slots[0].values = ['人员', '单位注册名称', '店名称', '注册编号', '地址', '法人', '法人手机号']
     } else {
       url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
-      this.report.slots[0].values = ["人员", "地址"]
+      this.report.slots[0].values = ['人员', '地址']
     }
-    this.company = Object.assign(utils.copyCompany(this.$route.query), {
+    const company = utils.copyCompany(this.$route.query)
+    const imgUrlPfx = '/population-statistics/mdl/v1/image'
+    if (company.license.length) {
+      const imgURL = `${imgUrlPfx}/${company.license[0]}`
+      const result = await utils.reqBackend(axios.get(imgURL))
+      company.lcnsURL = result[0].url
+    }
+    if (company.pictures.length) {
+      company.picURLs = (await Promise.all(company.pictures.map(imgId => {
+        return utils.reqBackend(axios.get(`${imgUrlPfx}/${imgId}`))
+      }))).map(img => img[0].url)
+    }
+    this.company = Object.assign(company, {
       people: await utils.reqBackend(axios.get(url))
     })
-
+    console.log(this.company)
   },
   async mounted() {
     if (this.uneditable) {
       // 身份校验
-      const url = "/population-statistics/api/v1/person/sign/stat"
+      const url = '/population-statistics/api/v1/person/sign/stat'
       const data = await utils.reqBackend(axios.get(url, {
-        headers: {"authorization": cookies.get("personTkn")}
+        headers: {'authorization': cookies.get('personTkn')}
       }), res => {
         if (!res.data.data) {
           Toast({
             message: res.data.message,
-            iconClass: "iconfont icon-close-bold fs-50"
+            iconClass: 'iconfont icon-close-bold fs-50'
           })
-          this.$router.push({path: "/valid"})
+          this.$router.push({path: '/valid'})
         }
       })
       if (!data) {
@@ -147,30 +173,34 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (to.path !== "/person-detail") {
-      cookies.clear("personTkn")
+    if (to.path !== '/person-detail') {
+      cookies.clear('personTkn')
     }
     next()
   },
   methods: {
     onUpdateClick() {
-      this.$router.push({path: `/input?tab=company&${(new URLSearchParams(this.company)).toString()}`})
+      this.$router.push({
+        path: `/input?tab=company&${
+          (new URLSearchParams(this.company)).toString()
+        }`
+      })
     },
     onDeleteClick() {
       MessageBox({
-        title: "提示",
-        message: "确定执行此操作?",
+        title: '提示',
+        message: '确定执行此操作?',
         showCancelButton: true
       }).then(async action => {
-        if (action !== "confirm") {
+        if (action !== 'confirm') {
           return
         }
         const url = `/population-statistics/mdl/v1/company/${this.company.id}`
         const data = await utils.reqBackend(axios.delete(url))
         if (data) {
           Toast({
-            message: "删除成功！",
-            iconClass: "iconfont icon-select-bold fs-50"
+            message: '删除成功！',
+            iconClass: 'iconfont icon-select-bold fs-50'
           })
           this.$router.go(-1)
         }
@@ -182,22 +212,22 @@ export default {
     onReportSubmit() {
       this.report.showTopPopup = false
       MessageBox({
-        title: "提示",
-        message: "确定上报信息更新？管理员收到此记录会对您的居住房屋或工作单位进行核实",
+        title: '提示',
+        message: '确定上报信息更新？管理员收到此记录会对您的居住房屋或工作单位进行核实',
         showCancelButton: true
       }).then(async action => {
-        if (action !== "confirm") {
+        if (action !== 'confirm') {
           return
         }
-        this.report.form.type = this.company.shopName ? "单位" : "房屋"
+        this.report.form.type = this.company.shopName ? '单位' : '房屋'
         this.report.form.relId = parseInt(this.company.id)
         this.report.form.name = this.company.shopName || this.company.address
         this.report.form.submit = this.$route.query.submit
         this.report.form.sbtPhone = this.$route.query.sbtPhone
-        if (await utils.reqBackend(axios.post("/population-statistics/mdl/v1/report", this.report.form))) {
+        if (await utils.reqBackend(axios.post('/population-statistics/mdl/v1/report', this.report.form))) {
           Toast({
-            message: "提交成功！感谢您提交的信息更新，稍后管理员会对您提交的信息进行确认",
-            iconClass: "iconfont icon-select-bold fs-50"
+            message: '提交成功！感谢您提交的信息更新，稍后管理员会对您提交的信息进行确认',
+            iconClass: 'iconfont icon-select-bold fs-50'
           })
         }
       })
@@ -215,14 +245,14 @@ export default {
       const url = `/population-statistics/api/v1/company/${this.company.id}/export/excel`
       const data = await utils.reqBackend(axios.get(url))
       Toast({
-        message: "导出Excel成功！",
-        iconClass: "iconfont icon-select-bold fs-50"
+        message: '导出Excel成功！',
+        iconClass: 'iconfont icon-select-bold fs-50'
       })
       window.location.href = data
     },
     onBackClick() {
       if (this.$route.query.scroll) {
-        utils.eventBus.$emit("scroll", this.$route.query.scroll)
+        utils.eventBus.$emit('scroll', this.$route.query.scroll)
       }
       this.$router.go(-1)
     },

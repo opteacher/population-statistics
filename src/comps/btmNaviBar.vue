@@ -1,5 +1,5 @@
 <template>
-  <mt-tabbar v-model="selected" style="position: fixed">
+  <mt-tabbar v-model="selected">
     <mt-tab-item id="admin">
       <svg slot="icon" class="icon" aria-hidden="true">
         <use xlink:href="#icon-lock"></use>
@@ -61,7 +61,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .wh-24::before {
   width: 24px;
   height: 24px;

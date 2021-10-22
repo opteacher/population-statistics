@@ -1,8 +1,14 @@
 <template>
   <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
-      <id-card-field :form="form"/>
+      <mt-cell class="mint-field" title="头像">
+        <upload-image name="Pictures" v-model="form.pictures" :maxNum="3"/>
+      </mt-cell>
+      <mt-cell class="mint-field" title="身份证照片">
+        <upload-image name="IdPicture" v-model="form.idPicture"/>
+      </mt-cell>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
+      <id-card-field :form="form"/>
       <gender-field :form="form"/>
       <nation-field :form="form" :bottom="55"/>
       <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="form.phone"/>
@@ -57,6 +63,7 @@
 import idCardField from "./idCardField"
 import nationField from "./nationField"
 import genderField from "./genderField"
+import uploadImage from "./uploadImage"
 import utils from "../utils"
 import { Toast } from "mint-ui"
 import "url"
@@ -65,7 +72,8 @@ export default {
   components: {
     "id-card-field": idCardField,
     "nation-field": nationField,
-    "gender-field": genderField
+    "gender-field": genderField,
+    'upload-image': uploadImage
   },
   data() {
     return {
@@ -90,6 +98,8 @@ export default {
         }
       }
       this.form.specTags = specTagsSet.join(",")
+      this.form.pictures = this.form.pictures.join(',')
+      this.form.idPicture = this.form.idPicture.join(',')
       await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/person/${this.form.id}`, this.form) :
         axios.post("/population-statistics/mdl/v1/person", this.form))

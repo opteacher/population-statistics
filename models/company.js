@@ -15,7 +15,9 @@ module.exports = db.defineModel({
   isClosed:     db.Types.Boolean,
   fireFgtTags:  db.Types.String,
   pbcSecuTags:  db.Types.String,
-  remarks:      db.Types.String
+  remarks:      db.Types.String,
+  pictures:     db.Types.String,// 存储图片表的ID
+  license:      db.Types.String,
 }, {
   router: {
     methods: [

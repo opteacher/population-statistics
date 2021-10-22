@@ -1,8 +1,6 @@
 const path = require("path")
 const Koa = require("koa")
-// 用于旧版本模块的generator向async/await转换
-const convert = require("koa-convert")
-const bodyparser = require("koa-bodyparser")
+const body = require('koa-body')
 const json = require("koa-json")
 const logger = require("koa-logger")
 const statc = require("koa-static")
@@ -16,10 +14,19 @@ const router = require("./routes/index")
 const app = new Koa()
 
 // 跨域配置
-app.use(cors())
+app.use(cors({credentials: true}))
 
 // 路径解析
-app.use(bodyparser())
+app.use(body({
+  multipart: true,
+  formidable: {
+    maxFileSize: 200*1024*1024    // 设置上传文件大小最大限制，默认2M
+  },
+  jsonLimit: '100mb',
+  onError: function (err, ctx) {
+    ctx.throw(`Error happened! ${err}`)
+  }
+}))
 
 // json解析
 app.use(json())

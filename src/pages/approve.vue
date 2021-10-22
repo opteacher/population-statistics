@@ -145,7 +145,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .btm-btn-area {
   position: fixed;
   bottom: 55px;

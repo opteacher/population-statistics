@@ -64,7 +64,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .sch-list-panel {
   position: fixed;
   margin-top: 1vh;

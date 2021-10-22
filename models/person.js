@@ -13,7 +13,9 @@ module.exports = db.defineModel({
   cmpId:      db.Types.Number,
   company:    db.Types.String,
   specTags:   db.Types.String,
-  remarks:    db.Types.String
+  remarks:    db.Types.String,
+  idPicture:  db.Types.String,
+  pictures:   db.Types.String,
 }, {
   router: {
     methods: [

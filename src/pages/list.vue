@@ -44,8 +44,6 @@ import lsToolBox from "../comps/lsToolBox"
 import btmNaviBar from "../comps/btmNaviBar"
 import utils from "../utils"
 import "url"
-import { MessageBox, Toast, Indicator } from "mint-ui"
-import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -150,7 +148,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .nml-search .mint-search-list {
   padding-bottom: 106px !important;
 }

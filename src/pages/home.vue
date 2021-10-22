@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .large-circle-btn {
   width: 45vw;
   height: 45vw !important;

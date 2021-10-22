@@ -1,6 +1,12 @@
 <template>
   <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
+      <mt-cell class="mint-field" title="单位照片">
+        <upload-image name="Pictures" :maxNum="10" v-model="form.pictures"/>
+      </mt-cell>
+      <mt-cell class="mint-field" title="营业执照">
+        <upload-image name="License" v-model="form.license"/>
+      </mt-cell>
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
       <popup-field title="类型" :form="form" pname="type" :bottom="55" :values="[
@@ -68,31 +74,35 @@
 </template>
 
 <script>
-import utils from "../utils"
-import { Toast } from "mint-ui"
-import popupField from "./popupField"
+import utils from '../utils'
+import { Toast } from 'mint-ui'
+import popupField from './popupField'
+import uploadImage from './uploadImage'
 
 export default {
   components: {
-    "popup-field": popupField
+    'popup-field': popupField,
+    'upload-image': uploadImage
   },
   data() {
     return {
       form: {
-        name: "",
-        shopName: "",
-        type: "",
-        regId: "",
-        address: "",
+        name: '',
+        shopName: '',
+        type: '',
+        regId: '',
+        address: '',
         area: 0,
-        lglName: "",
-        lglId: "",
-        lglPhone: "",
-        openHours: "",
+        lglName: '',
+        lglId: '',
+        lglPhone: '',
+        openHours: '',
         isClosed: false,
-        fireFgtTags: "",
-        pbcSecuTags: "",
-        remarks: ""
+        fireFgtTags: '',
+        pbcSecuTags: '',
+        remarks: '',
+        pictures: [],
+        license: []
       },
       formSubmit: false,
       times: [],
@@ -117,20 +127,22 @@ export default {
           fireFgtTagsSet.push(key)
         }
       }
-      this.form.fireFgtTags = fireFgtTagsSet.join(",")
+      this.form.fireFgtTags = fireFgtTagsSet.join(',')
       let pbcSecuTagsSet = []
       for (const [key, value] of Object.entries(this.form.pbcSecuTagsMap)) {
         if (value) {
           pbcSecuTagsSet.push(key)
         }
       }
-      this.form.pbcSecuTags = pbcSecuTagsSet.join(",")
+      this.form.pbcSecuTags = pbcSecuTagsSet.join(',')
+      this.form.pictures = this.form.pictures.join(',')
+      this.form.license = this.form.license.join(',')
       await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
-        axios.post("/population-statistics/mdl/v1/company", this.form))
+        axios.post('/population-statistics/mdl/v1/company', this.form))
       Toast({
-        message: "提交成功！",
-        iconClass: "iconfont icon-select-bold fs-50"
+        message: '提交成功！',
+        iconClass: 'iconfont icon-select-bold fs-50'
       })
       this.$router.push({path: `/list?type=${this.form.shopName ? 'company' : 'house'}`})
     }

@@ -1,5 +1,7 @@
 const crypto = require("crypto")
-const db = require("../utils/tools").getDatabase()
+const tools = require("../utils/tools")
+const db = tools.getDatabase()
+const secret = tools.getSecret()
 
 module.exports = db.defineModel({
   __modelName: "admin",
@@ -16,8 +18,11 @@ module.exports = db.defineModel({
   middle: {
     create: {
       before: function(doc) {
-        if(doc.password) {
-          doc.password = crypto.createHash("sha1").update(doc.password).digest("hex");
+        if(doc.password.length !== 64) {
+          doc.password = crypto
+            .createHmac("sha256", secret)
+            .update(doc.password)
+            .digest("hex")
         }
       }
     }

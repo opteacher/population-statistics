@@ -44,6 +44,13 @@ module.exports = {
       } else {
         callback && callback(res)
         Indicator.close()
+        if (res.data.error) {
+          Toast({
+            message: `错误！${res.data.error}`,
+            iconClass: "iconfont icon-close-bold fs-50"
+          })
+          return Promise.reject(res.data.error)
+        }
         return Promise.resolve(res.data.data)
       }
     }
@@ -92,7 +99,7 @@ module.exports = {
     //       html+= date + ' ' +params[0].name+'<br>';
     //       for ( var int = 0; int < params.length; int++) {
     //         if(int == 0){
-    //           html+=params[int].marker + params[int].seriesName+': '+params[int].data+'&nbsp;&nbsp;&nbsp;<button class="fr btn closeHandle" id="specialLook"  οnclick="lookVideoGo(\''+ date + ' ' +params[0].name +'\')">查 看</button><br>';      
+    //           html+=params[int].marker + params[int].seriesName+': '+params[int].data+'&nbsp;&nbsp;&nbsp;<button class="fr btn closeHandle" id="specialLook"  οnclick="lookVideoGo(\''+ date + ' ' +params[0].name +'\')">查 看</button><br>';
     //           //lookVideoGo按钮触发函数 ，注意传递参数引号规则
     //         }else{
     //           html+=params[int].marker + params[int].seriesName+': '+params[int].data+'<br>';
@@ -200,10 +207,18 @@ module.exports = {
       isClosed: query.isClosed ? JSON.parse(query.isClosed) : false,
       fireFgtTags: query.fireFgtTags || "",
       pbcSecuTags: query.pbcSecuTags || "",
-      remarks: query.remarks || ""
+      remarks: query.remarks || "",
+      pictures: [],
+      license: []
     }
     if (query.id) {
       ret.id = parseInt(query.id)
+    }
+    if (query.pictures && query.pictures !== 'null') {
+      ret.pictures = query.pictures.split(',').map(num => parseInt(num))
+    }
+    if (query.license && query.license !== 'null') {
+      ret.license = [parseInt(query.license)]
     }
     const fireFgtTagsSet = ret.fireFgtTags.split(",")
     ret.fireFgtTagsMap = {
@@ -233,10 +248,18 @@ module.exports = {
       cmpId: query.cmpId ? parseInt(query.cmpId) : -1,
       company: query.company || "",
       specTags: query.specTags || "",
-      remarks: query.remarks || ""
+      remarks: query.remarks || "",
+      pictures: [],
+      idPicture: []
     }
     if (query.id) {
       ret.id = parseInt(query.id)
+    }
+    if (query.pictures && query.pictures !== 'null') {
+      ret.pictures = query.pictures.split(',').map(num => parseInt(num))
+    }
+    if (query.idPicture && query.idPicture !== 'null') {
+      ret.idPicture = [parseInt(query.idPicture)]
     }
     const specTagsSet = ret.specTags.split(",")
     ret.specTagsMap = {

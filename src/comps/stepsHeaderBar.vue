@@ -41,8 +41,8 @@ export default{
 }
 </script>
 
-<style scoped lang="scss">
-.triangle_step{
+<style scoped lang="less">
+.triangle_step {
   height: 40px;
   display: flex;
   justify-content: center;
@@ -50,53 +50,53 @@ export default{
   margin: 10px auto;
   overflow-x: hidden;
 
-  li{
+  li {
     height: 40px;
     background: #d7d8da;
-    color:#666;
+    color: #666;
     text-align: center;
     line-height: 40px;
     /*width: 20%;*/
     /*flex-basis: 100%;*/
     position: relative;
   }
-  li.cur{
+  li.cur {
     background: #26a2ff;
-    color:#fff;
+    color: #fff;
   }
   /*三角形绘制*/
-  .jiao{
+  .jiao {
     width: 0;
     height: 0;
-    border-top: 20px solid transparent;/*高度一半*/
+    border-top: 20px solid transparent; /*高度一半*/
     border-left: 10px solid #d7d8da; /*调整宽度*/
-    border-bottom: 20px solid transparent;/*高度一半*/
+    border-bottom: 20px solid transparent; /*高度一半*/
     position: absolute;
-    right:-10px;/*跟宽度保持一致*/
-    top:0;
+    right: -10px; /*跟宽度保持一致*/
+    top: 0;
     z-index: 1000;
   }
-  .jiaoActive{
+  .jiaoActive {
     width: 0;
     height: 0;
-    border-top: 20px solid transparent;/*高度一半*/
+    border-top: 20px solid transparent; /*高度一半*/
     border-left: 10px solid #26a2ff; /*调整宽度*/
-    border-bottom: 20px solid transparent;/*高度一半*/
+    border-bottom: 20px solid transparent; /*高度一半*/
     position: absolute;
-    right:-10px;/*跟宽度保持一致*/
-    top:0;
+    right: -10px; /*跟宽度保持一致*/
+    top: 0;
     z-index: 2;
   }
   /*大3个px的边 26-20/2*/
-  .interval{
+  .interval {
     width: 0;
     height: 0;
-    border-top: 26px solid transparent;/*高度一半*/
+    border-top: 26px solid transparent; /*高度一半*/
     border-left: 13px solid #fff; /*调整宽度*/
-    border-bottom: 26px solid transparent;/*高度一半*/
+    border-bottom: 26px solid transparent; /*高度一半*/
     position: absolute;
-    right:-13px;/*跟宽度保持一致*/
-    top:-6px;
+    right: -13px; /*跟宽度保持一致*/
+    top: -6px;
     z-index: 1;
   }
 }

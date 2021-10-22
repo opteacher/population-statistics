@@ -11,39 +11,43 @@ import admin from "./pages/admin"
 import approve from "./pages/approve"
 
 export default [{
-    path: "/",
-    redirect: "/home"
+  path: "/",
+  redirect: "/home"
 }, {
-    path: "/home",
-    component: home
+  path: "/home",
+  component: home
 }, {
-    path: "/come",
-    component: come
+  path: "/come",
+  component: come
 }, {
-    path: "/leave",
-    component: leave
+  path: "/leave",
+  component: leave
 }, {
-    path: "/valid",
-    component: valid
+  path: "/valid",
+  component: valid
 }, {
-    path: "/input",
-    component: input
+  path: "/input",
+  component: input,
+  meta: { reqAdmin: true }
 }, {
-    path: "/list",
-    component: list
+  path: "/list",
+  component: list,
+  meta: { reqAdmin: true }
 }, {
-    path: "/company-detail",
-    component: cmpDetail
+  path: "/company-detail",
+  component: cmpDetail
 }, {
-    path: "/person-detail",
-    component: psnDetail
+  path: "/person-detail",
+  component: psnDetail
 }, {
-    path: "/approve",
-    component: approve
+  path: "/approve",
+  component: approve,
+  meta: { reqAdmin: true }
 }, {
-    path: "/login",
-    component: login
+  path: "/login",
+  component: login
 }, {
-    path: "/admin",
-    component: admin
+  path: "/admin",
+  component: admin,
+  meta: { reqAdmin: true }
 }]

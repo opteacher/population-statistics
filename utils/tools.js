@@ -89,6 +89,9 @@ const exp = {
     }
     return toml.parse(fs.readFileSync(`${cfgFile}.toml`, {encoding: "utf8"}))
   },
+  getSecret () {
+    return exp.readConfig('./configs/server').secret
+  },
   env() {
     if (!this._serverConfigs.env) {
       this._serverConfigs = this.readConfig("./configs/server")

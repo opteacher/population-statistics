@@ -1,2 +1,4 @@
 env="dev"
 port=3000
+admin="opteacher"
+secret="BCADWuuRYNr5P4Sb"

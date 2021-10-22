@@ -113,7 +113,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .foothold-search .mint-search-list {
   padding-top: 0 !important;
   height: 0 !important;

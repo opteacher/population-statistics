@@ -17,6 +17,7 @@ const exp = {
   "Record": require("./record"),
   "Admin": require("./admin"),
   "Report": require("./report"),
+  "Image": require("./image"),
 }
 
 // @step{}:同步数据库
