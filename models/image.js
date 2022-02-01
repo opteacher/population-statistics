@@ -1,14 +1,10 @@
-const db = require("../utils/tools").getDatabase()
+import { db } from '../utils/index.js'
 
-module.exports = db.defineModel({
-  __modelName: "image",
+export default db.defineModel({
+  __modelName: 'image',
   url: db.Types.String,
 }, {
   router: {
-    methods: [
-      "GET",
-      "POST",
-      "DELETE"
-    ]
+    methods: ['GET', 'POST', 'DELETE']
   }
 })

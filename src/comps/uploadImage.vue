@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { reqBackend } from '../utils'
+import { reqBackend } from '../utils.js'
 import $ from 'jquery'
 import { MessageBox } from 'mint-ui'
 

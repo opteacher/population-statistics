@@ -1,15 +1,15 @@
-const Path = require("path")
-const router = require("koa-router")()
+import Router from 'koa-router'
 
-const tools = require("../../../../../utils/tools")
-const pjPath = tools.projRootPath()
-const sqlCfg = tools.readConfig(Path.join(pjPath, "configs", "sqls"))
-const db = tools.getDatabase()
+import { db } from '../../../../../utils/index.js'
+import { readConfig } from '../../../../../lib/backend-library/utils/index.js'
 
-router.get("/people", async ctx => {
+const router = Router()
+const sqlCfg = readConfig('./configs/sqls')
+
+router.get('/people', async ctx => {
   ctx.body = {
     data: (await db.exec(sqlCfg.selHouseWithPersonNum))[0]
   }
 })
 
-module.exports = router
+export default router

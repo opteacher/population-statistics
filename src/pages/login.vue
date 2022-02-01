@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { reqBackend } from '../utils'
 export default {
   data() {
     return {

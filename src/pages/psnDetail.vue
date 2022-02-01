@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import btmNaviBar from "../comps/btmNaviBar"
+import btmNaviBar from "../comps/btmNaviBar.vue"
 import { MessageBox, Toast } from "mint-ui"
-import utils from "../utils"
-import cookies from "../cookies"
+import * as utils from "../utils.js"
+import cookies from "../cookies.js"
 
 export default {
   components: {

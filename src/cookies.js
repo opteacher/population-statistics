@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   _cvtJSON(data) {
     try {
       data = JSON.parse(data)

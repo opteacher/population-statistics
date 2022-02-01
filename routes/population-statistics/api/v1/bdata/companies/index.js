@@ -1,29 +1,30 @@
-const Path = require("path")
-const router = require("koa-router")()
+import Router from 'koa-router'
 
-const tools = require("../../../../../../utils/tools")
-const pjPath = tools.projRootPath()
-const sqlCfg = tools.readConfig(Path.join(pjPath, "configs", "sqls"))
-const db = tools.getDatabase()
+import { db } from '../../../../../../utils/index.js'
+import { readConfig } from '../../../../../../lib/backend-library/utils/index.js'
+import { fmtQuerySQL } from '../../../../../../lib/backend-library/databases/index.js'
 
-router.get("/total_count", async ctx => {
+const router = Router()
+const sqlCfg = readConfig('./configs/sqls')
+
+router.get('/total_count', async ctx => {
   ctx.body = {
-    data: (await db.exec(tools.fmtQuerySQL(sqlCfg.selCompanyNum, ctx.query, "company", {
-      addWhere: false, tags: ["fireFgtTags", "pbcSecuTags"]
+    data: (await db.exec(fmtQuerySQL(sqlCfg.selCompanyNum, ctx.query, 'company', {
+      addWhere: false, tags: ['fireFgtTags', 'pbcSecuTags']
     })))[0]
   }
 })
 
-router.get("/total_count/groupby/type", async ctx => {
+router.get('/total_count/groupby/type', async ctx => {
   ctx.body = {
     data: (await db.exec(sqlCfg.selCompanyNumGpByType))[0]
   }
 })
 
-router.get("/total_count/open/night", async ctx => {
+router.get('/total_count/open/night', async ctx => {
   ctx.body = {
     data: (await db.exec(sqlCfg.selCompanyNumOpnNgt))[0]
   }
 })
 
-module.exports = router
+export default router

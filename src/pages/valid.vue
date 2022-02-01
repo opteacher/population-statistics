@@ -24,9 +24,9 @@
 
 <script>
 import "url"
-import utils from "../utils"
-import cookies from "../cookies"
-import idCardField from "../comps/idCardField"
+import * as utils from "../utils.js"
+import cookies from "../cookies.js"
+import idCardField from "../comps/idCardField.vue"
 
 export default {
   components: {

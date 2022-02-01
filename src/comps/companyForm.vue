@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import utils from '../utils'
+import * as utils from '../utils.js'
 import { Toast } from 'mint-ui'
 import popupField from './popupField'
 import uploadImage from './uploadImage'

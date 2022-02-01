@@ -1,15 +1,24 @@
-const path = require("path")
-const Koa = require("koa")
-const body = require('koa-body')
-const json = require("koa-json")
-const logger = require("koa-logger")
-const statc = require("koa-static")
-const views = require("koa-views")
-const cors = require("koa2-cors")
+import Path from 'path'
+import Koa from 'koa'
+import body from 'koa-body'
+import json from 'koa-json'
+import logger from 'koa-logger'
+import statc from 'koa-static'
+import views from 'koa-views'
+import cors from 'koa2-cors'
 
-const configs = require("./utils/tools").readConfig("./configs/server")
-const models = require("./models/index").index
-const router = require("./routes/index")
+import { genApiRoutes } from './lib/backend-library/router/index.js'
+import { genMdlRoutes } from './lib/backend-library/models/index.js'
+import { db } from './utils/index.js'
+
+const router = await genApiRoutes(
+  Path.resolve('routes')
+)
+const models = (await genMdlRoutes(
+  db,
+  Path.resolve('models'),
+  Path.resolve('configs', 'models')
+)).router
 
 const app = new Koa()
 
@@ -35,18 +44,18 @@ app.use(json())
 app.use(logger())
 
 // 指定静态目录
-app.use(statc(path.join(__dirname, "public")))
+app.use(statc(Path.resolve('public')))
 
 // 模型路由
 app.use(models.routes(), models.allowedMethods())
 
 // 指定页面目录
-app.use(views(path.resolve("./"), {extension: "html"}));
+app.use(views(Path.resolve('./'), {extension: 'html'}));
 
 // 路径分配
 app.use(router.routes(), router.allowedMethods())
 
 // 指定页面目录
-app.use(async ctx => await ctx.render("index"))
+app.use(async ctx => await ctx.render('index'))
 
-app.listen(process.env.PORT || configs.port)
+app.listen(process.env.PORT || 3000)

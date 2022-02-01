@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import stepsHeaderBar from "../comps/stepsHeaderBar"
-import agentForm from "../comps/agentForm"
-import lvPsnForm from "../comps/lvPsnForm"
-import whereToForm from "../comps/whereToForm"
-import connectForm from "../comps/connectForm"
-import confirmForm from "../comps/confirmForm"
+import stepsHeaderBar from "../comps/stepsHeaderBar.vue"
+import agentForm from "../comps/agentForm.vue"
+import lvPsnForm from "../comps/lvPsnForm.vue"
+import whereToForm from "../comps/whereToForm.vue"
+import connectForm from "../comps/connectForm.vue"
+import confirmForm from "../comps/confirmForm.vue"
 import { MessageBox, Toast } from "mint-ui"
-import utils from "../utils"
+import * as utils from "../utils.js"
 
 export default {
   components: {

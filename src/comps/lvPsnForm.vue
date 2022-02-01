@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { reqBackend } from "../utils"
+import { reqBackend } from "../utils.js"
 
 export default {
   props: {
@@ -70,7 +70,7 @@ export default {
 .sel-person {
   left: 0;
   right: 0;
-  z-index: 100
+  z-index: 100;
 }
 
 .mint-header-title {

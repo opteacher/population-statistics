@@ -1,7 +1,7 @@
-const db = require("../utils/tools").getDatabase()
+import { db } from '../utils/index.js'
 
-module.exports = db.defineModel({
-  __modelName: "report",
+export default db.defineModel({
+  __modelName: 'report',
   type:     db.Types.String,// 房屋/单位/人员
   relId:    db.Types.Number,
   name:     db.Types.String,// 地址/店名/人名
@@ -12,12 +12,6 @@ module.exports = db.defineModel({
   solved:   db.Types.Boolean,
 }, {
   router: {
-    methods: [
-      "GET",
-      "ALL",
-      "POST",
-      "PUT",
-      "DELETE"
-    ]
+    methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']
   }
 })

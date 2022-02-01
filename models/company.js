@@ -1,7 +1,7 @@
-const db = require("../utils/tools").getDatabase()
+import { db } from '../utils/index.js'
 
-module.exports = db.defineModel({
-  __modelName: "company",
+export default db.defineModel({
+  __modelName: 'company',
   name:         db.Types.String,
   shopName:     db.Types.String,
   type:         db.Types.String,// 企业公司/金融证券/餐饮/美容美发/医疗机构/健身房/教育培训/宾旅馆/中介/养身按摩/便利超市/其他
@@ -20,12 +20,6 @@ module.exports = db.defineModel({
   license:      db.Types.String,
 }, {
   router: {
-    methods: [
-      "GET",
-      "ALL",
-      "POST",
-      "PUT",
-      "DELETE"
-    ]
+    methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']
   }
 })

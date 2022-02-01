@@ -1,51 +1,49 @@
-const qiniu = require('qiniu')
-const { readConfig } = require('../utils/tools')
+import qiniu from 'qiniu'
+import { readConfig } from '../lib/backend-library/utils/index.js'
 
-module.exports = {
-  async uploadToQiniu(key, readableStream) {
-    const qnCfg = readConfig('./configs/qiniu')
-    const mac = new qiniu.auth.digest.Mac(qnCfg.accessKey, qnCfg.secretKey)
+export async function uploadToQiniu(key, readableStream) {
+  const qnCfg = readConfig('./configs/qiniu')
+  const mac = new qiniu.auth.digest.Mac(qnCfg.accessKey, qnCfg.secretKey)
 
-    const config = new qiniu.conf.Config()
-    // 空间对应的机房
-    config.zone = qiniu.zone.Zone_z2
+  const config = new qiniu.conf.Config()
+  // 空间对应的机房
+  config.zone = qiniu.zone.Zone_z2
 
-    const url = `http://cdn.opteacher.top/${key}`
-    let needRefresh = false
-    try {
-      const resp = await axios.get(new URL(url).href)
-      needRefresh = resp.status === 200
-    } catch (e) {}
+  const url = `http://cdn.opteacher.top/${key}`
+  let needRefresh = false
+  try {
+    const resp = await axios.get(new URL(url).href)
+    needRefresh = resp.status === 200
+  } catch (e) {}
 
-    const putPolicy = new qiniu.rs.PutPolicy({
-      scope: `${qnCfg.bucket}:${key}`
+  const putPolicy = new qiniu.rs.PutPolicy({
+    scope: `${qnCfg.bucket}:${key}`
+  })
+  const uploadToken = putPolicy.uploadToken(mac)
+
+  const formUploader = new qiniu.form_up.FormUploader(config)
+  const putExtra = new qiniu.form_up.PutExtra()
+  await new Promise((res, rej) => {
+    formUploader.putStream(uploadToken, key, readableStream, putExtra, (respErr, respBody, respInfo) => {
+      if (respErr) {
+        rej(respErr)
+      }
+      if (respInfo.statusCode == 200) {
+        res(respBody)
+      } else {
+        console.log(respInfo.statusCode)
+        rej(respBody)
+      }
     })
-    const uploadToken = putPolicy.uploadToken(mac)
-
-    const formUploader = new qiniu.form_up.FormUploader(config)
-    const putExtra = new qiniu.form_up.PutExtra()
+  })
+  if (needRefresh) {
+    // 刷新缓存
+    const cdnManager = new qiniu.cdn.CdnManager(mac)
     await new Promise((res, rej) => {
-      formUploader.putStream(uploadToken, key, readableStream, putExtra, (respErr, respBody, respInfo) => {
-        if (respErr) {
-          rej(respErr)
-        }
-        if (respInfo.statusCode == 200) {
-          res(respBody)
-        } else {
-          console.log(respInfo.statusCode)
-          rej(respBody)
-        }
+      cdnManager.refreshUrls([url], function (err) {
+        err ? rej(err) : res()
       })
     })
-    if (needRefresh) {
-      // 刷新缓存
-      const cdnManager = new qiniu.cdn.CdnManager(mac)
-      await new Promise((res, rej) => {
-        cdnManager.refreshUrls([url], function (err) {
-          err ? rej(err) : res()
-        })
-      })
-    }
-    return url
   }
+  return url
 }

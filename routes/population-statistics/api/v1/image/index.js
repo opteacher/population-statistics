@@ -1,12 +1,10 @@
-const fs = require('fs')
-const path = require('path')
-const router = require('koa-router')()
+import Router from 'koa-router'
 
-const tools = require("../../../../../utils/tools")
-const pjPath = tools.projRootPath()
-const { uploadToQiniu } = require(`${pjPath}/services/cdn`)
-const { Image } = require(`${pjPath}/models/index`)
-const db = tools.getDatabase()
+import { db } from '../../../../../utils/index.js'
+import { uploadToQiniu } from '../../../../../services/cdn.js'
+import Image from '../../../../../models/image.js'
+
+const router = Router()
 
 router.post('/', async ctx => {
   const key = ctx.request.body.key
@@ -22,4 +20,4 @@ router.post('/', async ctx => {
   }
 })
 
-module.exports = router
+export default router

@@ -14,8 +14,7 @@
 </template>
 
 <script>
-import utils from "../utils"
-import schAddrField from "./schAddrField"
+import schAddrField from "./schAddrField.vue"
 
 export default {
   props: {
@@ -30,7 +29,8 @@ export default {
 <style>
 .has-lv-cd {
   position: absolute;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
 }
 </style>

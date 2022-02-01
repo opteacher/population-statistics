@@ -1,8 +1,8 @@
-import routes from "./routes"
+import routes from "./routes.js"
 import "./styles/common.less"
 import VueHolder from 'vue-holderjs'
-import { reqBackend } from './utils'
-import store from './store'
+import { reqBackend } from './utils.js'
+import store from './store.js'
 
 Vue.use(VueHolder)
 

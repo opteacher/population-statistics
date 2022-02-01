@@ -50,12 +50,12 @@
 </template>
 
 <script>
-import utils from "../utils"
-import recordCell from "../comps/recordCell"
-import recordForm from "../comps/recordForm"
-import reportCell from "../comps/reportCell"
-import reportForm from "../comps/reportForm"
-import btmNaviBar from "../comps/btmNaviBar"
+import * as utils from "../utils.js"
+import recordCell from "../comps/recordCell.vue"
+import recordForm from "../comps/recordForm.vue"
+import reportCell from "../comps/reportCell.vue"
+import reportForm from "../comps/reportForm.vue"
+import btmNaviBar from "../comps/btmNaviBar.vue"
 import { MessageBox, Toast } from "mint-ui"
 export default {
   components: {

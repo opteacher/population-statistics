@@ -75,9 +75,9 @@
 <script>
 import btmNaviBar from '../comps/btmNaviBar'
 import { MessageBox, Toast } from 'mint-ui'
-import utils from '../utils'
+import * as utils from '../utils.js'
 import 'url'
-import cookies from '../cookies'
+import cookies from '../cookies.js'
 
 export default {
   components: {

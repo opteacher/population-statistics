@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import idCardField from "./idCardField"
-import nationField from "./nationField"
-import genderField from "./genderField"
-import utils from "../utils"
+import idCardField from "./idCardField.vue"
+import nationField from "./nationField.vue"
+import genderField from "./genderField.vue"
+import * as utils from "../utils.js"
 
 export default {
   components: {

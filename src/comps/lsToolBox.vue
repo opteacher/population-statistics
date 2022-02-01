@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import utils from "../utils"
+import * as utils from "../utils.js"
 import { Toast, MessageBox, Indicator } from "mint-ui"
 export default {
   props: {

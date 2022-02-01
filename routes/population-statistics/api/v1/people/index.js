@@ -1,30 +1,32 @@
-const fs = require("fs")
-const stream = require("stream")
-const ExcelJS = require("exceljs")
-const router = require("koa-router")()
+import fs from 'fs'
+import Path from 'path'
+import stream from 'stream'
+import ExcelJS from 'exceljs'
+import Router from 'koa-router'
 
-const tools = require("../../../../../utils/tools")
-const pjPath = tools.projRootPath()
-const { Person } = require(`${pjPath}/models/index`)
-const db = tools.getDatabase()
-const dataPath = `${pjPath}/resources/福海路777弄.xlsx`
+import { db } from '../../../../../utils/index.js'
+import Person from '../../../../../models/person.js'
+import { uploadToQiniu } from '../../../../../services/cdn.js'
+
+const router = Router()
+const dataPath = Path.resolve('../../../../..', 'resources')
 
 function chkHeader (ctx, worksheet) {
   const hdInfo = {
     has: false,
     map: {
-      name: "A",
-      idCard: "B",
-      gender: "C",
-      nation: "D",
-      lvAddress: "E"
+      name: 'A',
+      idCard: 'B',
+      gender: 'C',
+      nation: 'D',
+      lvAddress: 'E'
     }
   }
   if (!ctx.query) {
     return hdInfo
   }
-  const first = worksheet.getCell("A1").value
-  if (first === "姓名") {
+  const first = worksheet.getCell('A1').value
+  if (first === '姓名') {
     hdInfo.has = true
   } else {
     return hdInfo
@@ -54,7 +56,7 @@ function chkHeader (ctx, worksheet) {
 }
 
 function fixGender (row, genderIdx) {
-  return row.getCell(genderIdx).value.replace("性", "")
+  return row.getCell(genderIdx).value.replace('性', '')
 }
 
 function fixAddress (row, addrIdx) {
@@ -62,23 +64,23 @@ function fixAddress (row, addrIdx) {
     return null
   }
   const orgAddr = row.getCell(addrIdx).value
-  let address = ""
+  let address = ''
   if (!orgAddr) {
     return null
   } else if (orgAddr.richText) {
     for (const lvAddr of orgAddr.richText) {
       address += lvAddr.text
     }
-  } else if (typeof orgAddr === "string") {
+  } else if (typeof orgAddr === 'string') {
     address = orgAddr
   }
-  address = address.replace("嘉定工业区", "")
+  address = address.replace('嘉定工业区', '')
   return address
 }
 
-router.post("/batch_load", async ctx => {
+router.post('/batch_load', async ctx => {
   const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.read(fs.createReadStream(dataPath))
+  await workbook.xlsx.read(fs.createReadStream(Path.join(dataPath, '福海路777弄.xlsx')))
 
   let count = 0
   for (const worksheet of workbook.worksheets) {
@@ -90,7 +92,7 @@ router.post("/batch_load", async ctx => {
       const hdMap = hdInfo.map
       const cellA = row.getCell(hdMap.name)
       const name = cellA.value
-      if (!name || typeof name !== "string") {
+      if (!name || typeof name !== 'string') {
         return
       }
       let hasLvCard = false
@@ -118,19 +120,19 @@ router.post("/batch_load", async ctx => {
 })
 
 const colMapper = {
-  name:       "姓名",
-  idCard:     "身份证",
-  gender:     "性别",
-  nation:     "民族",
-  phone:      "手机号",
-  hhAddress:  "户籍地址",
-  lvAddress:  "居住地址",
-  company:    "工作单位"
+  name:       '姓名',
+  idCard:     '身份证',
+  gender:     '性别',
+  nation:     '民族',
+  phone:      '手机号',
+  hhAddress:  '户籍地址',
+  lvAddress:  '居住地址',
+  company:    '工作单位'
 }
 
-router.post("/export/excel", async ctx => {
+router.post('/export/excel', async ctx => {
   const people = await db.select(Person, {
-    id: ["in", ctx.request.body.psnIds.map(sid => parseInt(sid))]
+    id: ['in', ctx.request.body.psnIds.map(sid => parseInt(sid))]
   }, {
     selCols: ctx.request.body.columns
   })
@@ -149,7 +151,7 @@ router.post("/export/excel", async ctx => {
 
   for (let i = 0; i < people.length; ++i) {
     const person = people[i]
-    worksheet.addRow(person, "i")
+    worksheet.addRow(person, 'i')
     if (i === 0) {
       const firstRow = worksheet.getRow(2)
       firstRow.height = 15
@@ -175,8 +177,8 @@ router.post("/export/excel", async ctx => {
   const readableStream = bufferStream.end(xlsxBuffer)
 
   ctx.body = {
-    data: await tools.uploadToQiniu(`导出人员${Date.now()}.xlsx`, readableStream)
+    data: await uploadToQiniu(`导出人员${Date.now()}.xlsx`, readableStream)
   }
 })
 
-module.exports = router
+export default router

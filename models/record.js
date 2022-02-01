@@ -1,7 +1,7 @@
-const db = require("../utils/tools").getDatabase()
+import { db } from '../utils/index.js'
 
-module.exports = db.defineModel({
-  __modelName: "record",
+export default db.defineModel({
+  __modelName: 'record',
   type:       db.Types.String,// come/leave
   purpose:    db.Types.String,// work/live
   psnId:      db.Types.Number,
@@ -20,12 +20,6 @@ module.exports = db.defineModel({
   submit:     db.Types.String// 提交者
 }, {
   router: {
-    methods: [
-      "GET",
-      "ALL",
-      "POST",
-      "PUT",
-      "DELETE"
-    ]
+    methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']
   }
 })

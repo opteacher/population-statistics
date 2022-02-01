@@ -1,7 +1,7 @@
-const db = require("../utils/tools").getDatabase()
+import { db } from '../utils/index.js'
 
-module.exports = db.defineModel({
-  __modelName: "person",
+export default db.defineModel({
+  __modelName: 'person',
   name:       db.Types.String,
   idCard:     db.Types.String,
   gender:     db.Types.String,
@@ -18,12 +18,6 @@ module.exports = db.defineModel({
   pictures:   db.Types.String,
 }, {
   router: {
-    methods: [
-      "GET",
-      "ALL",
-      "POST",
-      "PUT",
-      "DELETE"
-    ]
+    methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']
   }
 })

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reqBackend } from './utils'
+import { reqBackend } from './utils.js'
 
 Vue.use(Vuex)
 

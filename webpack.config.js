@@ -1,14 +1,14 @@
-const resolve = require('path').resolve
-const { VueLoaderPlugin } = require('vue-loader')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+import { resolve } from 'path'
+import { VueLoaderPlugin } from 'vue-loader'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 
-module.exports = {
+export default {
   mode: 'development',
   entry: {
     bundle: './src/main.js'
   },
   output: {
-    path: resolve(__dirname, 'public/population-statistics/dist'),
+    path: resolve('public/population-statistics/dist'),
     filename: 'build.js'
   },
   module: {
@@ -43,7 +43,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src'),
+      '@': resolve('src'),
       'vue$': 'vue/dist/vue.esm.js'
     },
     extensions: ['.js', '.vue', '.json', '.css']

@@ -1,12 +1,12 @@
-const router = require('koa-router')()
-const path = require('path')
+import Router from 'koa-router'
 
-const rootPath = require('../../../../../../utils/tools').projRootPath()
-const { Admin } = require(path.resolve(rootPath, 'models/index'))
-const { login, logstat } = require(path.resolve(rootPath, 'services/user'))
+import Admin from '../../../../../../models/admin.js'
+import { login, logstat } from '../../../../../../services/user.js'
+
+const router = Router()
 
 router.post('/in', ctx => login(ctx, Admin, 'username'))
 
 router.get('/stat', ctx => logstat(ctx))
 
-module.exports = router
+export default router

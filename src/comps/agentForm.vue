@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import idCardField from "./idCardField"
-import utils from "../utils"
+import idCardField from "./idCardField.vue"
+import * as utils from "../utils.js"
 import { MessageBox } from "mint-ui"
 
 export default {

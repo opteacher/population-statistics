@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import lsToolBox from "../comps/lsToolBox"
-import btmNaviBar from "../comps/btmNaviBar"
-import utils from "../utils"
+import lsToolBox from "../comps/lsToolBox.vue"
+import btmNaviBar from "../comps/btmNaviBar.vue"
+import * as utils from "../utils.js"
 import "url"
 
 export default {
@@ -136,14 +136,14 @@ export default {
         path: `/${tab}-detail?scroll=${scroll}&${itmParams}`
       })
     },
-    onSchWdsChanged: utils.onSchWdsChanged,
     onToolBoxConfirmed(result) {
       this.toolBox.visible = false
       if (result) {
         this.toolBox.mainTitle = result.mainTitle || ""
         this.toolBox.subTitle = result.subTitle || ""
       }
-    }
+    },
+    onSchWdsChanged: utils.onSchWdsChanged,
   }
 }
 </script>

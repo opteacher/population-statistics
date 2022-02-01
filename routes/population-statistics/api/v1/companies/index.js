@@ -1,29 +1,32 @@
-const fs = require("fs")
-const _ = require("lodash")
-const stream = require("stream")
-const ExcelJS = require("exceljs")
-const router = require("koa-router")()
+import fs from 'fs'
+import _ from 'lodash'
+import Path from 'path'
+import stream from 'stream'
+import ExcelJS from 'exceljs'
+import Router from 'koa-router'
 
-const tools = require("../../../../../utils/tools")
-const pjPath = tools.projRootPath()
-const { Company, Person } = require(`${pjPath}/models/index`)
-const db = tools.getDatabase()
-const excTmpPath = `${pjPath}/resources/companies_temp.xlsx`
+import { db } from '../../../../../utils/index.js'
+import Company from '../../../../../models/company.js'
+import Person from '../../../../../models/person.js'
+import { uploadToQiniu } from '../../../../../services/cdn.js'
 
-router.post("/export/excel", async ctx => {
+const router = Router()
+const excTmpPath = Path.resolve('../../../..', 'resources')
+
+router.post('/export/excel', async ctx => {
   const reqBody = ctx.request.body
   const cmpIds = reqBody.cmpIds instanceof Array ?
   reqBody.cmpIds.map(cmpId => parseInt(cmpId)) : [parseInt(reqBody.cmpIds)]
-  let conds = {}
+  const conds = {}
   if (reqBody.cmpIds) {
-    conds.id = ["in", cmpIds]
+    conds.id = ['in', cmpIds]
   } else if (!reqBody.ctnHouses) {
-    conds.shopName = ["!=", ""]
+    conds.shopName = ['!=', '']
   }
-  let companies = await db.select(Company, conds, {rawQuery: true})
-  let houses = {}
+  const companies = await db.select(Company, conds, {rawQuery: true})
+  const houses = {}
   for (let i = 0; i < companies.length; ++i) {
-    if (companies[i].shopName === "") {
+    if (companies[i].shopName === '') {
       houses[i] = companies[i].address
     } else {
       companies[i].people = await db.select(Person, {
@@ -36,7 +39,7 @@ router.post("/export/excel", async ctx => {
   }
 
   const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.read(fs.createReadStream(excTmpPath))
+  await workbook.xlsx.read(fs.createReadStream(Path.join(excTmpPath, 'companies_temp.xlsx')))
   const worksheet = workbook.getWorksheet(1)
 
   let rowNum = 4
@@ -66,8 +69,8 @@ router.post("/export/excel", async ctx => {
   const readableStream = bufferStream.end(xlsxBuffer)
 
   ctx.body = {
-    data: await tools.uploadToQiniu(`导出单位${Date.now()}.xlsx`, readableStream)
+    data: await uploadToQiniu(`导出单位${Date.now()}.xlsx`, readableStream)
   }
 })
 
-module.exports = router
+export default router
