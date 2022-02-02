@@ -2,10 +2,10 @@
   <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
       <mt-cell class="mint-field" title="单位照片">
-        <upload-image name="Pictures" :maxNum="10" v-model="form.pictures" @delete="(url) => onImgDelete('pictures', url)"/>
+        <upload-image name="Pictures" :maxNum="10" v-model="form.pictures"/>
       </mt-cell>
       <mt-cell class="mint-field" title="营业执照">
-        <upload-image name="License" v-model="form.license" @delete="(url) => onImgDelete('license', url)"/>
+        <upload-image name="License" v-model="form.license"/>
       </mt-cell>
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>

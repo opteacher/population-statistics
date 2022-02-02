@@ -6,18 +6,18 @@
     </mt-header>
     <div class="scroll-panel" :style="`top: 40px; bottom: ${uneditable ? '50' : '101'}px`">
       <div>
-        <mt-swipe v-if="company.picURLs" :auto="0" style="height: 200px">
-          <mt-swipe-item v-for="picURL in company.picURLs" :key="picURL">
-            <img :src="picURL" style="width: 100%; height: 200px"/>
+        <mt-swipe v-if="company.pictures" :auto="0" style="height: 200px">
+          <mt-swipe-item v-for="(picture, index) in company.pictures" :key="index">
+            <img :src="picture" style="width: 100%; height: 200px"/>
           </mt-swipe-item>
         </mt-swipe>
         <mt-cell v-if="company.shopName" title="店名称" :value="company.shopName"
-          :is-link="company.lcnsURL"
+          :is-link="company.license.length !== 0"
           data-target="#cmpLicense" data-toggle="collapse"
           aria-expanded="false" aria-controls="cmpLicense"
         />
-        <div v-if="company.lcnsURL" class="collapse" id="cmpLicense">
-          <img :src="company.lcnsURL" style="width: 100%; height: auto"/>
+        <div v-if="company.license" class="collapse" id="cmpLicense">
+          <img :src="company.license" style="width: 100%; height: auto"/>
         </div>
         <mt-cell v-if="company.name" title="单位注册名称" :value="company.name"/>
         <mt-cell v-if="company.type" title="类型" :value="company.type"/>
@@ -29,12 +29,12 @@
         <mt-cell v-if="company.lglPhone" :title="company.shopName ? '法人手机号' : '房东手机号'" :value="company.lglPhone"/>
         <mt-field v-if="company.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="1" v-model="company.remarks"/>
         <mt-cell title="消防标签" v-if="company.fireFgtTags">
-          <mt-badge v-for="fireFgt in company.fireFgtTags.split(',')" :key="fireFgt"
+          <mt-badge v-for="fireFgt in company.fireFgtTags" :key="fireFgt"
             class="mr-1pc" size="small" :type="fireFgtColrMap[fireFgt]"
           >{{fireFgt}}</mt-badge>
         </mt-cell>
         <mt-cell title="治安标签" v-if="company.pbcSecuTags">
-          <mt-badge v-for="pbcSec in company.pbcSecuTags.split(',')" :key="pbcSec"
+          <mt-badge v-for="pbcSec in company.pbcSecuTags" :key="pbcSec"
             class="mr-1pc" size="small" :type="pbcSecuColrMap[pbcSec]"
           >{{pbcSec}}</mt-badge>
         </mt-cell>

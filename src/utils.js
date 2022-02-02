@@ -217,10 +217,19 @@ export function copyCompany(query) {
     pbcSecuTags: query.pbcSecuTags || "",
     remarks: query.remarks || "",
     pictures: query.pictures || [],
-    license: query.license || []
+    license: query.license|| []
   }
   if (query.id) {
     ret.id = parseInt(query.id)
+  }
+  if (typeof ret.pictures === 'string') {
+    ret.pictures = ret.pictures.split(',')
+  }
+  if (typeof ret.license === 'string') {
+    ret.license = ret.license.split(',')
+  }
+  if (typeof ret.fireFgtTags === 'string') {
+    ret.fireFgtTags = ret.fireFgtTags.split(',')
   }
   ret.fireFgtTagsMap = {
     "店住人": ret.fireFgtTags.includes("店住人"),
@@ -228,6 +237,9 @@ export function copyCompany(query) {
     "有仓库": ret.fireFgtTags.includes("有仓库"),
     "用明火": ret.fireFgtTags.includes("用明火"),
     "高层/地下室": ret.fireFgtTags.includes("高层/地下室"),
+  }
+  if (typeof ret.pbcSecuTags === 'string') {
+    ret.pbcSecuTags = ret.pbcSecuTags.split(',')
   }
   ret.pbcSecuTagsMap = {
     "销售酒类": ret.pbcSecuTags.includes("销售酒类"),
@@ -255,6 +267,15 @@ export function copyPerson(query) {
   }
   if (query.id) {
     ret.id = parseInt(query.id)
+  }
+  if (typeof ret.pictures === 'string') {
+    ret.pictures = ret.pictures.split(',')
+  }
+  if (typeof ret.idPicture === 'string') {
+    ret.idPicture = ret.idPicture.split(',')
+  }
+  if (typeof ret.specTags === 'string') {
+    ret.specTags = ret.specTags.split(',')
   }
   ret.specTagsMap = {
     "独居老人": ret.specTags.includes("独居老人"),

@@ -2,10 +2,10 @@
   <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
       <mt-cell class="mint-field" title="头像">
-        <upload-image name="Pictures" v-model="form.pictures" :maxNum="3" @delete="(url) => onImgDelete('pictures', url)"/>
+        <upload-image name="Pictures" v-model="form.pictures" :maxNum="3"/>
       </mt-cell>
       <mt-cell class="mint-field" title="身份证照片">
-        <upload-image name="IdPicture" v-model="form.idPicture" @delete="(url) => onImgDelete('idPicture', url)"/>
+        <upload-image name="IdPicture" v-model="form.idPicture"/>
       </mt-cell>
       <mt-field label="姓名" placeholder="请输入真实姓名" v-model="form.name"/>
       <id-card-field :form="form"/>
@@ -121,11 +121,6 @@ export default {
         iconClass: "iconfont icon-select-bold fs-50"
       })
       this.batchLoad = false
-    },
-    async onImgDelete (prop, url) {
-      await utils.reqBackend(`/population-statistics/mdl/v1/company/${this.form.id}`, {
-        [prop]: this.form[prop].splice(this.form[prop].indexOf(url), 1)
-      })
     }
   }
 }

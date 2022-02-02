@@ -1,7 +1,7 @@
 <template>
 <div class="mtb-10" style="max-width: 210px">
   <a
-    v-for="url in images"
+    v-for="url in value"
     :key="url" href="#"
     style="width: 64px"
     @click="vwImgURL = url"
@@ -49,7 +49,7 @@
       </mt-button>
     </div>
   </mt-popup>
-  <mt-button v-if="images.length < maxNum" :style="{
+  <mt-button v-if="value.length < maxNum" :style="{
     width: '64px',
     height: '64px',
     'box-shadow': 'none',
@@ -87,7 +87,6 @@ export default {
   },
   data () {
     return {
-      images: [],
       vwImgURL: ''
     }
   },
@@ -165,7 +164,6 @@ export default {
         return
       }
       const imgURL = result.url
-      this.images.push(imgURL)
       this.value.push(imgURL)
     },
     onUpldImgClicked () {
@@ -175,8 +173,7 @@ export default {
       MessageBox.confirm('确定删除该图片吗？', '警告').then(async action => {
         if (action === 'confirm') {
           this.$emit('delete', this.vwImgURL)
-          this.images.splice(this.images.indexOf(this.vwImgURL), 1)
-          this.value.splice(this.images.indexOf(this.vwImgURL), 1)
+          this.value.splice(this.value.indexOf(this.vwImgURL), 1)
           this.vwImgURL = ''
         }
       }).catch(() => {})

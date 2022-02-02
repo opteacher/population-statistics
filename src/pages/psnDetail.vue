@@ -5,12 +5,13 @@
     </mt-header>
     <div class="scroll-panel" :style="'top: 40px;' + (uneditable ? 'bottom: 50px' : 'bottom: 106px')">
       <mt-swipe v-if="person.pictures" :auto="0" style="height: 200px">
-        <mt-swipe-item v-for="picURL in person.pictures" :key="picURL">
-          <img :src="picURL" style="width: 100%; height: 200px"/>
+        <mt-swipe-item v-for="(picture, index) in person.pictures" :key="index">
+          <img :src="picture" style="width: 100%; height: 200px"/>
         </mt-swipe-item>
       </mt-swipe>
       <mt-cell title="姓名" :value="person.name"/>
-      <mt-cell title="身份证" :value="person.idCard" :is-link="person.idPicture"
+      <mt-cell title="身份证" :value="person.idCard"
+        :is-link="person.idPicture.length !== 0"
         data-target="#psnIdPic" data-toggle="collapse"
         aria-expanded="false" aria-controls="psnIdPic"
       />
@@ -26,7 +27,7 @@
       <mt-cell v-if="person.company && person.company !== 'null'" title="所在单位" :value="person.company"/>
       <mt-field v-if="person.remarks && !uneditable" label="备注" readonly disabled type="textarea" rows="1" v-model="person.remarks"/>
       <mt-cell title="特殊标签" v-if="person.specTags">
-        <mt-badge v-for="spec in person.specTags.split(',')" :key="spec"
+        <mt-badge v-for="spec in person.specTags" :key="spec"
           class="mr-1pc" size="small" :type="specColrMap[spec]"
         >{{spec}}</mt-badge>
       </mt-cell>
