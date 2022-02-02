@@ -6,8 +6,8 @@ const secret = readConfig('./configs/server').secret
 
 export default db.defineModel({
   __modelName: 'admin',
-  username: db.Types.String,
-  password: db.Types.String
+  username: db.PropTypes.String,
+  password: db.PropTypes.String
 }, {
   router: {
     methods: ['GET', 'ALL', 'POST']
