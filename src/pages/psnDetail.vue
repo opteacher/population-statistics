@@ -4,18 +4,18 @@
       <mt-button icon="back" slot="left" @click="onBackClick">返回</mt-button>
     </mt-header>
     <div class="scroll-panel" :style="'top: 40px;' + (uneditable ? 'bottom: 50px' : 'bottom: 106px')">
-      <mt-swipe v-if="person.picURLs" :auto="0" style="height: 200px">
-        <mt-swipe-item v-for="picURL in person.picURLs" :key="picURL">
+      <mt-swipe v-if="person.pictures" :auto="0" style="height: 200px">
+        <mt-swipe-item v-for="picURL in person.pictures" :key="picURL">
           <img :src="picURL" style="width: 100%; height: 200px"/>
         </mt-swipe-item>
       </mt-swipe>
       <mt-cell title="姓名" :value="person.name"/>
-      <mt-cell title="身份证" :value="person.idCard" :is-link="person.idPicURL"
+      <mt-cell title="身份证" :value="person.idCard" :is-link="person.idPicture"
         data-target="#psnIdPic" data-toggle="collapse"
         aria-expanded="false" aria-controls="psnIdPic"
       />
-      <div v-if="person.idPicURL" class="collapse" id="psnIdPic">
-        <img :src="person.idPicURL" style="width: 100%; height: auto"/>
+      <div v-if="person.idPicture" class="collapse" id="psnIdPic">
+        <img :src="person.idPicture" style="width: 100%; height: auto"/>
       </div>
       <mt-cell v-if="person.gender" title="性别" :value="person.gender"/>
       <mt-cell v-if="person.nation" title="民族" :value="person.nation"/>
@@ -97,17 +97,6 @@ export default {
       this.uneditable = JSON.parse(this.$route.query.uneditable)
     }
     this.person = utils.copyPerson(this.$route.query)
-    const imgUrlPfx = '/population-statistics/mdl/v1/image'
-    if (this.person.idPicture.length) {
-      const imgURL = `${imgUrlPfx}/${this.person.idPicture[0]}`
-      const result = await utils.reqBackend(axios.get(imgURL))
-      this.person.idPicURL = result[0].url
-    }
-    if (this.person.pictures.length) {
-      this.person.picURLs = (await Promise.all(this.person.pictures.map(imgId => {
-        return utils.reqBackend(axios.get(`${imgUrlPfx}/${imgId}`))
-      }))).map(img => img[0].url)
-    }
   },
   async mounted() {
     if (this.uneditable) {

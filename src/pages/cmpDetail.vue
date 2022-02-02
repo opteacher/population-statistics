@@ -136,17 +136,6 @@ export default {
       this.report.slots[0].values = ['人员', '地址']
     }
     const company = utils.copyCompany(this.$route.query)
-    const imgUrlPfx = '/population-statistics/mdl/v1/image'
-    if (company.license.length) {
-      const imgURL = `${imgUrlPfx}/${company.license[0]}`
-      const result = await utils.reqBackend(axios.get(imgURL))
-      company.lcnsURL = result[0].url
-    }
-    if (company.pictures.length) {
-      company.picURLs = (await Promise.all(company.pictures.map(imgId => {
-        return utils.reqBackend(axios.get(`${imgUrlPfx}/${imgId}`))
-      }))).map(img => img[0].url)
-    }
     this.company = Object.assign(company, {
       people: await utils.reqBackend(axios.get(url))
     })

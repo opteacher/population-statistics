@@ -13,11 +13,11 @@ export default db.defineModel({
   lglPhone:     db.PropTypes.String,
   openHours:    db.PropTypes.String,// 00:00-24:59
   isClosed:     db.PropTypes.Boolean,
-  fireFgtTags:  db.PropTypes.String,
-  pbcSecuTags:  db.PropTypes.String,
+  fireFgtTags:  db.PropTypes.Array,
+  pbcSecuTags:  db.PropTypes.Array,
   remarks:      db.PropTypes.String,
-  pictures:     db.PropTypes.String,// 存储图片表的ID
-  license:      db.PropTypes.String,
+  pictures:     db.PropTypes.Array,// 存储图片表的ID
+  license:      db.PropTypes.Array,
 }, {
   router: {
     methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']

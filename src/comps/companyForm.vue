@@ -2,10 +2,10 @@
   <div class="scroll-panel" style="top: 49px; bottom: 55px">
     <div>
       <mt-cell class="mint-field" title="单位照片">
-        <upload-image name="Pictures" :maxNum="10" v-model="form.pictures"/>
+        <upload-image name="Pictures" :maxNum="10" v-model="form.pictures" @delete="(url) => onImgDelete('pictures', url)"/>
       </mt-cell>
       <mt-cell class="mint-field" title="营业执照">
-        <upload-image name="License" v-model="form.license"/>
+        <upload-image name="License" v-model="form.license" @delete="(url) => onImgDelete('license', url)"/>
       </mt-cell>
       <mt-field label="单位注册名称" placeholder="请输入营业执照上的全称" v-model="form.name"/>
       <mt-field label="店名称" placeholder="请输入招牌名称" v-model="form.shopName"/>
@@ -121,22 +121,20 @@ export default {
   methods: {
     async onSubmitClick() {
       this.formSubmit = true
-      let fireFgtTagsSet = []
+      const fireFgtTagsSet = []
       for (const [key, value] of Object.entries(this.form.fireFgtTagsMap)) {
         if (value) {
           fireFgtTagsSet.push(key)
         }
       }
-      this.form.fireFgtTags = fireFgtTagsSet.join(',')
-      let pbcSecuTagsSet = []
+      this.form.fireFgtTags = fireFgtTagsSet
+      const pbcSecuTagsSet = []
       for (const [key, value] of Object.entries(this.form.pbcSecuTagsMap)) {
         if (value) {
           pbcSecuTagsSet.push(key)
         }
       }
-      this.form.pbcSecuTags = pbcSecuTagsSet.join(',')
-      this.form.pictures = this.form.pictures.join(',')
-      this.form.license = this.form.license.join(',')
+      this.form.pbcSecuTags = pbcSecuTagsSet
       await utils.reqBackend(this.form.id ?
         axios.put(`/population-statistics/mdl/v1/company/${this.form.id}`, this.form) :
         axios.post('/population-statistics/mdl/v1/company', this.form))
@@ -145,6 +143,11 @@ export default {
         iconClass: 'iconfont icon-select-bold fs-50'
       })
       this.$router.push({path: `/list?type=${this.form.shopName ? 'company' : 'house'}`})
+    },
+    async onImgDelete (prop, url) {
+      await utils.reqBackend(`/population-statistics/mdl/v1/company/${this.form.id}`, {
+        [prop]: this.form[prop].splice(this.form[prop].indexOf(url), 1)
+      })
     }
   }
 }

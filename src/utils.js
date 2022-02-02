@@ -216,30 +216,22 @@ export function copyCompany(query) {
     fireFgtTags: query.fireFgtTags || "",
     pbcSecuTags: query.pbcSecuTags || "",
     remarks: query.remarks || "",
-    pictures: [],
-    license: []
+    pictures: query.pictures || [],
+    license: query.license || []
   }
   if (query.id) {
     ret.id = parseInt(query.id)
   }
-  if (query.pictures && typeof query.pictures !== 'undefined') {
-    ret.pictures = query.pictures.split(',').map(num => parseInt(num))
-  }
-  if (query.license && typeof query.license !== 'undefined') {
-    ret.license = [parseInt(query.license)]
-  }
-  const fireFgtTagsSet = ret.fireFgtTags.split(",")
   ret.fireFgtTagsMap = {
-    "店住人": fireFgtTagsSet.includes("店住人"),
-    "沿街": fireFgtTagsSet.includes("沿街"),
-    "有仓库": fireFgtTagsSet.includes("有仓库"),
-    "用明火": fireFgtTagsSet.includes("用明火"),
-    "高层/地下室": fireFgtTagsSet.includes("高层/地下室"),
+    "店住人": ret.fireFgtTags.includes("店住人"),
+    "沿街": ret.fireFgtTags.includes("沿街"),
+    "有仓库": ret.fireFgtTags.includes("有仓库"),
+    "用明火": ret.fireFgtTags.includes("用明火"),
+    "高层/地下室": ret.fireFgtTags.includes("高层/地下室"),
   }
-  const pbcSecuTagsSet = ret.pbcSecuTags.split(",")
   ret.pbcSecuTagsMap = {
-    "销售酒类": pbcSecuTagsSet.includes("销售酒类"),
-    "可疑行径": pbcSecuTagsSet.includes("可疑行径"),
+    "销售酒类": ret.pbcSecuTags.includes("销售酒类"),
+    "可疑行径": ret.pbcSecuTags.includes("可疑行径"),
   }
   return ret
 }
@@ -258,25 +250,18 @@ export function copyPerson(query) {
     company: query.company || "",
     specTags: query.specTags || "",
     remarks: query.remarks || "",
-    pictures: [],
-    idPicture: []
+    pictures: query.pictures || [],
+    idPicture: query.idPicture || []
   }
   if (query.id) {
     ret.id = parseInt(query.id)
   }
-  if (query.pictures && typeof query.pictures !== 'undefined') {
-    ret.pictures = query.pictures.split(',').map(num => parseInt(num))
-  }
-  if (query.idPicture && typeof query.idPicture !== 'undefined') {
-    ret.idPicture = [parseInt(query.idPicture)]
-  }
-  const specTagsSet = ret.specTags.split(",")
   ret.specTagsMap = {
-    "独居老人": specTagsSet.includes("独居老人"),
-    "孕妇": specTagsSet.includes("孕妇"),
-    "患精神疾病": specTagsSet.includes("患精神疾病"),
-    "生理残疾人": specTagsSet.includes("生理残疾人"),
-    "行径可疑": specTagsSet.includes("行径可疑"),
+    "独居老人": ret.specTags.includes("独居老人"),
+    "孕妇": ret.specTags.includes("孕妇"),
+    "患精神疾病": ret.specTags.includes("患精神疾病"),
+    "生理残疾人": ret.specTags.includes("生理残疾人"),
+    "行径可疑": ret.specTags.includes("行径可疑"),
   }
   return ret
 }

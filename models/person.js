@@ -12,10 +12,10 @@ export default db.defineModel({
   hasLvCard:  db.PropTypes.Boolean,
   cmpId:      db.PropTypes.Number,
   company:    db.PropTypes.String,
-  specTags:   db.PropTypes.String,
+  specTags:   db.PropTypes.Array,
   remarks:    db.PropTypes.String,
-  idPicture:  db.PropTypes.String,
-  pictures:   db.PropTypes.String,
+  idPicture:  db.PropTypes.Array,
+  pictures:   db.PropTypes.Array,
 }, {
   router: {
     methods: ['GET', 'ALL', 'POST', 'PUT', 'DELETE']
