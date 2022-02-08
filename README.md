@@ -1,4 +1,4 @@
-# population-statistics-ft
+# population-statistics
 
 ## Project setup
 ```
