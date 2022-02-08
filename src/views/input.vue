@@ -6,14 +6,10 @@
     </mt-navbar>
     <mt-tab-container class="mt-3 mb-55" v-model="selected">
       <mt-tab-container-item id="company">
-        <company-form
-          :edtCompany="selected === 'company' ? edtSubject : undefined"
-        />
+        <company-form />
       </mt-tab-container-item>
       <mt-tab-container-item id="person">
-        <person-form
-          :edtPerson="selected === 'person' ? edtSubject : undefined"
-        />
+        <person-form />
       </mt-tab-container-item>
     </mt-tab-container>
     <btm-navi-bar select="input" />
@@ -34,14 +30,11 @@ export default {
   data() {
     return {
       selected: 'company',
-      edtSubject: {},
     }
   },
   async created() {
     if (this.$route.query.tab) {
       this.selected = this.$route.query.tab
-      this.edtSubject = Object.assign(this.$route.query)
-      delete this.edtSubject.tab
     }
   },
 }
