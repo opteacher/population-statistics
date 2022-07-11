@@ -152,13 +152,15 @@ export default {
       let url = ''
       switch (selTab) {
         case 'company':
-          url = '/population-statistics/mdl/v1/companys?shopName=!=&shopName='
+          url =
+            '/population-statistics/mdl/v1/company/s?shopName=!=&shopName=null'
           break
         case 'house':
-          url = '/population-statistics/api/v1/houses/people'
+          url =
+            '/population-statistics/mdl/v1/company/s?shopName===&shopName=null'
           break
         case 'person':
-          url = '/population-statistics/mdl/v1/persons'
+          url = '/population-statistics/mdl/v1/person/s'
           break
       }
       this.searchItem.allItems = await utils.reqBackend(axios.get(url))
@@ -183,7 +185,7 @@ export default {
     },
     onCfmSelClick() {
       this.$router.push({
-        path: `/input?tab=person&${new URLSearchParams(
+        path: `/population-statistics-frt/input?tab=person&${new URLSearchParams(
           this.edtEmployee
         ).toString()}`,
       })
@@ -193,7 +195,7 @@ export default {
       const scroll = $('.mint-search-list-warp').offset().top
       const itmParams = new this.URLSearchParams(item).toString()
       this.$router.push({
-        path: `/${tab}-detail?scroll=${scroll}&${itmParams}`,
+        path: `/population-statistics-frt/${tab}-detail?scroll=${scroll}&${itmParams}`,
       })
     },
     onToolBoxConfirmed(result) {

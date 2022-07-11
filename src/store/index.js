@@ -10,26 +10,22 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_LOGIN(state, payload) {
-      state.login = Object.assign(payload.login, {
-        token: payload.token,
-      })
+      state.login = payload.record
     },
   },
   actions: {
     async login(ctx, param) {
       const result = await reqBackend(
         axios.post(
-          `/population-statistics/api/v1/${param.role}/log/in`,
+          `/population-statistics/api/v1/${param.role}/sign`,
           param.form
         )
       )
       if (typeof result === 'string') {
         return Promise.reject(new Error(result.error))
       }
-      ctx.commit('SET_LOGIN', result)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${result.token}`
+      ctx.commit('SET_LOGIN', result.record)
     },
-  },
-  getters: {
-    lgnToken: (state) => (state.login ? state.login.token : ''),
-  },
+  }
 })

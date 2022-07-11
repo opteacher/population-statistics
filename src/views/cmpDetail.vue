@@ -224,7 +224,7 @@ export default {
     }
     let url = ''
     if (this.$route.query.shopName) {
-      url = `/population-statistics/mdl/v1/persons?cmpId=${this.$route.query.id}`
+      url = `/population-statistics/mdl/v1/person/s?cmpId=${this.$route.query.id}`
       this.report.slots[0].values = [
         '人员',
         '单位注册名称',
@@ -235,7 +235,7 @@ export default {
         '法人手机号',
       ]
     } else {
-      url = `/population-statistics/mdl/v1/persons?lvAddress=${this.$route.query.address}`
+      url = `/population-statistics/mdl/v1/person/s?lvAddress=${this.$route.query.address}`
       this.report.slots[0].values = ['人员', '地址']
     }
     const company = utils.copyCompany(this.$route.query)
@@ -257,7 +257,7 @@ export default {
               message: res.data.message,
               iconClass: 'iconfont icon-close-bold fs-50',
             })
-            this.$router.push({ path: '/valid' })
+            this.$router.push({ path: '/population-statistics-frt/valid' })
           }
         }
       )
@@ -267,7 +267,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (to.path !== '/person-detail') {
+    if (to.path !== '/population-statistics-frt/person-detail') {
       cookies.clear('personTkn')
     }
     next()
@@ -275,7 +275,7 @@ export default {
   methods: {
     onUpdateClick() {
       this.$router.push({
-        path: `/input?tab=company&${new URLSearchParams(
+        path: `/population-statistics-frt/input?tab=company&${new URLSearchParams(
           this.company
         ).toString()}`,
       })
@@ -302,9 +302,9 @@ export default {
     },
     onPersonClick(psn) {
       this.$router.push({
-        path: `/person-detail?${this._cmbParams(psn)}&uneditable=${
-          this.uneditable
-        }`,
+        path: `/population-statistics-frt/person-detail?${this._cmbParams(
+          psn
+        )}&uneditable=${this.uneditable}`,
       })
     },
     onReportSubmit() {
@@ -365,11 +365,11 @@ export default {
     onAddPerson() {
       if (this.company.shopName) {
         this.$router.push({
-          path: `/input?tab=person&cmpId=${this.company.id}&company=${this.company.shopName}`,
+          path: `/population-statistics-frt/input?tab=person&cmpId=${this.company.id}&company=${this.company.shopName}`,
         })
       } else {
         this.$router.push({
-          path: `/input?tab=person&lvAddress=${this.company.address}`,
+          path: `/population-statistics-frt/input?tab=person&lvAddress=${this.company.address}`,
         })
       }
     },

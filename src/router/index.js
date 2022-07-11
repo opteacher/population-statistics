@@ -18,54 +18,54 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    redirect: '/home',
+    path: '/population-statistics-frt',
+    redirect: '/population-statistics-frt/home',
   },
   {
-    path: '/home',
+    path: '/population-statistics-frt/home',
     component: home,
   },
   {
-    path: '/come',
+    path: '/population-statistics-frt/come',
     component: come,
   },
   {
-    path: '/leave',
+    path: '/population-statistics-frt/leave',
     component: leave,
   },
   {
-    path: '/valid',
+    path: '/population-statistics-frt/valid',
     component: valid,
   },
   {
-    path: '/input',
+    path: '/population-statistics-frt/input',
     component: input,
     meta: { reqAdmin: true },
   },
   {
-    path: '/list',
+    path: '/population-statistics-frt/list',
     component: list,
     meta: { reqAdmin: true },
   },
   {
-    path: '/company-detail',
+    path: '/population-statistics-frt/company-detail',
     component: cmpDetail,
   },
   {
-    path: '/person-detail',
+    path: '/population-statistics-frt/person-detail',
     component: psnDetail,
   },
   {
-    path: '/approve',
+    path: '/population-statistics-frt/approve',
     component: approve,
     meta: { reqAdmin: true },
   },
   {
-    path: '/login',
+    path: '/population-statistics-frt/login',
     component: login,
   },
   {
-    path: '/admin',
+    path: '/population-statistics-frt/admin',
     component: admin,
     meta: { reqAdmin: true },
   },
@@ -73,15 +73,12 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: '/population-statistics/',
   routes,
 })
 
 async function validLogin(role) {
   return reqBackend(
-    axios.get(`/population-statistics/api/v1/${role}/log/stat`, {
-      headers: { token: store.getters.lgnToken },
-    })
+    axios.post(`/population-statistics/api/v1/${role}/verify`)
   )
 }
 
@@ -92,7 +89,7 @@ router.beforeEach(async (to, _from, next) => {
       next()
     } catch (e) {
       next({
-        path: '/login',
+        path: '/population-statistics-frt/login',
         query: {
           redirect: to.fullPath,
           mode: 'admin',

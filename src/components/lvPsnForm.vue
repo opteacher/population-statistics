@@ -55,9 +55,9 @@ export default {
   async created() {
     let url = ''
     if (this.form.relation === '同工') {
-      url = `/population-statistics/mdl/v1/persons?cmpId=${this.form.cmpId}`
+      url = `/population-statistics/mdl/v1/person/s?cmpId=${this.form.cmpId}`
     } else {
-      url = `/population-statistics/mdl/v1/persons?lvAddress=${this.form.lvAddress}`
+      url = `/population-statistics/mdl/v1/person/s?lvAddress=${this.form.lvAddress}`
     }
     this.people = await reqBackend(axios.get(url))
     this.sbtPsn = this.form.submit

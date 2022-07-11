@@ -1,8 +1,6 @@
 module.exports = {
   lintOnSave: false,
-  publicPath: '/population-statistics',
-  outputDir: 'dist/public/population-statistics',
-  assetsDir: 'static',
+  assetsDir: 'population-statistics-frt',
   configureWebpack: {
     externals: {
       vue: 'Vue',

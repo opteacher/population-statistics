@@ -218,24 +218,38 @@ export function assignToCloneObj(temp, src) {
   return Object.assign(_.cloneDeep(temp), src)
 }
 
+function copyWithDefault(value, options = { dft: '', pcs: val => val }) {
+  if (!options.pcs) {
+    options.pcs = val => val
+  }
+  return typeof value !== 'undefined' &&
+    value !== null &&
+    value.toLowerCase() !== 'null'
+    ? options.pcs(value)
+    : options.dft
+}
+
 export function copyCompany(query) {
   let ret = {
-    name: query.name || '',
-    shopName: query.shopName || '',
-    type: query.type || '',
-    regId: query.regId || '',
-    address: query.address || '',
-    area: query.area || 0,
-    lglName: query.lglName || '',
-    lglId: query.lglId || '',
-    lglPhone: query.lglPhone || '',
-    openHours: query.openHours || '',
-    isClosed: query.isClosed ? JSON.parse(query.isClosed) : false,
-    fireFgtTags: query.fireFgtTags || '',
-    pbcSecuTags: query.pbcSecuTags || '',
-    remarks: query.remarks || '',
-    pictures: query.pictures || [],
-    license: query.license || [],
+    name: copyWithDefault(query.name),
+    shopName: copyWithDefault(query.shopName),
+    type: copyWithDefault(query.type),
+    regId: copyWithDefault(query.regId),
+    address: copyWithDefault(query.address),
+    area: copyWithDefault(query.area, { dft: 0 }),
+    lglName: copyWithDefault(query.lglName),
+    lglId: copyWithDefault(query.lglId),
+    lglPhone: copyWithDefault(query.lglPhone),
+    openHours: copyWithDefault(query.openHours),
+    isClosed: copyWithDefault(query.isClosed, {
+      dft: false,
+      pcs: (val) => JSON.parse(val),
+    }),
+    fireFgtTags: copyWithDefault(query.fireFgtTags),
+    pbcSecuTags: copyWithDefault(query.pbcSecuTags),
+    remarks: copyWithDefault(query.remarks),
+    pictures: copyWithDefault(query.pictures, { dft: [] }),
+    license: copyWithDefault(query.license, { dft: [] }),
   }
   if (query.id) {
     ret.id = parseInt(query.id)
@@ -268,20 +282,26 @@ export function copyCompany(query) {
 
 export function copyPerson(query) {
   let ret = {
-    name: query.name || '',
-    idCard: query.idCard || '',
-    gender: query.gender || '',
-    nation: query.nation || '',
-    phone: query.phone || '',
-    hhAddress: query.hhAddress || '',
-    lvAddress: query.lvAddress || '',
-    hasLvCard: query.hasLvCard ? JSON.parse(query.hasLvCard) : false,
-    cmpId: query.cmpId ? parseInt(query.cmpId) : -1,
-    company: query.company || '',
-    specTags: query.specTags || '',
-    remarks: query.remarks || '',
-    pictures: query.pictures || [],
-    idPicture: query.idPicture || [],
+    name: copyWithDefault(query.name),
+    idCard: copyWithDefault(query.idCard),
+    gender: copyWithDefault(query.gender),
+    nation: copyWithDefault(query.nation),
+    phone: copyWithDefault(query.phone),
+    hhAddress: copyWithDefault(query.hhAddress),
+    lvAddress: copyWithDefault(query.lvAddress),
+    hasLvCard: copyWithDefault(query.hasLvCard, {
+      dft: false,
+      pcs: (val) => JSON.parse(val),
+    }),
+    cmpId: copyWithDefault(query.cmpId, {
+      dft: -1,
+      pcs: (val) => parseInt(val),
+    }),
+    company: copyWithDefault(query.company),
+    specTags: copyWithDefault(query.specTags),
+    remarks: copyWithDefault(query.remarks),
+    pictures: copyWithDefault(query.pictures, { dft: [] }),
+    idPicture: copyWithDefault(query.idPicture, { dft: [] }),
   }
   if (query.id) {
     ret.id = parseInt(query.id)

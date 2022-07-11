@@ -176,7 +176,7 @@ export default {
               message: res.data.message,
               iconClass: 'iconfont icon-close-bold fs-50',
             })
-            this.$router.push({ path: '/valid' })
+            this.$router.push({ path: '/population-statistics-frt/valid' })
           }
         }
       )
@@ -188,7 +188,7 @@ export default {
   methods: {
     onUpdateClick() {
       this.$router.push({
-        path: `/input?tab=person&${new URLSearchParams(
+        path: `/population-statistics-frt/input?tab=person&${new URLSearchParams(
           this.person
         ).toString()}`,
       })

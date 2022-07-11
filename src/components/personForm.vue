@@ -36,7 +36,7 @@
         class="mint-field"
         title="所在单位"
         is-link
-        :to="`/population-statistics/list?type=company&mode=select&${new URLSearchParams(
+        :to="`/population-statistics-frt/list?type=company&mode=select&${new URLSearchParams(
           form
         ).toString()}`"
       >

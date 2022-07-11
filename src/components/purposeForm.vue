@@ -92,7 +92,7 @@ export default {
     },
   },
   async created() {
-    const url = '/population-statistics/mdl/v1/companys?shopName=!=&shopName='
+    const url = '/population-statistics/mdl/v1/company/s?shopName=!=&shopName='
     const data = await utils.reqBackend(axios.get(url))
     this.searchCompany.allItems = data.map((company) => {
       company.id = company.id.toString()

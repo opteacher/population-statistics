@@ -33,7 +33,7 @@
         disabled
       >
         <img
-          src="/assets/imgs/wechat.png"
+          src="../assets/wechat.png"
           height="20"
           width="20"
           style="color: white"
@@ -65,7 +65,7 @@ export default {
         role: this.mode,
         form: this.form,
       })
-      let redirect = '/admin'
+      let redirect = '/population-statistics-frt/admin'
       if (this.$route.query.redirect) {
         redirect = this.$route.query.redirect
       }

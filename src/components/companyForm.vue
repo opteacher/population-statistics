@@ -249,7 +249,9 @@ export default {
         iconClass: 'iconfont icon-select-bold fs-50',
       })
       this.$router.push({
-        path: `/list?type=${this.form.shopName ? 'company' : 'house'}`,
+        path: `/population-statistics-frt/list?type=${
+          this.form.shopName ? 'company' : 'house'
+        }`,
       })
     },
     async onImgDelete(prop, url) {

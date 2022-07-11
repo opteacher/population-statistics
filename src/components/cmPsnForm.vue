@@ -97,7 +97,7 @@ export default {
     },
     async selTab(n, o) {
       if (n === 'old') {
-        let url = '/population-statistics/mdl/v1/records?type=leave'
+        let url = '/population-statistics/mdl/v1/record/s?type=leave'
         if (this.form.purpose === 'work') {
           url += `&cmpId=${this.form.cmpId}`
         } else {

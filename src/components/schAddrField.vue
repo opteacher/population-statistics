@@ -67,7 +67,7 @@ export default {
     },
   },
   async created() {
-    const url = `/population-statistics/mdl/v1/companys${this.params}`
+    const url = `/population-statistics/mdl/v1/company/s${this.params}`
     this.searchAddr.allItems = await utils.reqBackend(axios.get(url))
     this.searchAddr.mchItems = this.searchAddr.allItems
     this.searchAddr.schWords = this.form[this.pname]

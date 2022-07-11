@@ -69,7 +69,9 @@ export default {
     async onDlgBtnClick(foothold) {
       $('#selHouseOrCompany').modal('hide')
       this.$router.push({
-        path: `/company-detail?${this._cmbParams(foothold)}&uneditable=true`,
+        path: `/population-statistics-frt/company-detail?${this._cmbParams(
+          foothold
+        )}&uneditable=true`,
       })
     },
     async onConfirmClick() {
@@ -106,7 +108,7 @@ export default {
       }
       this.form = data
 
-      url = '/population-statistics/mdl/v1/companys?shopName===&shopName='
+      url = '/population-statistics/mdl/v1/company/s?shopName===&shopName='
       data = await utils.reqBackend(axios.get(url))
       const houses = data.map((item) => item.address)
 
@@ -118,7 +120,7 @@ export default {
       }
       this.house = null
       if (houses.includes(this.form.lvAddress)) {
-        url = `/population-statistics/mdl/v1/companys?address=${this.form.lvAddress}`
+        url = `/population-statistics/mdl/v1/company/s?address=${this.form.lvAddress}`
         data = await utils.reqBackend(axios.get(url))
         this.house = data[0]
       }

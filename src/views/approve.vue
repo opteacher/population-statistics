@@ -110,11 +110,11 @@ export default {
   },
   methods: {
     async _refreshRecords() {
-      let url = '/population-statistics/mdl/v1/records?passed=0'
+      let url = '/population-statistics/mdl/v1/record/s?passed=0'
       this.waitForPass = await utils.reqBackend(axios.get(url))
       this.hasPassToApv = Boolean(this.waitForPass.length)
 
-      url = '/population-statistics/mdl/v1/reports?solved=0'
+      url = '/population-statistics/mdl/v1/report/s?solved=0'
       this.waitForSolve = await utils.reqBackend(axios.get(url))
       this.hasErrUpdToApv = Boolean(this.waitForSolve.length)
     },
@@ -159,7 +159,9 @@ export default {
           message: '审批通过！人员已更新到实有人口',
           iconClass: 'iconfont icon-select-bold fs-50',
         })
-        this.$router.push({ path: '/list?type=person' })
+        this.$router.push({
+          path: '/population-statistics-frt/list?type=person',
+        })
       })
     },
     onRejectPsnClick() {
